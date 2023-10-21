@@ -12,6 +12,7 @@
 #include "Camera.h"
 #include "Pyramid.h"
 
+#include "GEntity.h"
 #include "physicsEngine/ParticlesSimulation.h"
 
 #define numVAOs 1
@@ -133,6 +134,9 @@ int main(void)
 	glfwSwapInterval(1);
 	init(window);
 	
+	GEntity g;
+	g.init();
+
 	Inputs& inputs = Inputs::get();
 	std::thread first([&]() { inputs.updateIO(); });     // spawn new thread that calls updateIO()
 		
