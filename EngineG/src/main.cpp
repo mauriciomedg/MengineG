@@ -22,9 +22,10 @@ GLuint vbo[2];
 GLuint mvLoc, projLoc;
 
 ////////////////////////////
-Particle* phyCube = new Particle;
 Particle* phyPyramid = new Particle;
 ParticleSystem* pSystem = new ParticleSystem;
+
+GEntity* gameObject = new GEntity(pSystem);
 
 ////////////////////////////
 
@@ -46,7 +47,7 @@ float vPositions[] = { 0.25, -0.25, 0.0,
 						0.25, 0.25, 0.0 };
 
 Camera camera;
-Cube oneCube;
+
 //Pyramid onePyramid;
 
 void init(GLFWwindow* window) 
@@ -56,24 +57,12 @@ void init(GLFWwindow* window)
 	glBindVertexArray(vao[0]);
 	glGenBuffers(2, vbo);
 	
-	oneCube.init(vbo);
+	gameObject->init(vbo);
+	
 	//onePyramid.init(vbo);
 	
-	phyCube->x = oneCube.mPos;
-	phyCube->v = glm::vec3(0.0f, 50.0f, 0.0f);
-	
-	//
-	float a = pSystem->gravity[1] / 2.0f;
-	float b = phyCube->v[1];
-	float c = phyCube->x[1];
-
-	float t = (-b - glm::sqrt((b * b) - 4 * a * c)) / (2 * a);
-	std::cout << " Time in the air " << t << std::endl;
-	//
 	//phyPyramid->x = onePyramid.mPos;
 	phyPyramid->v = glm::vec3(0.0f, 15.0f, 0.0f);
-	
-	pSystem->p.push_back(phyCube);
 	//pSystem->p.push_back(phyPyramid);
 	pSystem->init();
 
@@ -112,12 +101,10 @@ void display(GLFWwindow* window, double currentTime)
 	
 	//
 	EulerStep(pSystem, elapsed);
-	oneCube.mPos = phyCube->x;
 	//onePyramid.mPos = phyPyramid->x;
-
-	//
+	gameObject->update(currentTime, &camera, renderingProgram);
 	///////////////
-	oneCube.update(currentTime, &camera, renderingProgram);
+	
 	//onePyramid.update(currentTime, &camera, renderingProgram);
 
 	lastTime = glfwGetTime();
@@ -134,10 +121,11 @@ int main(void)
 	glfwSwapInterval(1);
 	init(window);
 	
-	GEntity g;
-	g.init();
-
 	Inputs& inputs = Inputs::get();
+	inputs.mapInput("MoveForward", 'w', 1.0f);
+	inputs.mapInput("MoveLeft", 'a', -1.0f);
+	inputs.mapInput("MoveRight", 'd', 1.0f);
+
 	std::thread first([&]() { inputs.updateIO(); });     // spawn new thread that calls updateIO()
 		
 	while (!glfwWindowShouldClose(window)) {

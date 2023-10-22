@@ -1,28 +1,29 @@
 #pragma once
 
 #include "Inputs.h"
+#include <GL/glew.h>
 #include <iostream>
+
+class Particle;
+class ParticleSystem;
+class Camera;
+class Cube;
 
 class GEntity
 {
 	
 public:
 
-	GEntity() {}
+	GEntity(ParticleSystem* pSystem);
 
-	void bindAxis()
-	{
-		Inputs::get().addBinding("MoveForward", & GEntity::moveForward, this);
-	}
-	
-	void moveForward(float val)
-	{
-		std::cout << "moveeeeeeeee " << val << std::endl;
-	}
+	void init(GLuint* vbo);
+	void bindAxis();
+	void moveForward(float val);
+	void moveSide(float val);
+	void update(float currentTime, Camera* camera, GLuint renderingProgram);
 
-	void init()
-	{
-		bindAxis();
-	}
+private:
 	
+	Particle* phyCube;
+	Cube* meshCube;
 };

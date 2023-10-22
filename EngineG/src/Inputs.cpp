@@ -1,17 +1,28 @@
 #include "Inputs.h"
 #include "GEntity.h"
+#include <mutex>
+
+namespace
+{
+	struct AxisParams
+	{
+		CHAR  m_AsciiChar;
+		float m_InputValue;
+	};
+}
 
 void print_num(int i)
 {
 	std::cout << i << '\n';
 }
 
+Inputs::Inputs()
+{
+}
+
 void Inputs::addBinding(std::string axisName, ActionAxis actionInput, GEntity* obj)
 {
 	m_bindings[axisName] = std::make_tuple(actionInput, obj);
-	auto pair = m_bindings[axisName];
-	std::invoke(std::get<0>(pair), std::get<1>(pair), 1000);
-
 }
 
 void Inputs::updateIO()
@@ -92,19 +103,32 @@ VOID Inputs::ErrorExit(LPCSTR lpszMessage)
 
 VOID Inputs::KeyEventProc(KEY_EVENT_RECORD ker)
 {
-	printf("Key event: ");
+	//printf("Key event: ");
 
 	if (ker.bKeyDown)
 	{
-		std::cout << ker.uChar.AsciiChar << std::endl;
-
-		auto pair = m_bindings["MoveForward"];
-		std::invoke(std::get<0>(pair), std::get<1>(pair), 1000);
+		//std::cout << ker.uChar.AsciiChar << std::endl;
+		//char ascii = ker.uChar.AsciiChar;
+		
+		auto axisNameVal = m_InputsMapped[ker.uChar.AsciiChar];
+		
+		if (std::get<0>(axisNameVal) != "")
+		{
+			auto pair = m_bindings[std::get<0>(axisNameVal)];
+			if (std::get<0>(pair) != nullptr)
+			{
+				mtx.lock();
+				std::invoke(std::get<0>(pair), std::get<1>(pair), std::get<1>(axisNameVal));
+				mtx.unlock();
+			}
+		}
 
 		//printf("key pressed\n");
+	}	
+	else
+	{
+		//printf("key released\n");
 	}
-		
-	else printf("key released\n");
 }
 
 VOID Inputs::MouseEventProc(MOUSE_EVENT_RECORD mer)
@@ -112,7 +136,7 @@ VOID Inputs::MouseEventProc(MOUSE_EVENT_RECORD mer)
 #ifndef MOUSE_HWHEELED
 #define MOUSE_HWHEELED 0x0008
 #endif
-	printf("Mouse event: ");
+	//printf("Mouse event: ");
 
 	switch (mer.dwEventFlags)
 	{
@@ -120,31 +144,31 @@ VOID Inputs::MouseEventProc(MOUSE_EVENT_RECORD mer)
 
 		if (mer.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED)
 		{
-			printf("left button press \n");
+			//printf("left button press \n");
 		}
 		else if (mer.dwButtonState == RIGHTMOST_BUTTON_PRESSED)
 		{
-			printf("right button press \n");
+			//printf("right button press \n");
 		}
 		else
 		{
-			printf("button press\n");
+			//printf("button press\n");
 		}
 		break;
 	case DOUBLE_CLICK:
-		printf("double click\n");
+		//printf("double click\n");
 		break;
 	case MOUSE_HWHEELED:
-		printf("horizontal mouse wheel\n");
+		//printf("horizontal mouse wheel\n");
 		break;
 	case MOUSE_MOVED:
-		printf("mouse moved\n");
+		//printf("mouse moved\n");
 		break;
 	case MOUSE_WHEELED:
-		printf("vertical mouse wheel\n");
+		//printf("vertical mouse wheel\n");
 		break;
 	default:
-		printf("unknown\n");
+		//printf("unknown\n");
 		break;
 	}
 }
