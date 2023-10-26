@@ -4,11 +4,9 @@
 
 struct RigidBody
 {
+
 public:
 	RigidBody();
-
-	void stateToArray(RigidBody* rb, float* y);
-	void arrayToState(RigidBody* rb, float* y);
 
 	// Constants
 	float mMass;
@@ -29,4 +27,6 @@ public:
 	// Computed quantities
 	glm::vec3 mForce;
 	glm::vec3 mTorque;
+
+
 };

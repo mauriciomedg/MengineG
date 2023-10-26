@@ -151,6 +151,7 @@
     <ClCompile Include="src\Inputs.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\physicsEngine\ParticlesSimulation.cpp" />
+    <ClCompile Include="src\physicsEngine\PhysicsWorld.cpp" />
     <ClCompile Include="src\physicsEngine\RigidBody.cpp" />
     <ClCompile Include="src\Pyramid.cpp" />
     <ClCompile Include="src\Utils.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="src\Cube.h" />
     <ClInclude Include="src\GEntity.h" />
     <ClInclude Include="src\Inputs.h" />
+    <ClInclude Include="src\PhysicsEngine\Header.h" />
     <ClInclude Include="src\physicsEngine\ParticlesSimulation.h" />
     <ClInclude Include="src\physicsEngine\PhysicsWorld.h" />
     <ClInclude Include="src\physicsEngine\RigidBody.h" />
