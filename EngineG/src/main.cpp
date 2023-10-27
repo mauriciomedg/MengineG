@@ -14,6 +14,7 @@
 
 #include "GEntity.h"
 #include "physicsEngine/ParticlesSimulation.h"
+#include "physicsEngine/PhysicsWorld.h"
 
 #define numVAOs 1
 GLuint renderingProgram;
@@ -24,8 +25,8 @@ GLuint mvLoc, projLoc;
 ////////////////////////////
 Particle* phyPyramid = new Particle;
 ParticleSystem* pSystem = new ParticleSystem;
-
-GEntity* gameObject = new GEntity(pSystem);
+PhysicsWorld* pWorld = new PhysicsWorld;
+GEntity* gameObject = new GEntity;
 
 ////////////////////////////
 
@@ -58,13 +59,14 @@ void init(GLFWwindow* window)
 	glGenBuffers(2, vbo);
 	
 	gameObject->init(vbo);
-	
+	pWorld->mBodies.push_back(gameObject->rigidBody);
+	pWorld->init();
 	//onePyramid.init(vbo);
 	
 	//phyPyramid->x = onePyramid.mPos;
 	phyPyramid->v = glm::vec3(0.0f, 15.0f, 0.0f);
 	//pSystem->p.push_back(phyPyramid);
-	pSystem->init();
+	//pSystem->init();
 
 	//glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
 	//glBufferData(GL_ARRAY_BUFFER, sizeof(vPositions), vPositions, GL_STATIC_DRAW);
@@ -102,6 +104,7 @@ void display(GLFWwindow* window, double currentTime)
 	//
 	EulerStep(pSystem, elapsed);
 	//onePyramid.mPos = phyPyramid->x;
+	pWorld->runSimulation(elapsed);
 	gameObject->update(currentTime, &camera, renderingProgram);
 	///////////////
 	

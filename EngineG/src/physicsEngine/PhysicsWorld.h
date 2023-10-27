@@ -1,8 +1,9 @@
 #pragma once
 
 #include <vector>
+#include <glm/gtc/matrix_transform.hpp>
 
-typedef void (*dydt_func)(float t, float y[], float ydot[]);
+typedef void (*dydt_func)(float t, float* ydot);
 
 class RigidBody;
 
@@ -12,21 +13,25 @@ public:
 	static const int STATE_SIZE;
 
 public:
+	void init();
 	void stateToArray(RigidBody* rb, float* y);
 	void arrayToState(RigidBody* rb, float* y);
 	void arrayToBody(float* y);
-	void bodyToArray();
-	void dydt(float t, std::vector<float>& ydot);
+	void bodiesToArray();
+	void dydt(float deltaT, float* ydot);
 	void computeForceAndTorque(float t, RigidBody* body);
 	void ddtStateToArray(RigidBody* rb, float* ydot);
+	void runSimulation(float deltaT);
 
+	std::vector<RigidBody*> mBodies;
 private:
 
+	glm::vec3 mGravity;
 	int m_numberOfNodes;
 	std::vector<float> mY;
+	std::vector<float> mYfinal;
 	std::vector<float> mYdot;
-	std::vector<RigidBody*> mBodies;
-
-	void ode(float y0[], float yEnd[], int len, float t0, float t1, dydt_func dydt);
+	
+	void ode(float y0[], float yEnd[], float deltaT);//, dydt_func dydtfunc);
 
 };

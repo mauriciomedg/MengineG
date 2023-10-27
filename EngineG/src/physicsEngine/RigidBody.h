@@ -7,6 +7,7 @@ struct RigidBody
 
 public:
 	RigidBody();
+	void init(glm::vec3 pos, glm::vec3 v, glm::mat3 R);
 
 	// Constants
 	float mMass;

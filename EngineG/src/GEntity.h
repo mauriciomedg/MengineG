@@ -4,17 +4,16 @@
 #include <GL/glew.h>
 #include <iostream>
 
-class Particle;
-class ParticleSystem;
 class Camera;
 class Cube;
+struct RigidBody;
 
 class GEntity
 {
 	
 public:
 
-	GEntity(ParticleSystem* pSystem);
+	GEntity();
 
 	void init(GLuint* vbo);
 	void bindAxis();
@@ -22,8 +21,10 @@ public:
 	void moveSide(float val);
 	void update(float currentTime, Camera* camera, GLuint renderingProgram);
 
+	RigidBody* rigidBody;
+
 private:
 	
-	Particle* phyCube;
 	Cube* meshCube;
+	
 };
