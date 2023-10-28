@@ -29,5 +29,10 @@ public:
 	glm::vec3 mForce;
 	glm::vec3 mTorque;
 
+	/////////////////////////////////
+	glm::vec3 mForceInput; /* force from inputs */
+	glm::vec3 mLastForceInputConsume;
 
+	void addMovement(glm::vec3& intensity, float scale);
+	glm::vec3& ConsumeForceInput();
 };

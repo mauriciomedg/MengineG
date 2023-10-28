@@ -36,9 +36,9 @@ void Cube::update(float currentTime, Camera* camera, GLuint renderingProgram)
 	glm::mat4 tMat = glm::translate(glm::mat4(1.0f),
 		//glm::vec3(sin(0.35f * currentTime) * 2.0f, cos(0.52f * currentTime) * 2.0f, sin(0.7f * currentTime) * 2.0f));
 		mPos);
-	glm::mat4 rMat = glm::rotate(glm::mat4(1.0f), 1.75f * (float)currentTime, glm::vec3(0.0f, 1.0f, 0.0f));
-	rMat = glm::rotate(rMat, 1.75f * (float)currentTime, glm::vec3(1.0f, 0.0f, 0.0f));
-	rMat = glm::rotate(rMat, 1.75f * (float)currentTime, glm::vec3(0.0f, 0.0f, 1.0f));
+	glm::mat4 rMat(mR);// = glm::rotate(glm::mat4(1.0f), mR);// 1.75f * (float)currentTime, glm::vec3(0.0f, 1.0f, 0.0f));
+	//rMat = glm::rotate(rMat, 1.75f * (float)currentTime, glm::vec3(1.0f, 0.0f, 0.0f));
+	//rMat = glm::rotate(rMat, 1.75f * (float)currentTime, glm::vec3(0.0f, 0.0f, 1.0f));
 	// the 1.75 adjusts the rotation speed
 	mMat = tMat * rMat;
 

@@ -23,3 +23,15 @@ void RigidBody::init(glm::vec3 pos, glm::vec3 v, glm::mat3 R)
 
 	mIbodyInv = glm::inverse(mIbody);
 }
+
+void RigidBody::addMovement(glm::vec3& intensity, float scale)
+{
+	mForceInput += intensity * scale;
+}
+
+glm::vec3& RigidBody::ConsumeForceInput()
+{
+	mLastForceInputConsume = mForceInput;
+	mForceInput = glm::vec3(0.0f);
+	return mLastForceInputConsume;
+}

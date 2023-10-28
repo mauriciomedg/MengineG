@@ -17,6 +17,7 @@ public:
 public:
 
 	glm::vec3 mPos;
+	glm::mat3 mR;
 	
 private:
 

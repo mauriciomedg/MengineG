@@ -2,6 +2,7 @@
 
 #include "PhysicsWorld.h"
 #include "RigidBody.h"
+#include <iostream>
 
 const int PhysicsWorld::STATE_SIZE = 18;
 
@@ -62,12 +63,24 @@ void PhysicsWorld::bodiesToArray()
 void PhysicsWorld::computeForceAndTorque(float t, RigidBody* body)
 {
 	// gravity and drag
-	float k_drag = 1.0f;
+	float k_drag = 0.1f;
 
+	// Clean
 	body->mForce = glm::vec3(0.0f, 0.0f, 0.0f);
 	body->mTorque = glm::vec3(0.0f, 0.0f, 0.0f);
 
-	body->mForce += body->mMass * mGravity - k_drag * body->mV;
+	// Compute force and torque from external force
+	glm::vec3& force = body->ConsumeForceInput();
+
+	glm::vec3 localPos = glm::vec3(-0.5f, 0.0f, 0.0f);
+	//glm::vec3 forceAppLocation = body->mX + localPos;
+	localPos = glm::normalize(localPos);
+	glm::vec3 forceResult = glm::dot(localPos, force) * localPos;
+	
+	glm::vec3 torque = glm::cross(localPos, force);
+	//std::cout << torque[0] << " " << torque[1] << " " << torque[2] << std::endl;
+	body->mTorque += torque;
+	body->mForce += body->mMass * mGravity - k_drag * body->mV + forceResult;
 }
 
 namespace
@@ -76,11 +89,11 @@ namespace
 	{
 		glm::mat3 skew(0.0f);
 
-		skew[0][1] = -a[2];
+		skew[0][1] = a[2];
 		skew[0][2] = -a[1];
-		skew[1][2] = -a[0];
+		skew[1][2] = a[0];
 
-		glm::mat3 result(skew + glm::transpose(skew));
+		glm::mat3 result(skew + glm::transpose(-skew));
 		return result;
 	}
 }
@@ -145,19 +158,26 @@ void PhysicsWorld::ode(float* y0, float* yEnd, float deltaT)
 
 void PhysicsWorld::runSimulation(float deltaT)
 {
-	/* copy yfinal back to y0 */
-	for (int i = 0; i < STATE_SIZE * mBodies.size(); i++)
-		mY[i] = mYfinal[i];
-	ode(&mY[0], &mYfinal[0], deltaT);
-	/* copy d
-	dtY(t + 1
-	30 ) into state variables */
-	arrayToBody(&mYfinal[0]);
+	int nbSuperSample = 2;
+
+	deltaT = deltaT / nbSuperSample;
+
+	for (int sample = 0; sample < nbSuperSample; ++sample)
+	{
+		/* copy yfinal back to y0 */
+		for (int i = 0; i < STATE_SIZE * mBodies.size(); i++)
+			mY[i] = mYfinal[i];
+		ode(&mY[0], &mYfinal[0], deltaT);
+		/* copy d
+		dtY(t + 1
+		30 ) into state variables */
+		arrayToBody(&mYfinal[0]);
+	}
 }
 
 void PhysicsWorld::init()
 {
-	mGravity = glm::vec3(0.0f, -98.0f, 0.0f);
+	mGravity = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	mY.resize(STATE_SIZE * mBodies.size());
 	mYfinal.resize(STATE_SIZE * mBodies.size());
