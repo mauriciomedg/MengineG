@@ -104,6 +104,7 @@ void display(GLFWwindow* window, double currentTime)
 	//
 	EulerStep(pSystem, elapsed);
 	//onePyramid.mPos = phyPyramid->x;
+	gameObject->consumeInput();
 	pWorld->runSimulation(elapsed);
 	gameObject->update(currentTime, &camera, renderingProgram);
 	///////////////

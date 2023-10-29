@@ -48,5 +48,5 @@ public:
 	glm::vec3 mLastForceInputConsume;
 
 	void addMovement(glm::vec3& intensity, float scale);
-	glm::vec3& ConsumeForceInput();
+	void ConsumeForceInput();
 };

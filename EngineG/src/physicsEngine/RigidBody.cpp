@@ -39,11 +39,10 @@ void RigidBody::addMovement(glm::vec3& intensity, float scale)
 	mForceInput += intensity * scale;
 }
 
-glm::vec3& RigidBody::ConsumeForceInput()
+void RigidBody::ConsumeForceInput()
 {
 	mLastForceInputConsume = mForceInput;
 	mForceInput = glm::vec3(0.0f);
-	return mLastForceInputConsume;
 }
 
 void RigidBody::computeForceAndTorque(float deltaT, const glm::vec3& gravity)
@@ -56,7 +55,7 @@ void RigidBody::computeForceAndTorque(float deltaT, const glm::vec3& gravity)
 	mTorque = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	// Compute force and torque from external force
-	glm::vec3& force = ConsumeForceInput();
+	glm::vec3& force = mLastForceInputConsume;
 
 	glm::vec3 localPos = glm::vec3(-0.5f, 0.0f, 0.0f);
 	//glm::vec3 forceAppLocation = body->mX + localPos;
@@ -64,7 +63,6 @@ void RigidBody::computeForceAndTorque(float deltaT, const glm::vec3& gravity)
 	glm::vec3 forceResult = glm::dot(localPos, force) * localPos;
 
 	glm::vec3 torque = glm::cross(localPos, force);
-	//std::cout << torque[0] << " " << torque[1] << " " << torque[2] << std::endl;
 	mTorque += torque;
 	mForce += mMass * gravity - k_drag * mV + forceResult;
 }

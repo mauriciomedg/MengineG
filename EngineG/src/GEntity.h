@@ -19,6 +19,7 @@ public:
 	void bindAxis();
 	void moveForward(float val);
 	void moveSide(float val);
+	void consumeInput();
 	void update(float currentTime, Camera* camera, GLuint renderingProgram);
 
 	RigidBody* rigidBody;

@@ -26,6 +26,11 @@ void GEntity::init(GLuint* vbo)
 	bindAxis();
 }
 
+void GEntity::consumeInput()
+{
+	rigidBody->ConsumeForceInput();
+}
+
 void GEntity::bindAxis()
 {
 	Inputs::get().addBinding("MoveForward", &GEntity::moveForward, this);

@@ -21,16 +21,16 @@ namespace
 		}
 	}
 
-	void ode(float* yFinal, float* ydot, float deltaT, int size)
+	void ode(float* y, float* ydot, float deltaT, int size)
 	{
 		ScaleVector(ydot, deltaT, size);
-		AddVectors(ydot, yFinal, size); /* add -> temp2 */
+		AddVectors(ydot, y, size); /* add -> temp2 */
 	}
 }
 
 void PhysicsWorld::runSimulation(float deltaT)
 {
-	int nbSuperSample = 10;
+	int nbSuperSample = 2;
 
 	deltaT = deltaT / nbSuperSample;
 
@@ -38,15 +38,14 @@ void PhysicsWorld::runSimulation(float deltaT)
 	{
 		for (int i = 0; i < mBodies.size(); i++)
 		{
-			mBodies[i]->prepareSystem(&mYfinal[0], &mYdot[0], deltaT, mGravity);
+			mBodies[i]->prepareSystem(&mY[0], &mYdot[0], deltaT, mGravity);
 		}
 
-		mY = mYfinal;
-		ode(&mYfinal[0], &mYdot[0], deltaT, mYdot.size());
+		ode(&mY[0], &mYdot[0], deltaT, mYdot.size());
 
 		for (int i = 0; i < mBodies.size(); i++)
 		{
-			mBodies[i]->update(&mYfinal[0]);
+			mBodies[i]->update(&mY[0]);
 		}
 	}
 }
@@ -56,6 +55,5 @@ void PhysicsWorld::init()
 	mGravity = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	mY.resize(RigidBody::STATE_SIZE * mBodies.size());
-	mYfinal.resize(RigidBody::STATE_SIZE * mBodies.size());
 	mYdot.resize(RigidBody::STATE_SIZE * mBodies.size());
 }

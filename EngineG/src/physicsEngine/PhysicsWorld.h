@@ -19,7 +19,6 @@ private:
 	glm::vec3 mGravity;
 	int m_numberOfNodes;
 	std::vector<float> mY;
-	std::vector<float> mYfinal;
 	std::vector<float> mYdot;
 
 };
