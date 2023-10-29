@@ -1,13 +1,14 @@
 #pragma once
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 struct RigidBody
 {
 
 public:
 	RigidBody();
-	void init(glm::vec3 pos, glm::vec3 v, glm::mat3 R);
+	void init(glm::vec3 pos, glm::vec3 v, glm::quat Q);
 
 	// Constants
 	float mMass;
@@ -16,7 +17,8 @@ public:
 
 	// State variables
 	glm::vec3 mX;
-	glm::mat3 mR;
+	glm::quat mQ;
+	//glm::mat3 mR;
 	glm::vec3 mP;
 	glm::vec3 mL;
 

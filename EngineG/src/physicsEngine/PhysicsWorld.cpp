@@ -4,7 +4,7 @@
 #include "RigidBody.h"
 #include <iostream>
 
-const int PhysicsWorld::STATE_SIZE = 18;
+const int PhysicsWorld::STATE_SIZE = 13;
 
 /* Copy the state information into an array */
 void PhysicsWorld::stateToArray(RigidBody* rb, float* y)
@@ -12,9 +12,14 @@ void PhysicsWorld::stateToArray(RigidBody* rb, float* y)
 	*y++ = rb->mX[0]; /* x component of position */
 	*y++ = rb->mX[1]; /* etc. */
 	*y++ = rb->mX[2];
-	for (int i = 0; i < 3; i++) /* copy rotation matrix */
-		for (int j = 0; j < 3; j++)
-			*y++ = rb->mR[i][j];
+	//for (int i = 0; i < 3; i++) /* copy rotation matrix */
+	//	for (int j = 0; j < 3; j++)
+	//		*y++ = rb->mR[i][j];
+	
+	*y++ = rb->mQ[0];
+	*y++ = rb->mQ[1];
+	*y++ = rb->mQ[2];
+	*y++ = rb->mQ[3];
 
 	*y++ = rb->mP[0];
 	*y++ = rb->mP[1];
@@ -30,20 +35,28 @@ void PhysicsWorld::arrayToState(RigidBody* rb, float* y)
 	rb->mX[0] = *y++;
 	rb->mX[1] = *y++;
 	rb->mX[2] = *y++;
-	for (int i = 0; i < 3; i++)
-		for (int j = 0; j < 3; j++)
-			rb->mR[i][j] = *y++;
+
+	rb->mQ[0] = *y++;
+	rb->mQ[1] = *y++;
+	rb->mQ[2] = *y++;
+	rb->mQ[3] = *y++;
+	//for (int i = 0; i < 3; i++)
+	//	for (int j = 0; j < 3; j++)
+	//		rb->mR[i][j] = *y++;
 	rb->mP[0] = *y++;
 	rb->mP[1] = *y++;
 	rb->mP[2] = *y++;
 	rb->mL[0] = *y++;
 	rb->mL[1] = *y++;
 	rb->mL[2] = *y++;
+
+	rb->mQ = glm::normalize(rb->mQ);
+	glm::mat3 R(rb->mQ);
 	/* Compute auxiliary variables... */
 	/* v(t) = P(t) * M */
 	rb->mV = rb->mP / rb->mMass;
 	/* I−1(t) = R(t)I−1 bodyR(t)T*/
-	rb->mIinv = rb->mR * rb->mIbodyInv * glm::transpose(rb->mR);
+	rb->mIinv = R * rb->mIbodyInv * glm::transpose(R);
 	/* ω(t) = I−1(t)L(t) */
 	rb->mW = rb->mIinv * rb->mL;
 }
@@ -83,20 +96,6 @@ void PhysicsWorld::computeForceAndTorque(float t, RigidBody* body)
 	body->mForce += body->mMass * mGravity - k_drag * body->mV + forceResult;
 }
 
-namespace
-{
-	glm::mat3 Star(glm::vec3& a)
-	{
-		glm::mat3 skew(0.0f);
-
-		skew[0][1] = a[2];
-		skew[0][2] = -a[1];
-		skew[1][2] = a[0];
-
-		glm::mat3 result(skew + glm::transpose(-skew));
-		return result;
-	}
-}
 void PhysicsWorld::ddtStateToArray(RigidBody* rb, float* ydot)
 {
 	/* copy d
@@ -105,11 +104,20 @@ void PhysicsWorld::ddtStateToArray(RigidBody* rb, float* ydot)
 	*ydot++ = rb->mV[1];
 	*ydot++ = rb->mV[2];
 	/* Compute R˙(t) = ω(t)∗R(t) */
-	glm::mat3 Rdot = Star(rb->mW) * rb->mR;
+	//glm::mat3 Rdot = Star(rb->mW) * rb->mR;
 	/* copy R˙(t) into array */
-	for (int i = 0; i < 3; i++)
-		for (int j = 0; j < 3; j++)
-			*ydot++ = Rdot[i][j];
+	//for (int i = 0; i < 3; i++)
+	//	for (int j = 0; j < 3; j++)
+	//		*ydot++ = Rdot[i][j];
+
+	glm::quat Wquad(0.0f, rb->mW[0], rb->mW[1], rb->mW[2]);
+	glm::quat qdot = 0.5f * (Wquad * rb->mQ);
+
+	*ydot++ = qdot[0];
+	*ydot++ = qdot[1];
+	*ydot++ = qdot[2];
+	*ydot++ = qdot[3];
+
 	*ydot++ = rb->mForce[0]; /* dt P(t) = F(t) */
 	*ydot++ = rb->mForce[1];
 	*ydot++ = rb->mForce[2];
@@ -158,7 +166,7 @@ void PhysicsWorld::ode(float* y0, float* yEnd, float deltaT)
 
 void PhysicsWorld::runSimulation(float deltaT)
 {
-	int nbSuperSample = 2;
+	int nbSuperSample = 10;
 
 	deltaT = deltaT / nbSuperSample;
 
@@ -168,9 +176,7 @@ void PhysicsWorld::runSimulation(float deltaT)
 		for (int i = 0; i < STATE_SIZE * mBodies.size(); i++)
 			mY[i] = mYfinal[i];
 		ode(&mY[0], &mYfinal[0], deltaT);
-		/* copy d
-		dtY(t + 1
-		30 ) into state variables */
+		/* copy ddtY(t + 1 / 30 ) into state variables */
 		arrayToBody(&mYfinal[0]);
 	}
 }

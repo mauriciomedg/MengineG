@@ -5,11 +5,12 @@ RigidBody::RigidBody()
 {
 }
 
-void RigidBody::init(glm::vec3 pos, glm::vec3 v, glm::mat3 R)
+void RigidBody::init(glm::vec3 pos, glm::vec3 v, glm::quat Q)
 {
 	mX = pos; 
 	mP = mMass * v;
-	mR = R;
+	mQ = Q;
+	//mR = R;
 
 	float x0 = 2.0f;
 	float y0 = 2.0f;

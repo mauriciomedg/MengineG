@@ -52,7 +52,7 @@ void GEntity::moveSide(float val)
 void GEntity::update(float currentTime, Camera* camera, GLuint renderingProgram)
 {
 	meshCube->mPos = rigidBody->mX;
-	meshCube->mR = rigidBody->mR;
+	meshCube->mR = glm::mat3(rigidBody->mQ);
 
 	meshCube->update(currentTime, camera, renderingProgram);
 }
