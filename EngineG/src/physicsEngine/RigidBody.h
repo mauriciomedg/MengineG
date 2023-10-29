@@ -5,10 +5,22 @@
 
 struct RigidBody
 {
-
+	static const int STATE_SIZE;
 public:
+
 	RigidBody();
 	void init(glm::vec3 pos, glm::vec3 v, glm::quat Q);
+
+	void prepareSystem(float* y, float* ydot, float deltaT, const glm::vec3& gravity);
+
+
+	void ddtStateToArray(float* ydot);
+	void arrayToState(float* y);
+	void stateToArray(float* y);
+
+	void computeForceAndTorque(float deltaT, const glm::vec3& gravity);
+
+	void update(float* y);
 
 	// Constants
 	float mMass;
