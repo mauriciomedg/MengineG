@@ -4,15 +4,15 @@ const int RigidBody::STATE_SIZE = 13;
 
 namespace
 {
-	void applyConnection(RigidBody* b, glm::vec3 pLocal, float dt)
+	void applyConnection(RigidBody* b, glm::vec4 pLocal, float dt)
 	{
-		float ks = 4000.0f;
+		float ks = 50.0f;
 		float kd = 10.1f;
 		glm::vec3 P(0.0f, 35.0f, 0.0f);
 		glm::vec3 N(0.0f, 1.0f, 0.0f);
 
-		glm::vec3 pWorld = (b->mWorldMat * glm::vec4(pLocal, 1.0f));
-		glm::vec3 v = b->mV + glm::cross(pLocal, b->mW);
+		glm::vec3 pWorld = (b->mWorldMat * pLocal);
+		glm::vec3 v = b->mV + glm::cross(glm::vec3(pLocal), b->mW);
 
 		float depth = glm::dot(pWorld + v * dt - P, N);
 
@@ -21,39 +21,37 @@ namespace
 			v -= glm::dot(v, N) * N;
 			//penalty
 			glm::vec3 force = (-ks * depth - kd * glm::dot(v, N)) * N;
-			b->mForce += force;
+			pWorld = pWorld - b->mX;
 
-			glm::vec3 pLocalMormalized = glm::normalize(pLocal);
-			glm::vec3 forceResult = glm::dot(pLocalMormalized, force) * pLocalMormalized;
-
-			glm::vec3 torque = glm::cross(pLocal, force);
+			glm::vec3 torque = glm::cross(pWorld, force);
 			b->mTorque += torque;
+			b->mForce += force;
 		}
 	}
 
 	void Surface_Connection(RigidBody* b, float dt)
 	{
-		glm::vec3 pLocal = glm::vec4(1.0f);
+		glm::vec4 pLocal = glm::vec4(1.0f);
 		applyConnection(b, pLocal, dt);
 
 		pLocal = glm::vec4(-1.0f, -1.0f, -1.0f, 1.0);
 		applyConnection(b, pLocal, dt);
-
+		
 		pLocal = glm::vec4(-1.0f, 1.0f, -1.0f, 1.0);
 		applyConnection(b, pLocal, dt);
-
+		
 		pLocal = glm::vec4(1.0f, -1.0f, 1.0f, 1.0);
 		applyConnection(b, pLocal, dt);
-
+		
 		pLocal = glm::vec4(1.0f, -1.0f, -1.0f, 1.0);
 		applyConnection(b, pLocal, dt);
-
+		
 		pLocal = glm::vec4(-1.0f, -1.0f, 1.0f, 1.0);
 		applyConnection(b, pLocal, dt);
-
+		
 		pLocal = glm::vec4(-1.0f, 1.0f, 1.0f, 1.0);
 		applyConnection(b, pLocal, dt);
-
+		
 		pLocal = glm::vec4(1.0f, 1.0f, -1.0f, 1.0);
 		applyConnection(b, pLocal, dt);
 
@@ -61,7 +59,7 @@ namespace
 }
 
 RigidBody::RigidBody()
-	: mMass(10.0f), mL(0.0f), mForce(0.0f)
+	: mMass(1.0f), mL(0.0f), mForce(0.0f)
 {
 }
 
@@ -117,14 +115,12 @@ void RigidBody::computeForceAndTorque(float deltaT, const glm::vec3& gravity)
 	// Compute force and torque from external force
 	glm::vec3& force = mLastForceInputConsume;
 
-	glm::vec3 localPos = glm::vec3(-0.5f, 0.0f, 0.0f);
-	//glm::vec3 forceAppLocation = body->mX + localPos;
-	glm::vec3 localPosNormalized = glm::normalize(localPos);
-	glm::vec3 forceResult = glm::dot(localPosNormalized, force) * localPosNormalized;
-
-	glm::vec3 torque = glm::cross(localPos, force);
+	glm::vec3 pos = (mWorldMat * glm::vec4(-0.5f, 0.0f, 0.0f, 1.0));
+	pos = pos - mX;
+	
+	glm::vec3 torque = glm::cross(pos, force);
 	mTorque += torque;
-	mForce += mMass * gravity - k_drag * mV + forceResult;
+	mForce += mMass * gravity - k_drag * mV + force;
 }
 
 void RigidBody::ddtStateToArray(float* ydot)

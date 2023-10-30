@@ -4,8 +4,9 @@
 #include "Camera.h"
 
 Cube::Cube()
-	: mPos(-21.0f, 40.0f, 0.0f)
+	: mPos(-5.0f, 40.0f, 25.0f)
 {
+	mR = glm::rotate(glm::mat4(1.0f), 1.75f, glm::vec3(1.0f, 0.0f, 0.0f));
 	mMat = glm::translate(glm::mat4(1.0f), mPos) * glm::mat4(mR);
 }
 
