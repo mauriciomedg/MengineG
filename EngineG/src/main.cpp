@@ -8,12 +8,9 @@
 #include "Inputs.h"
 
 #include "Utils.h"
-#include "Cube.h"
 #include "Camera.h"
-#include "Pyramid.h"
 
 #include "GEntity.h"
-#include "physicsEngine/ParticlesSimulation.h"
 #include "physicsEngine/PhysicsWorld.h"
 
 #define numVAOs 1
@@ -23,8 +20,6 @@ GLuint vbo[2];
 GLuint mvLoc, projLoc;
 
 ////////////////////////////
-Particle* phyPyramid = new Particle;
-ParticleSystem* pSystem = new ParticleSystem;
 PhysicsWorld* pWorld = new PhysicsWorld;
 GEntity* gameObject = new GEntity;
 GEntity* gameObject2 = new GEntity;
@@ -77,13 +72,8 @@ void init(GLFWwindow* window)
 	pWorld->mBodies.push_back(gameObject2->rigidBody);
 
 	pWorld->init();
-
-	phyPyramid->v = glm::vec3(0.0f, 15.0f, 0.0f);
 }
 
-float x = 0.0f; // location of triangle on x axis
-float v_i = 1.0f; // offset for moving the triangle
-float v = v_i;
 double lastTime = 0.0f;
 double currentTime = 0;
 
@@ -102,25 +92,17 @@ void display(GLFWwindow* window, double currentTime)
 	//////////////
 	double current = glfwGetTime();
 	double elapsed = current - lastTime;
-
 	currentTime += elapsed;
-	x += v * elapsed; // move the triangle along x axis
-	if (x > 1.0f) v = -v_i; // switch to moving the triangle to the left
-	if (x < -1.0f) v = v_i; // switch to moving the triangle to the right
-	///////////////
+
+	///
 	camera.update(window);
-	
-	//
-	EulerStep(pSystem, elapsed);
-	//onePyramid.mPos = phyPyramid->x;
+	///
 	gameObject->consumeInput();
 	pWorld->runSimulation(elapsed);
 	gameObject->update(currentTime, &camera, renderingProgram);
 	gameObject2->update(currentTime, &camera, renderingProgram);
-	///////////////
+	///
 	
-	//onePyramid.update(currentTime, &camera, renderingProgram);
-
 	lastTime = glfwGetTime();
 }
 
