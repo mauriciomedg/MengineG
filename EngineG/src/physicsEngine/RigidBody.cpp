@@ -7,11 +7,13 @@ RigidBody::RigidBody()
 {
 }
 
-void RigidBody::init(glm::vec3 pos, glm::vec3 v, glm::quat Q)
+void RigidBody::init(glm::mat4& mMat, glm::vec3& v)
 {
-	mX = pos; 
+	mX = mMat[3];
 	mP = mMass * v;
-	mQ = Q;
+	mQ = mMat;
+
+	mWorldMat = glm::translate(glm::mat4(1.0f), mX) * glm::mat4(mQ);
 
 	float x0 = 2.0f;
 	float y0 = 2.0f;
@@ -137,6 +139,8 @@ void RigidBody::arrayToState(float* y)
 	mIinv = R * mIbodyInv * glm::transpose(R);
 	/* ω(t) = I−1(t)L(t) */
 	mW = mIinv * mL;
+
+	mWorldMat = glm::translate(glm::mat4(1.0f), mX) * glm::mat4(mQ);
 }
 
 void RigidBody::update(float* y)

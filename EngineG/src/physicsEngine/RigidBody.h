@@ -9,7 +9,7 @@ struct RigidBody
 public:
 
 	RigidBody();
-	void init(glm::vec3 pos, glm::vec3 v, glm::quat Q);
+	void init(glm::mat4& mMat, glm::vec3& v);
 
 	void prepareSystem(float* y, float* ydot, float deltaT, const glm::vec3& gravity);
 
@@ -38,6 +38,7 @@ public:
 	glm::vec3 mV;
 	glm::mat3 mIinv;
 	glm::vec3 mW; //w(t)
+	glm::mat4 mWorldMat;
 
 	// Computed quantities
 	glm::vec3 mForce;

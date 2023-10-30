@@ -12,15 +12,16 @@ public:
 
 	void init(GLuint* vbo);
 	void update(float currentTime, Camera* camera, GLuint renderingProgram);
-	const glm::mat4& getModelMatrix() { return mMat; };
+	glm::mat4& getModelMatrix() { return mMat; };
 	
 public:
 
-	glm::vec3 mPos;
-	glm::mat3 mR;
-	
+	glm::mat4 mMat;
+
 private:
 
-	glm::mat4 mMat;
+	glm::vec3 mPos;
+	glm::mat3 mR;
+
 	GLuint* m_vbo;
 };

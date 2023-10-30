@@ -13,7 +13,8 @@ void GEntity::init(GLuint* vbo)
 {
 	//phyCube->x = meshCube->mPos;
 	//phyCube->v = glm::vec3(0.0f, 50.0f, 0.0f);
-	rigidBody->init(meshCube->mPos, glm::vec3(0.0f, 0.0f, 0.0f), glm::mat3(1.0f));
+	glm::vec3 initVelocity(0.0f, 0.0f, 0.0f);
+	rigidBody->init(meshCube->getModelMatrix(), initVelocity);
 	//
 	//float a = pSystem->gravity[1] / 2.0f;
 	//float b = phyCube->v[1];
@@ -56,8 +57,6 @@ void GEntity::moveSide(float val)
 
 void GEntity::update(float currentTime, Camera* camera, GLuint renderingProgram)
 {
-	meshCube->mPos = rigidBody->mX;
-	meshCube->mR = glm::mat3(rigidBody->mQ);
-
+	meshCube->mMat = rigidBody->mWorldMat;
 	meshCube->update(currentTime, camera, renderingProgram);
 }
