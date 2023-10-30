@@ -10,18 +10,18 @@ class Cube
 public:
 	Cube();
 
-	void init(GLuint* vbo);
+	void init(GLuint* vbo, const glm::mat4& modelMat);
 	void update(float currentTime, Camera* camera, GLuint renderingProgram);
 	glm::mat4& getModelMatrix() { return mMat; };
+	void setModelMatrix(const glm::mat4& modelMat);
 	
-public:
-
-	glm::mat4 mMat;
-
 private:
 
-	glm::vec3 mPos;
-	glm::mat3 mR;
+	//void updateModelMatrix();
+
+	glm::mat4 mMat;
+	//glm::vec3 mPos;
+	//glm::mat3 mR;
 
 	GLuint* m_vbo;
 };

@@ -59,17 +59,17 @@ namespace
 }
 
 RigidBody::RigidBody()
-	: mMass(1.0f), mL(0.0f), mForce(0.0f)
+	: mMass(1.0f), mL(0.0f), mForce(0.0f), mV(0.0f)
 {
 }
 
-void RigidBody::init(glm::mat4& mMat, glm::vec3& v)
+void RigidBody::init(glm::mat4& mMat)
 {
 	mX = mMat[3];
-	mP = mMass * v;
+	mP = mMass * mV;
 	mQ = mMat;
 
-	mWorldMat = glm::translate(glm::mat4(1.0f), mX) * glm::mat4(mQ);
+	mWorldMat = mMat;
 
 	float x0 = 2.0f;
 	float y0 = 2.0f;

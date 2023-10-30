@@ -38,14 +38,20 @@ void PhysicsWorld::runSimulation(float deltaT)
 	{
 		for (int i = 0; i < mBodies.size(); i++)
 		{
-			mBodies[i]->prepareSystem(&mY[0], &mYdot[0], deltaT, mGravity);
+			mBodies[i]->prepareSystem(&mY[0 + RigidBody::STATE_SIZE * i],
+				&mYdot[0 + RigidBody::STATE_SIZE * i],
+				deltaT,
+				mGravity);
 		}
 
-		ode(&mY[0], &mYdot[0], deltaT, mYdot.size());
-
+		if (mYdot.size() > 0)
+		{
+			ode(&mY[0], &mYdot[0], deltaT, mYdot.size());
+		}
+		
 		for (int i = 0; i < mBodies.size(); i++)
 		{
-			mBodies[i]->update(&mY[0]);
+			mBodies[i]->update(&mY[0 + RigidBody::STATE_SIZE * i]);
 		}
 	}
 }

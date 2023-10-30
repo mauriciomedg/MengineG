@@ -9,21 +9,11 @@ GEntity::GEntity()
 	rigidBody = new RigidBody;
 }
 
-void GEntity::init(GLuint* vbo)
+void GEntity::init(GLuint* vbo, glm::mat4& modelMatrix)
 {
-	//phyCube->x = meshCube->mPos;
-	//phyCube->v = glm::vec3(0.0f, 50.0f, 0.0f);
-	glm::vec3 initVelocity(0.0f, 0.0f, 0.0f);
-	rigidBody->init(meshCube->getModelMatrix(), initVelocity);
-	//
-	//float a = pSystem->gravity[1] / 2.0f;
-	//float b = phyCube->v[1];
-	//float c = phyCube->x[1];
-	//
-	//float t = (-b - glm::sqrt((b * b) - 4 * a * c)) / (2 * a);
-	//std::cout << " Time in the air " << t << std::endl;
-	//
-	meshCube->init(vbo);
+	rigidBody->init(modelMatrix);
+	meshCube->init(vbo, modelMatrix);
+
 	bindAxis();
 }
 
@@ -57,6 +47,6 @@ void GEntity::moveSide(float val)
 
 void GEntity::update(float currentTime, Camera* camera, GLuint renderingProgram)
 {
-	meshCube->mMat = rigidBody->mWorldMat;
+	meshCube->setModelMatrix(rigidBody->mWorldMat);
 	meshCube->update(currentTime, camera, renderingProgram);
 }

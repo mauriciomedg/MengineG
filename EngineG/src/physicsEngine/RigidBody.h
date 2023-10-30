@@ -9,7 +9,7 @@ struct RigidBody
 public:
 
 	RigidBody();
-	void init(glm::mat4& mMat, glm::vec3& v);
+	void init(glm::mat4& mMat);
 
 	void prepareSystem(float* y, float* ydot, float deltaT, const glm::vec3& gravity);
 
@@ -17,9 +17,7 @@ public:
 	void ddtStateToArray(float* ydot);
 	void arrayToState(float* y);
 	void stateToArray(float* y);
-
 	void computeForceAndTorque(float deltaT, const glm::vec3& gravity);
-
 	void update(float* y);
 
 	// Constants

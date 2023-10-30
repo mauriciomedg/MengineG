@@ -4,15 +4,20 @@
 #include "Camera.h"
 
 Cube::Cube()
-	: mPos(-5.0f, 40.0f, 25.0f)
+	: mMat(1.0f)
 {
-	mR = glm::rotate(glm::mat4(1.0f), 1.75f, glm::vec3(1.0f, 0.0f, 0.0f));
-	mMat = glm::translate(glm::mat4(1.0f), mPos) * glm::mat4(mR);
 }
 
-void Cube::init(GLuint* vbo)
+void Cube::setModelMatrix(const glm::mat4& modelMat)
 {
-	m_vbo = &vbo[0];
+	mMat = modelMat;
+}
+
+void Cube::init(GLuint* vbo, const glm::mat4& modelMat)
+{
+	setModelMatrix(modelMat);
+
+	m_vbo = vbo;
 
 	float vertexPositions[] = {
 		-1.0f, 1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, -1.0f, -1.0f,
@@ -29,7 +34,7 @@ void Cube::init(GLuint* vbo)
 		1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f
 	};
 
-	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, *m_vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexPositions), vertexPositions, GL_STATIC_DRAW);
 }
 
@@ -46,7 +51,7 @@ void Cube::update(float currentTime, Camera* camera, GLuint renderingProgram)
 	//glProgramUniform1f(renderingProgram, offsetLoc, x); // send value in "x" to "offset"
 
 	// associate VBO with the corresponding vertex attribute in the vertex shader
-	glBindBuffer(GL_ARRAY_BUFFER, m_vbo[0]); // make the 0th buffer "active"
+	glBindBuffer(GL_ARRAY_BUFFER, *m_vbo); // make the 0th buffer "active"
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0); // associate 0th attribute with buffer
 	glEnableVertexAttribArray(0); // enable the 0th vertex attribute
 

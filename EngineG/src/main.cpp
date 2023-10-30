@@ -27,6 +27,7 @@ Particle* phyPyramid = new Particle;
 ParticleSystem* pSystem = new ParticleSystem;
 PhysicsWorld* pWorld = new PhysicsWorld;
 GEntity* gameObject = new GEntity;
+GEntity* gameObject2 = new GEntity;
 
 ////////////////////////////
 
@@ -58,18 +59,26 @@ void init(GLFWwindow* window)
 	glBindVertexArray(vao[0]);
 	glGenBuffers(2, vbo);
 	
-	gameObject->init(vbo);
-	pWorld->mBodies.push_back(gameObject->rigidBody);
-	pWorld->init();
-	//onePyramid.init(vbo);
+	/// set body gameObject in the scene
+	glm::vec3 Pos(-5.0f, 40.0f, 25.0f);
+	auto R = glm::rotate(glm::mat4(1.0f), 1.75f, glm::vec3(1.0f, 0.0f, 0.0f));
+	auto Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
+	gameObject->init(&vbo[0], Mat);
+	//
+	// set body gameObject2 in the scene
+	Pos = glm::vec3(5.0f, 40.0f, 25.0f);
+	R = glm::rotate(glm::mat4(1.0f), 1.75f, glm::normalize(glm::vec3(1.0f, 1.0f, 0.0f)));
+	Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
+	gameObject2->init(&vbo[1], Mat);
+	//
 	
-	//phyPyramid->x = onePyramid.mPos;
-	phyPyramid->v = glm::vec3(0.0f, 15.0f, 0.0f);
-	//pSystem->p.push_back(phyPyramid);
-	//pSystem->init();
+	//TODO: should be added in the world when there is a solver
+	pWorld->mBodies.push_back(gameObject->rigidBody);
+	pWorld->mBodies.push_back(gameObject2->rigidBody);
 
-	//glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(vPositions), vPositions, GL_STATIC_DRAW);
+	pWorld->init();
+
+	phyPyramid->v = glm::vec3(0.0f, 15.0f, 0.0f);
 }
 
 float x = 0.0f; // location of triangle on x axis
@@ -107,6 +116,7 @@ void display(GLFWwindow* window, double currentTime)
 	gameObject->consumeInput();
 	pWorld->runSimulation(elapsed);
 	gameObject->update(currentTime, &camera, renderingProgram);
+	gameObject2->update(currentTime, &camera, renderingProgram);
 	///////////////
 	
 	//onePyramid.update(currentTime, &camera, renderingProgram);
