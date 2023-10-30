@@ -52,7 +52,7 @@ void PhysicsWorld::runSimulation(float deltaT)
 
 void PhysicsWorld::init()
 {
-	mGravity = glm::vec3(0.0f, 0.0f, 0.0f);
+	mGravity = glm::vec3(0.0f, -50.0f, 0.0f);
 
 	mY.resize(RigidBody::STATE_SIZE * mBodies.size());
 	mYdot.resize(RigidBody::STATE_SIZE * mBodies.size());
