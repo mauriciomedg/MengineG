@@ -4,7 +4,7 @@ const int RigidBody::STATE_SIZE = 13;
 
 namespace
 {
-	void applyConnection(RigidBody* b, glm::vec4 pLocal, float dt)
+	bool applyConnection(RigidBody* b, glm::vec4 pLocal, float dt)
 	{
 		float ks = 50.0f;
 		float kd = 10.1f;
@@ -12,48 +12,61 @@ namespace
 		glm::vec3 N(0.0f, 1.0f, 0.0f);
 
 		glm::vec3 pWorld = (b->mWorldMat * pLocal);
-		glm::vec3 v = b->mV + glm::cross(glm::vec3(pLocal), b->mW);
+		
+		glm::vec3 v = b->mV + glm::cross(b->mW, glm::vec3(pWorld - b->mX));
 
 		float depth = glm::dot(pWorld + v * dt - P, N);
 
-		if (depth < 0.0f)
+		if (depth < 0.0f && glm::dot(v, N) < 0)
 		{
-			v -= glm::dot(v, N) * N;
-			//penalty
-			glm::vec3 force = (-ks * depth - kd * glm::dot(v, N)) * N;
-			pWorld = pWorld - b->mX;
+			float epsilon = 0.2f; // coefficent of restitution 0 <= epsilon <= 1
+			float numerator = -(1 + epsilon) * glm::dot(v, N);
+			
+			pWorld += -(b->mX);
+			
+			float term1 = 1 / b->mMass;
+			float term3 = glm::dot(N, glm::cross(b->mIbodyInv * glm::cross(pWorld, N), pWorld));
+			
+			float j = numerator / (term1 + term3);
+			glm::vec3 force = j * N;
 
-			glm::vec3 torque = glm::cross(pWorld, force);
-			b->mTorque += torque;
-			b->mForce += force;
+			b->mP += force;
+			b->mL += glm::cross(pWorld, force);
+
+			b->mV = b->mP / b->mMass;
+			b->mW = b->mIbodyInv * b->mL;
+
+			return true;
 		}
+
+		return false;
 	}
 
-	void Surface_Connection(RigidBody* b, float dt)
+	bool Surface_Connection(RigidBody* b, float dt)
 	{
 		glm::vec4 pLocal = glm::vec4(1.0f);
-		applyConnection(b, pLocal, dt);
+		return applyConnection(b, pLocal, dt);
 
-		pLocal = glm::vec4(-1.0f, -1.0f, -1.0f, 1.0);
-		applyConnection(b, pLocal, dt);
-		
-		pLocal = glm::vec4(-1.0f, 1.0f, -1.0f, 1.0);
-		applyConnection(b, pLocal, dt);
-		
-		pLocal = glm::vec4(1.0f, -1.0f, 1.0f, 1.0);
-		applyConnection(b, pLocal, dt);
-		
-		pLocal = glm::vec4(1.0f, -1.0f, -1.0f, 1.0);
-		applyConnection(b, pLocal, dt);
-		
-		pLocal = glm::vec4(-1.0f, -1.0f, 1.0f, 1.0);
-		applyConnection(b, pLocal, dt);
-		
-		pLocal = glm::vec4(-1.0f, 1.0f, 1.0f, 1.0);
-		applyConnection(b, pLocal, dt);
-		
-		pLocal = glm::vec4(1.0f, 1.0f, -1.0f, 1.0);
-		applyConnection(b, pLocal, dt);
+		//pLocal = glm::vec4(-1.0f, -1.0f, -1.0f, 1.0);
+		//applyConnection(b, pLocal, dt);
+		//
+		//pLocal = glm::vec4(-1.0f, 1.0f, -1.0f, 1.0);
+		//applyConnection(b, pLocal, dt);
+		//
+		//pLocal = glm::vec4(1.0f, -1.0f, 1.0f, 1.0);
+		//applyConnection(b, pLocal, dt);
+		//
+		//pLocal = glm::vec4(1.0f, -1.0f, -1.0f, 1.0);
+		//applyConnection(b, pLocal, dt);
+		//
+		//pLocal = glm::vec4(-1.0f, -1.0f, 1.0f, 1.0);
+		//applyConnection(b, pLocal, dt);
+		//
+		//pLocal = glm::vec4(-1.0f, 1.0f, 1.0f, 1.0);
+		//applyConnection(b, pLocal, dt);
+		//
+		//pLocal = glm::vec4(1.0f, 1.0f, -1.0f, 1.0);
+		//applyConnection(b, pLocal, dt);
 
 	}
 }
@@ -88,8 +101,15 @@ void RigidBody::prepareSystem(float* y, float* ydot, float deltaT, const glm::ve
 {
 	stateToArray(y);
 	computeForceAndTorque(deltaT, gravity);
-	Surface_Connection(this, deltaT);
-	ddtStateToArray(ydot);
+	if (Surface_Connection(this, deltaT))
+	{
+		//arrayToState(y);
+		stateToArray(y);
+	}
+	else
+	{
+		ddtStateToArray(ydot);
+	}
 }
 
 void RigidBody::addMovement(glm::vec3& intensity, float scale)
