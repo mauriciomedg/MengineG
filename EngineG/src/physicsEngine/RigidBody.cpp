@@ -19,7 +19,7 @@ namespace
 
 		if (depth < 0.0f && glm::dot(v, N) < 0)
 		{
-			float epsilon = 0.09f; // coefficent of restitution 0 <= epsilon <= 1
+			float epsilon = 0.2f; // coefficent of restitution 0 <= epsilon <= 1
 			float numerator = -(1 + epsilon) * glm::dot(v, N);
 			
 			pWorld += -(b->mX);
@@ -44,35 +44,32 @@ namespace
 
 	bool Surface_Connection(RigidBody* b, float dt)
 	{
-		glm::vec4 pLocal = glm::vec4(1.0f);
-		return applyConnection(b, pLocal, dt);
+		bool resetForSolver = false;
 
-		//pLocal = glm::vec4(-1.0f, -1.0f, -1.0f, 1.0);
-		//applyConnection(b, pLocal, dt);
-		//
-		//pLocal = glm::vec4(-1.0f, 1.0f, -1.0f, 1.0);
-		//applyConnection(b, pLocal, dt);
-		//
-		//pLocal = glm::vec4(1.0f, -1.0f, 1.0f, 1.0);
-		//applyConnection(b, pLocal, dt);
-		//
-		//pLocal = glm::vec4(1.0f, -1.0f, -1.0f, 1.0);
-		//applyConnection(b, pLocal, dt);
-		//
-		//pLocal = glm::vec4(-1.0f, -1.0f, 1.0f, 1.0);
-		//applyConnection(b, pLocal, dt);
-		//
-		//pLocal = glm::vec4(-1.0f, 1.0f, 1.0f, 1.0);
-		//applyConnection(b, pLocal, dt);
-		//
-		//pLocal = glm::vec4(1.0f, 1.0f, -1.0f, 1.0);
-		//applyConnection(b, pLocal, dt);
+		glm::vec4 contacts[] = { glm::vec4(1.0f), 
+			glm::vec4(-1.0f, -1.0f, -1.0f, 1.0),
+			glm::vec4(-1.0f, 1.0f, -1.0f, 1.0),
+			glm::vec4(1.0f, -1.0f, 1.0f, 1.0),
+			glm::vec4(1.0f, -1.0f, -1.0f, 1.0),
+			glm::vec4(-1.0f, -1.0f, 1.0f, 1.0),
+			glm::vec4(-1.0f, 1.0f, 1.0f, 1.0),
+			glm::vec4(1.0f, 1.0f, -1.0f, 1.0) 
+		};
 
+		for (int i = 0; i < 8; ++i)
+		{
+			if (applyConnection(b, contacts[i], dt))
+			{
+				resetForSolver = true;
+			}
+		}
+
+		return resetForSolver;
 	}
 }
 
 RigidBody::RigidBody()
-	: mMass(1.0f), mL(0.0f), mForce(0.0f), mV(0.0f, 0.0f, 0.0f)
+	: mMass(1.0f), mL(0.0f), mForce(0.0f), mV(0.0f, 100.0f, 0.0f)
 {
 }
 

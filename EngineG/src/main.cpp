@@ -69,7 +69,7 @@ void init(GLFWwindow* window)
 	
 	//TODO: should be added in the world when there is a solver
 	pWorld->mBodies.push_back(gameObject->rigidBody);
-	//pWorld->mBodies.push_back(gameObject2->rigidBody);
+	pWorld->mBodies.push_back(gameObject2->rigidBody);
 
 	pWorld->init();
 }
