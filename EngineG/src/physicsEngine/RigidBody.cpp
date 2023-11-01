@@ -72,7 +72,7 @@ namespace
 }
 
 RigidBody::RigidBody()
-	: mMass(1.0f), mL(0.0f), mForce(0.0f), mV(0.0f, 1000.0f, 0.0f)
+	: mMass(1.0f), mL(0.0f), mForce(0.0f), mV(0.0f, 0.0f, 0.0f)
 {
 }
 
