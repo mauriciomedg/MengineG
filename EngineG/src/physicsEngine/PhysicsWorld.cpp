@@ -30,7 +30,7 @@ namespace
 
 void PhysicsWorld::runSimulation(float deltaT)
 {
-	int nbSuperSample = 2;
+	int nbSuperSample = 5;
 
 	deltaT = deltaT / nbSuperSample;
 

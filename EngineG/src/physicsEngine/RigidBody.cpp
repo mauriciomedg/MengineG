@@ -8,7 +8,7 @@ namespace
 	{
 		float ks = 50.0f;
 		float kd = 10.1f;
-		glm::vec3 P(0.0f, 35.0f, 0.0f);
+		glm::vec3 P(0.0f, 20.0f, 0.0f);
 		glm::vec3 N(0.0f, 1.0f, 0.0f);
 
 		glm::vec3 pWorld = (b->mWorldMat * pLocal);
@@ -19,7 +19,7 @@ namespace
 
 		if (depth < 0.0f && glm::dot(v, N) < 0)
 		{
-			float epsilon = 0.2f; // coefficent of restitution 0 <= epsilon <= 1
+			float epsilon = 0.09f; // coefficent of restitution 0 <= epsilon <= 1
 			float numerator = -(1 + epsilon) * glm::dot(v, N);
 			
 			pWorld += -(b->mX);
@@ -72,7 +72,7 @@ namespace
 }
 
 RigidBody::RigidBody()
-	: mMass(1.0f), mL(0.0f), mForce(0.0f), mV(0.0f)
+	: mMass(1.0f), mL(0.0f), mForce(0.0f), mV(0.0f, 1000.0f, 0.0f)
 {
 }
 
@@ -106,10 +106,8 @@ void RigidBody::prepareSystem(float* y, float* ydot, float deltaT, const glm::ve
 		//arrayToState(y);
 		stateToArray(y);
 	}
-	else
-	{
-		ddtStateToArray(ydot);
-	}
+	
+	ddtStateToArray(ydot);
 }
 
 void RigidBody::addMovement(glm::vec3& intensity, float scale)
