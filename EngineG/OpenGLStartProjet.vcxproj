@@ -150,6 +150,8 @@
     <ClCompile Include="src\GEntity.cpp" />
     <ClCompile Include="src\Inputs.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\physicsEngine\CollisionDetection.cpp" />
+    <ClCompile Include="src\physicsEngine\CollisionResponse.cpp" />
     <ClCompile Include="src\physicsEngine\ParticlesSimulation.cpp" />
     <ClCompile Include="src\physicsEngine\PhysicsWorld.cpp" />
     <ClCompile Include="src\physicsEngine\RigidBody.cpp" />
@@ -161,6 +163,8 @@
     <ClInclude Include="src\Cube.h" />
     <ClInclude Include="src\GEntity.h" />
     <ClInclude Include="src\Inputs.h" />
+    <ClInclude Include="src\physicsEngine\CollisionDetection.h" />
+    <ClInclude Include="src\physicsEngine\CollisionResponse.h" />
     <ClInclude Include="src\PhysicsEngine\Header.h" />
     <ClInclude Include="src\physicsEngine\ParticlesSimulation.h" />
     <ClInclude Include="src\physicsEngine\PhysicsWorld.h" />

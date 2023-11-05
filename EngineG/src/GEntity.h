@@ -21,6 +21,7 @@ public:
 	void moveForward(float val);
 	void moveSide(float val);
 	void consumeInput();
+	void setIndexRigid(int index);
 	void update(float currentTime, Camera* camera, GLuint renderingProgram);
 
 	RigidBody* rigidBody;

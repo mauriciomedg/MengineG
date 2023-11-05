@@ -68,7 +68,9 @@ void init(GLFWwindow* window)
 	//
 	
 	//TODO: should be added in the world when there is a solver
+	gameObject->setIndexRigid(pWorld->mBodies.size());
 	pWorld->mBodies.push_back(gameObject->rigidBody);
+	gameObject2->setIndexRigid(pWorld->mBodies.size());
 	pWorld->mBodies.push_back(gameObject2->rigidBody);
 
 	pWorld->init();

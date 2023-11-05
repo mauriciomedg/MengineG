@@ -6,6 +6,7 @@
 typedef void (*dydt_func)(float t, float* ydot);
 
 class RigidBody;
+class CollisionResponse;
 
 class PhysicsWorld
 {
@@ -20,5 +21,5 @@ private:
 	int m_numberOfNodes;
 	std::vector<float> mY;
 	std::vector<float> mYdot;
-
+	CollisionResponse* mCollisionResponse;
 };

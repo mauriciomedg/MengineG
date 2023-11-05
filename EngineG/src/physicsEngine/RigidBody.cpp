@@ -2,74 +2,8 @@
 
 const int RigidBody::STATE_SIZE = 13;
 
-namespace
-{
-	bool applyConnection(RigidBody* b, glm::vec4 pLocal, float dt)
-	{
-		float ks = 50.0f;
-		float kd = 10.1f;
-		glm::vec3 P(0.0f, 20.0f, 0.0f);
-		glm::vec3 N(0.0f, 1.0f, 0.0f);
-
-		glm::vec3 pWorld = (b->mWorldMat * pLocal);
-		
-		glm::vec3 v = b->mV + glm::cross(b->mW, glm::vec3(pWorld - b->mX));
-
-		float depth = glm::dot(pWorld + v * dt - P, N);
-
-		if (depth < 0.0f && glm::dot(v, N) < 0)
-		{
-			float epsilon = 0.2f; // coefficent of restitution 0 <= epsilon <= 1
-			float numerator = -(1 + epsilon) * glm::dot(v, N);
-			
-			pWorld += -(b->mX);
-			
-			float term1 = 1 / b->mMass;
-			float term3 = glm::dot(N, glm::cross(b->mIbodyInv * glm::cross(pWorld, N), pWorld));
-			
-			float j = numerator / (term1 + term3);
-			glm::vec3 force = j * N;
-
-			b->mP += force;
-			b->mL += glm::cross(pWorld, force);
-
-			b->mV = b->mP / b->mMass;
-			b->mW = b->mIbodyInv * b->mL;
-
-			return true;
-		}
-
-		return false;
-	}
-
-	bool Surface_Connection(RigidBody* b, float dt)
-	{
-		bool resetForSolver = false;
-
-		glm::vec4 contacts[] = { glm::vec4(1.0f), 
-			glm::vec4(-1.0f, -1.0f, -1.0f, 1.0),
-			glm::vec4(-1.0f, 1.0f, -1.0f, 1.0),
-			glm::vec4(1.0f, -1.0f, 1.0f, 1.0),
-			glm::vec4(1.0f, -1.0f, -1.0f, 1.0),
-			glm::vec4(-1.0f, -1.0f, 1.0f, 1.0),
-			glm::vec4(-1.0f, 1.0f, 1.0f, 1.0),
-			glm::vec4(1.0f, 1.0f, -1.0f, 1.0) 
-		};
-
-		for (int i = 0; i < 8; ++i)
-		{
-			if (applyConnection(b, contacts[i], dt))
-			{
-				resetForSolver = true;
-			}
-		}
-
-		return resetForSolver;
-	}
-}
-
 RigidBody::RigidBody()
-	: mMass(1.0f), mL(0.0f), mForce(0.0f), mV(0.0f, 0.0f, 0.0f)
+	: mMass(1.0f), mL(0.0f), mForce(0.0f), mV(0.0f, 1000.0f, 0.0f)
 {
 }
 
@@ -98,12 +32,6 @@ void RigidBody::prepareSystem(float* y, float* ydot, float deltaT, const glm::ve
 {
 	stateToArray(y);
 	computeForceAndTorque(deltaT, gravity);
-	if (Surface_Connection(this, deltaT))
-	{
-		//arrayToState(y);
-		stateToArray(y);
-	}
-	
 	ddtStateToArray(ydot);
 }
 

@@ -20,6 +20,8 @@ public:
 	void computeForceAndTorque(float deltaT, const glm::vec3& gravity);
 	void update(float* y);
 
+	int mIndex = 0;
+
 	// Constants
 	float mMass;
 	glm::mat3 mIbody;

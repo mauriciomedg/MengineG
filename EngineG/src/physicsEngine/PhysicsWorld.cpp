@@ -2,6 +2,8 @@
 
 #include "PhysicsWorld.h"
 #include "RigidBody.h"
+#include "CollisionResponse.h"
+
 #include <iostream>
 
 namespace
@@ -53,13 +55,18 @@ void PhysicsWorld::runSimulation(float deltaT)
 		{
 			mBodies[i]->update(&mY[0 + RigidBody::STATE_SIZE * i]);
 		}
+
+		mCollisionResponse->generateContacts(mBodies, deltaT);
+		mCollisionResponse->resolverContacts(mBodies, &mY[0], &mYdot[0], deltaT, ode);
 	}
 }
 
 void PhysicsWorld::init()
 {
-	mGravity = glm::vec3(0.0f, -50.0f, 0.0f);
+	mGravity = glm::vec3(0.0f, -980.0f, 0.0f);
 
 	mY.resize(RigidBody::STATE_SIZE * mBodies.size());
 	mYdot.resize(RigidBody::STATE_SIZE * mBodies.size());
+
+	mCollisionResponse = new CollisionResponse;
 }

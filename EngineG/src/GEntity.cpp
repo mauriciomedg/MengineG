@@ -9,6 +9,11 @@ GEntity::GEntity()
 	rigidBody = new RigidBody;
 }
 
+void GEntity::setIndexRigid(int index)
+{
+	rigidBody->mIndex = index;
+}
+
 void GEntity::init(GLuint* vbo, glm::mat4& modelMatrix)
 {
 	rigidBody->init(modelMatrix);
