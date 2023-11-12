@@ -29,6 +29,7 @@ public:
     int localContactId;
 
     bool isRestingContact = false;
+    bool isStillInContact = false;
     void applyPositionChange(glm::vec3 linearChange[2],
         glm::vec3 angularChange[2],
         float penetration,

@@ -43,18 +43,19 @@ namespace
 		}
 	}
 
-	bool collisionDetection(RigidBody* bodies, glm::vec4& pLocal, Contact* contact)
+	bool collisionDetection(RigidBody* body, glm::vec4& pLocal, Contact* contact)
 	{
 		glm::vec3 P(0.0f, 20.0f, 0.0f);
 		glm::vec3 N(0.0f, 1.0f, 0.0f);
-		glm::vec3 pWorld = (bodies->mWorldMat * pLocal);
+		glm::vec3 pWorld = (body->mWorldMat * pLocal);
 
 		float depth = glm::dot(pWorld - P, N);
-		float epsilon = 0.01f;
 
 		contact->contactNormal = N;
 		contact->contactDepth = glm::abs(depth);
-		return depth < 0.0f;
+		contact->isStillInContact = depth < 0.0f;
+		contact->contactPoint = pWorld;
+		return contact->isStillInContact;
 	}
 
 	bool hasContact(RigidBody* b, glm::vec4& pLocal, float dt, Contact* contact)
@@ -190,29 +191,30 @@ void CollisionResponse::update(std::vector<RigidBody*>& bodies, float* y, float*
 
 	if (distance > 0)
 	{
-		//contact determination
-		float max = 0.0f;
-		int index = -1;
-
 		for (int i = 0; i < distance; i++)
 		{
 			Contact* c = &(mContacts[i]);
 
-			if (c->contactDepth > max && c->type == Contact::COLLIDING)
+			if (c->type == Contact::COLLIDING)
 			{
-				max = c->contactDepth;
-				index = i;
+				resolveInterpenetration(c->body[0], vertex[c->localContactId], y, ydot, 0, dt, dt, solver);
+
+				//update contacts due to the resolving interpenetration
+				for (int j = 0; j < distance; j++)
+				{
+					Contact* cc = &(mContacts[j]);
+					collisionDetection(cc->body[0], vertex[cc->localContactId], cc);
+				}
 			}
 		}
 		
-		if (index != -1)
+		for (int i = 0; i < distance; i++)
 		{
-			Contact* c = &(mContacts[index]);
-			resolveInterpenetration(c->body[0], vertex[c->localContactId], y, ydot, 0, dt, dt, solver);
-
-			glm::vec3 pWorld = (c->body[0]->mWorldMat * vertex[c->localContactId]);
-			c->contactPoint = pWorld;
-			resolveContact(c);
+			Contact* c = &(mContacts[i]);
+			if (c->isStillInContact && c->type == Contact::COLLIDING)
+			{
+				resolveContact(c);
+			}
 		}
 	}
 }
