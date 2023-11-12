@@ -8,31 +8,36 @@
 
 namespace
 {
-	void ScaleVector(float* dst, float DeltaT, int size)
-	{
-		for (int i = 0; i < size; ++i)
-		{
-			dst[i] *= DeltaT;
-		}
-	}
+	//void ScaleVector(float* dst, float DeltaT, int size)
+	//{
+	//	for (int i = 0; i < size; ++i)
+	//	{
+	//		dst[i] *= DeltaT;
+	//	}
+	//}
 
-	void AddVectors(float* src, float* dst, int size)
+	void AddVectors(float* src, float* dst, float DeltaT, int size)
 	{
-		for (int i = 0; i < size; ++i) {
-			dst[i] += src[i];
+		for (int i = 0; i < size; ++i) 
+		{
+			//float x = dst[i];
+			//float v = src[i];
+			//float d = v * DeltaT;
+			//float nextp = x + d;
+			dst[i] += src[i] * DeltaT;// nextp;
 		}
 	}
 
 	void ode(float* y, float* ydot, float deltaT, int size)
 	{
-		ScaleVector(ydot, deltaT, size);
-		AddVectors(ydot, y, size); /* add -> temp2 */
+		//ScaleVector(ydot, deltaT, size);
+		AddVectors(ydot, y, deltaT, size); /* add -> temp2 */
 	}
 }
 
 void PhysicsWorld::runSimulation(float deltaT)
 {
-	int nbSuperSample = 5;
+	int nbSuperSample = 2;
 
 	deltaT = deltaT / nbSuperSample;
 
@@ -56,14 +61,14 @@ void PhysicsWorld::runSimulation(float deltaT)
 			mBodies[i]->update(&mY[0 + RigidBody::STATE_SIZE * i]);
 		}
 
-		mCollisionResponse->generateContacts(mBodies, deltaT);
-		mCollisionResponse->resolverContacts(mBodies, &mY[0], &mYdot[0], deltaT, ode);
+		//mCollisionResponse->generateContacts(mBodies, deltaT);
+		mCollisionResponse->resolverContacts2(mBodies, &mY[0], &mYdot[0], deltaT, ode);
 	}
 }
 
 void PhysicsWorld::init()
 {
-	mGravity = glm::vec3(0.0f, -980.0f, 0.0f);
+	mGravity = glm::vec3(0.0f, -98.0f, 0.0f);
 
 	mY.resize(RigidBody::STATE_SIZE * mBodies.size());
 	mYdot.resize(RigidBody::STATE_SIZE * mBodies.size());

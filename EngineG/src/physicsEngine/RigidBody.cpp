@@ -3,7 +3,7 @@
 const int RigidBody::STATE_SIZE = 13;
 
 RigidBody::RigidBody()
-	: mMass(1.0f), mL(0.0f), mForce(0.0f), mV(0.0f, 1000.0f, 0.0f)
+	: mMass(1.0f), mL(0.0f), mForce(0.0f), mV(0.0f, 0.0f, 0.0f)
 {
 }
 
@@ -127,6 +127,11 @@ void RigidBody::arrayToState(float* y)
 	mL[1] = *y++;
 	mL[2] = *y++;
 
+	calculateInternalData();
+}
+
+void RigidBody::calculateInternalData()
+{
 	mQ = glm::normalize(mQ);
 	glm::mat3 R(mQ);
 	/* Compute auxiliary variables... */

@@ -50,4 +50,5 @@ public:
 
 	void addMovement(glm::vec3& intensity, float scale);
 	void ConsumeForceInput();
+	void calculateInternalData();
 };
