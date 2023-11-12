@@ -61,8 +61,7 @@ void PhysicsWorld::runSimulation(float deltaT)
 			mBodies[i]->update(&mY[0 + RigidBody::STATE_SIZE * i]);
 		}
 
-		//mCollisionResponse->generateContacts(mBodies, deltaT);
-		mCollisionResponse->resolverContacts2(mBodies, &mY[0], &mYdot[0], deltaT, ode);
+		mCollisionResponse->update(mBodies, &mY[0], &mYdot[0], deltaT, ode);
 	}
 }
 
