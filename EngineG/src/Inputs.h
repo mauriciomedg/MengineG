@@ -7,6 +7,7 @@
 #include <string>
 #include <map>
 #include <mutex>
+#include <queue>
 
 class GEntity;
 struct AxisParams;
@@ -38,12 +39,8 @@ private:
 public:
 
 	void updateIO();
-
-	void init()
-	{
-		
-	}
-
+	void init() {};
+	void update();
 private:
 
 	std::map<std::string, std::tuple<ActionAxis, GEntity*>> m_bindings;
@@ -53,6 +50,7 @@ private:
 	HANDLE hStdin;
 	DWORD fdwSaveOldMode;
 	std::mutex mtx;
+	std::queue<char> m_inputsAxisNames;
 	VOID ErrorExit(LPCSTR);
 	VOID KeyEventProc(KEY_EVENT_RECORD);
 	VOID MouseEventProc(MOUSE_EVENT_RECORD);

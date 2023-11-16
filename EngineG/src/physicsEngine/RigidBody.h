@@ -13,7 +13,6 @@ public:
 
 	void prepareSystem(float* y, float* ydot, float deltaT, const glm::vec3& gravity);
 
-
 	void ddtStateToArray(float* ydot);
 	void arrayToState(float* y);
 	void stateToArray(float* y);
@@ -45,10 +44,8 @@ public:
 	glm::vec3 mTorque;
 
 	/////////////////////////////////
-	glm::vec3 mForceInput; /* force from inputs */
-	glm::vec3 mLastForceInputConsume;
+	glm::vec3 mForceAdded;
 
 	void addMovement(glm::vec3& intensity, float scale);
-	void ConsumeForceInput();
 	void calculateInternalData();
 };

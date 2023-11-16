@@ -1,9 +1,10 @@
 ﻿#include "RigidBody.h"
+#include <iostream>
 
 const int RigidBody::STATE_SIZE = 13;
 
 RigidBody::RigidBody()
-	: mMass(1.0f), mL(0.0f), mForce(0.0f), mV(0.0f, 0.0f, 0.0f)
+	: mMass(1.0f), mL(0.0f), mForce(0.0f), mV(0.0f, 0.0f, 0.0f), mForceAdded(0.0f)
 {
 }
 
@@ -37,33 +38,28 @@ void RigidBody::prepareSystem(float* y, float* ydot, float deltaT, const glm::ve
 
 void RigidBody::addMovement(glm::vec3& intensity, float scale)
 {
-	mForceInput += intensity * scale;
-}
-
-void RigidBody::ConsumeForceInput()
-{
-	mLastForceInputConsume = mForceInput;
-	mForceInput = glm::vec3(0.0f);
+	mForceAdded += intensity * scale;
 }
 
 void RigidBody::computeForceAndTorque(float deltaT, const glm::vec3& gravity)
 {
 	// gravity and drag
-	float k_drag = 0.8f;
+	float k_drag = 0.0f;
 
 	// Clean
 	mForce = glm::vec3(0.0f, 0.0f, 0.0f);
 	mTorque = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	// Compute force and torque from external force
-	glm::vec3& force = mLastForceInputConsume;
-
-	glm::vec3 pos = (mWorldMat * glm::vec4(-0.5f, 0.0f, 0.0f, 1.0));
+	glm::vec3& force = mForceAdded;
+	glm::vec3 pos = (mWorldMat * glm::vec4(0.0f, 0.0f, 0.0f, 1.0));
 	pos = pos - mX;
 	
 	glm::vec3 torque = glm::cross(pos, force);
 	mTorque += torque;
 	mForce += mMass * gravity - k_drag * mV + force;
+
+	mForceAdded = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
 void RigidBody::ddtStateToArray(float* ydot)

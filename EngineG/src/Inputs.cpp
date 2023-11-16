@@ -25,6 +25,26 @@ void Inputs::addBinding(std::string axisName, ActionAxis actionInput, GEntity* o
 	m_bindings[axisName] = std::make_tuple(actionInput, obj);
 }
 
+void Inputs::update()
+{
+	mtx.lock();
+	while (!m_inputsAxisNames.empty())
+	{
+		char asciiChar = m_inputsAxisNames.front();
+		auto axisNameVal = m_InputsMapped[asciiChar];
+		if (std::get<0>(axisNameVal) != "")
+		{
+			auto pair = m_bindings[std::get<0>(axisNameVal)];
+			if (std::get<0>(pair) != nullptr)
+			{
+				std::invoke(std::get<0>(pair), std::get<1>(pair), std::get<1>(axisNameVal));
+			}
+		}
+		m_inputsAxisNames.pop();
+	}
+	mtx.unlock();
+}
+
 void Inputs::updateIO()
 {
 	////// <IO>
@@ -107,23 +127,9 @@ VOID Inputs::KeyEventProc(KEY_EVENT_RECORD ker)
 
 	if (ker.bKeyDown)
 	{
-		//std::cout << ker.uChar.AsciiChar << std::endl;
-		//char ascii = ker.uChar.AsciiChar;
-		
-		auto axisNameVal = m_InputsMapped[ker.uChar.AsciiChar];
-		
-		if (std::get<0>(axisNameVal) != "")
-		{
-			auto pair = m_bindings[std::get<0>(axisNameVal)];
-			if (std::get<0>(pair) != nullptr)
-			{
-				mtx.lock();
-				std::invoke(std::get<0>(pair), std::get<1>(pair), std::get<1>(axisNameVal));
-				mtx.unlock();
-			}
-		}
-
-		//printf("key pressed\n");
+		mtx.lock();
+		m_inputsAxisNames.push(ker.uChar.AsciiChar);
+		mtx.unlock();
 	}	
 	else
 	{

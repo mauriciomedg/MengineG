@@ -96,10 +96,12 @@ void display(GLFWwindow* window, double currentTime)
 	double elapsed = current - lastTime;
 	currentTime += elapsed;
 
+	//
+	Inputs::get().update();
+	//
 	///
 	camera.update(window);
 	///
-	gameObject->consumeInput();
 	pWorld->runSimulation(elapsed);
 	gameObject->update(currentTime, &camera, renderingProgram);
 	gameObject2->update(currentTime, &camera, renderingProgram);
