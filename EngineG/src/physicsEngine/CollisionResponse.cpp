@@ -191,30 +191,52 @@ void CollisionResponse::update(std::vector<RigidBody*>& bodies, float* y, float*
 
 	if (distance > 0)
 	{
-		for (int i = 0; i < distance; i++)
+		for (int i = 0; i < bodies.size(); i++)
 		{
-			Contact* c = &(mContacts[i]);
+			RigidBody* b = bodies[i];
+			float max = 0.0f;
+			int index = -1;
 
-			if (c->type == Contact::COLLIDING)
+			for (int i = 0; i < distance; i++)
 			{
+				Contact* c = &(mContacts[i]);
+
+				if (c->body[0] == b && c->type == Contact::COLLIDING)
+				{
+					if (c->contactDepth > max && c->type == Contact::COLLIDING)
+					{
+						max = c->contactDepth;
+						index = i;
+					}
+				}
+			}
+			
+			if (index != -1)
+			{
+				Contact* c = &(mContacts[index]);
 				resolveInterpenetration(c->body[0], vertex[c->localContactId], y, ydot, 0, dt, dt, solver);
 
 				//update contacts due to the resolving interpenetration
 				for (int j = 0; j < distance; j++)
 				{
 					Contact* cc = &(mContacts[j]);
-					collisionDetection(cc->body[0], vertex[cc->localContactId], cc);
+					if (cc->body[0] == b)
+					{
+						collisionDetection(cc->body[0], vertex[cc->localContactId], cc);
+					}
 				}
-			}
-		}
-		
-		for (int i = 0; i < distance; i++)
-		{
-			Contact* c = &(mContacts[i]);
-			if (c->isStillInContact && c->type == Contact::COLLIDING)
-			{
+
 				resolveContact(c);
 			}
 		}
+		
+		//for (int i = 0; i < distance; i++)
+		//{
+		//	Contact* c = &(mContacts[i]);
+		//	if (c->isStillInContact && c->type == Contact::COLLIDING)
+		//	{
+		//		resolveContact(c);
+		//	}
+		//}
 	}
 }
