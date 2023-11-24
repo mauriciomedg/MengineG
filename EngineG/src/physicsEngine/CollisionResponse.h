@@ -23,7 +23,6 @@ public:
     glm::vec3 contactPoint;
     glm::vec3 contactNormal;
     glm::vec3 relContactPoint;
-    glm::vec3 contactVelocity;
 
     float contactDepth;
     int localContactId;
@@ -32,8 +31,7 @@ public:
     bool isStillInContact = false;
     void applyPositionChange(glm::vec3 linearChange[2],
         glm::vec3 angularChange[2],
-        float penetration,
-        float dt);
+        float penetration);
 
     void applyVelocityChange(glm::vec3 velocityChange[2],
         glm::vec3 rotationChange[2]);
@@ -62,7 +60,7 @@ public:
     typedef void (*dydt_func)(float* y, float* ydot, float deltaT, int size);
 
     CollisionResponse();
-    void generateContacts(std::vector<RigidBody*>& bodies, float dt);
-    void update(std::vector<RigidBody*>& bodies, float* y, float* ydot, float dt, dydt_func solver);
+    void generateContacts(std::vector<RigidBody*>& bodies);
+    void update(std::vector<RigidBody*>& bodies);
     
 };

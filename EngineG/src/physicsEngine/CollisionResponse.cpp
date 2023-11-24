@@ -61,7 +61,7 @@ namespace
 		return contact->isStillInContact;
 	}
 
-	bool hasContact(RigidBody* b, glm::vec4& pLocal, float dt, Contact* contact)
+	bool hasContact(RigidBody* b, glm::vec4& pLocal, Contact* contact)
 	{
 		if (collisionDetection(b, pLocal, contact))
 		{
@@ -69,7 +69,6 @@ namespace
 			contact->body[0] = b;
 			contact->contactPoint = pWorld;
 			contact->relContactPoint = pWorld - b->mX;
-			contact->contactVelocity = b->mV + glm::cross(b->mW, glm::vec3(pWorld - b->mX));
 
 			contactPointDetermination(contact);
 			return true;
@@ -116,7 +115,7 @@ namespace
 		return force;
 	}
 	
-	void resolveFrictionContact(Contact* contact, float epsilon, float dt)
+	void resolveFrictionContact(Contact* contact, float epsilon)
 	{
 		RigidBody* b = contact->body[0];
 		glm::vec3& N = contact->contactNormal;
@@ -146,8 +145,6 @@ namespace
 		
 		b->mV = b->mP / b->mMass;
 		b->mW = b->mIinv * b->mL;
-		
-		contact->contactVelocity = b->mV + glm::cross(b->mW, glm::vec3(contact->contactPoint - b->mX));
 	}
 
 	void resolveFrictionlessContact(Contact* contact, float epsilon)
@@ -163,55 +160,7 @@ namespace
 	
 		b->mV = b->mP / b->mMass;
 		b->mW = b->mIinv * b->mL;
-
-		contact->contactVelocity = b->mV + glm::cross(b->mW, glm::vec3(contact->contactPoint - b->mX));
 	}
-
-	void microCollision(Contact* contact)
-	{
-		RigidBody* b = contact->body[0];
-		glm::vec3& N = contact->contactNormal;
-		glm::vec3 v = b->mV + glm::cross(b->mW, contact->contactPoint - b->mX);
-
-		float epsilon = 0.0f; // coefficent of restitution 0 <= epsilon <= 1
-		auto force = applyImpulse(b, v, contact->contactPoint, N, epsilon);
-
-		b->mP += force;
-		b->mL += glm::cross(contact->contactPoint - b->mX, force);
-
-		b->mV = b->mP / b->mMass;
-		b->mW = b->mIinv * b->mL;
-	}
-
-	void microCollision2(Contact* contact)
-	{
-		RigidBody* b = contact->body[0];
-		glm::vec3& N = contact->contactNormal;
-		glm::vec3 v = b->mV + glm::cross(b->mW, contact->contactPoint - b->mX);
-
-		float epsilon = 0.3f; // coefficent of restitution 0 <= epsilon <= 1
-		
-		glm::vec3 planarV = v - (N * glm::dot(v, N));
-		float length = glm::length(planarV);
-		if (length > 0.0f)
-		{
-			auto v_nom = glm::normalize(planarV);
-			auto forceP = applyImpulse(b, v, contact->contactPoint, v_nom, 1.0f);
-
-			//float mu = 0.05f;
-			//forceP *= mu;
-			//if (glm::length(forceP) > mu * glm::length(force))
-			//{
-			//	glm::vec3 friction = mu * glm::length(force) * v_nom;
-			b->mP += forceP;
-			b->mL += glm::cross(contact->contactPoint - b->mX, forceP);
-			//}
-		}
-
-		b->mV = b->mP / b->mMass;
-		b->mW = b->mIinv * b->mL;
-	}
-
 }
 
 Contact::Contact()
@@ -222,8 +171,7 @@ Contact::Contact()
 
 void Contact::applyPositionChange(glm::vec3 linearChange[2],
 	glm::vec3 angularChange[2],
-	float penetration,
-	float dt)
+	float penetration)
 {
 	const float angularLimit = 0.2f;
 	float angularMove[2];
@@ -334,7 +282,7 @@ void Contact::applyPositionChange(glm::vec3 linearChange[2],
 		// have the same penetration.
 		// 
 		//if (!body[i]->getAwake()) body[i]->calculateDerivedData();
-		body[i]->calculateInternalData(dt);
+		body[i]->calculateInternalData();
 	}
 }
 
@@ -344,7 +292,7 @@ CollisionResponse::CollisionResponse()
 	mContactItt = mContacts;
 }
 
-void CollisionResponse::generateContacts(std::vector<RigidBody*>& bodies, float dt)
+void CollisionResponse::generateContacts(std::vector<RigidBody*>& bodies)
 {
 	mContactItt = mContacts;
 
@@ -354,7 +302,7 @@ void CollisionResponse::generateContacts(std::vector<RigidBody*>& bodies, float 
 		for (int i = 0; i < 8; ++i)
 		{
 			Contact* contact = mContactItt;
-			if (hasContact(b, vertex[i], dt, contact))
+			if (hasContact(b, vertex[i], contact))
 			{
 				contact->localContactId = i;
 				mContactItt++;
@@ -364,10 +312,10 @@ void CollisionResponse::generateContacts(std::vector<RigidBody*>& bodies, float 
 	}
 }
 
-void CollisionResponse::update(std::vector<RigidBody*>& bodies, float* y, float* ydot, float dt, dydt_func solver)
+void CollisionResponse::update(std::vector<RigidBody*>& bodies)
 {
 	//collision detection
-	generateContacts(bodies, dt);
+	generateContacts(bodies);
 
 	int distance = std::distance(mContacts, mContactItt);
 
@@ -401,7 +349,7 @@ void CollisionResponse::update(std::vector<RigidBody*>& bodies, float* y, float*
 				glm::vec3 linearChange[2], angularChange[2];
 				(&mContacts[index])->applyPositionChange(linearChange,
 					angularChange,
-					max, dt);
+					max);
 
 				//update contacts due to the resolving interpenetration
 				for (int k = 0; k < distance; k++)
@@ -438,7 +386,7 @@ void CollisionResponse::update(std::vector<RigidBody*>& bodies, float* y, float*
 				{
 					Contact* c = &(mContacts[index]);
 					//resolveFrictionlessContact(c, 0.4f);
-					resolveFrictionContact(c, 0.0f, dt);
+					resolveFrictionContact(c, 0.0f);
 				}
 			}
 		}

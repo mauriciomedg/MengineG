@@ -112,7 +112,7 @@ void RigidBody::stateToArray(float* y)
 }
 
 /* Copy information from an array into the state variables */
-void RigidBody::arrayToState(float* y, float dt)
+void RigidBody::arrayToState(float* y)
 {
 	mX[0] = *y++;
 	mX[1] = *y++;
@@ -130,10 +130,10 @@ void RigidBody::arrayToState(float* y, float dt)
 	mL[1] = *y++;
 	mL[2] = *y++;
 
-	calculateInternalData(dt);
+	calculateInternalData();
 }
 
-void RigidBody::calculateInternalData(float deltaT)
+void RigidBody::calculateInternalData()
 {
 	mQ = glm::normalize(mQ);
 	glm::mat3 R(mQ);
@@ -149,7 +149,7 @@ void RigidBody::calculateInternalData(float deltaT)
 
 }
 
-void RigidBody::update(float* y, float dt)
+void RigidBody::update(float* y)
 {
-	arrayToState(y, dt);
+	arrayToState(y);
 }

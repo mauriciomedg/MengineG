@@ -58,10 +58,10 @@ void PhysicsWorld::runSimulation(float deltaT)
 		
 		for (int i = 0; i < mBodies.size(); i++)
 		{
-			mBodies[i]->update(&mY[0 + RigidBody::STATE_SIZE * i], deltaT);
+			mBodies[i]->update(&mY[0 + RigidBody::STATE_SIZE * i]);
 		}
 
-		mCollisionResponse->update(mBodies, &mY[0], &mYdot[0], deltaT, ode);
+		mCollisionResponse->update(mBodies);
 	}
 }
 
