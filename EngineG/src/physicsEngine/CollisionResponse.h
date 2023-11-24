@@ -63,7 +63,6 @@ public:
 
     CollisionResponse();
     void generateContacts(std::vector<RigidBody*>& bodies, float dt);
-    void resolveInterpenetration(RigidBody* bodies, glm::vec4 pLocal, float* y, float* ydot, float dt0, float dt1, float dtm, dydt_func solver);
     void update(std::vector<RigidBody*>& bodies, float* y, float* ydot, float dt, dydt_func solver);
     
 };

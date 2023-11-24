@@ -37,7 +37,7 @@ namespace
 
 void PhysicsWorld::runSimulation(float deltaT)
 {
-	int nbSuperSample = 2;
+	int nbSuperSample = 10;
 
 	deltaT = deltaT / nbSuperSample;
 
@@ -58,7 +58,7 @@ void PhysicsWorld::runSimulation(float deltaT)
 		
 		for (int i = 0; i < mBodies.size(); i++)
 		{
-			mBodies[i]->update(&mY[0 + RigidBody::STATE_SIZE * i]);
+			mBodies[i]->update(&mY[0 + RigidBody::STATE_SIZE * i], deltaT);
 		}
 
 		mCollisionResponse->update(mBodies, &mY[0], &mYdot[0], deltaT, ode);

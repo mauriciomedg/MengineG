@@ -4,7 +4,8 @@
 const int RigidBody::STATE_SIZE = 13;
 
 RigidBody::RigidBody()
-	: mMass(1.0f), mL(0.0f), mForce(0.0f), mV(0.0f, 0.0f, 0.0f), mForceAdded(0.0f)
+	: mMass(1.0f), mL(0.0f), mForce(0.0f), mV(0.0f, 0.0f, 0.0f), mForceAdded(0.0f),
+	mPreviousAcc(0.0f), mPreviousV(0.0f), mPreviousW(0.0f), mPreviousX(0.0f)
 {
 }
 
@@ -46,6 +47,12 @@ void RigidBody::computeForceAndTorque(float deltaT, const glm::vec3& gravity)
 	// gravity and drag
 	float k_drag = 0.0f;
 
+	///////////////
+	mPreviousAcc = mForce / mMass;
+	mPreviousV = mPreviousAcc * deltaT;
+	mPreviousW = mIinv * mL;
+	mPreviousX = mX;
+	///////////////
 	// Clean
 	mForce = glm::vec3(0.0f, 0.0f, 0.0f);
 	mTorque = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -56,7 +63,7 @@ void RigidBody::computeForceAndTorque(float deltaT, const glm::vec3& gravity)
 	pos = pos - mX;
 	
 	glm::vec3 torque = glm::cross(pos, force);
-	mTorque += torque;
+	mTorque += torque - 0.8f * mW;
 	mForce += mMass * gravity - k_drag * mV + force;
 
 	mForceAdded = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -105,7 +112,7 @@ void RigidBody::stateToArray(float* y)
 }
 
 /* Copy information from an array into the state variables */
-void RigidBody::arrayToState(float* y)
+void RigidBody::arrayToState(float* y, float dt)
 {
 	mX[0] = *y++;
 	mX[1] = *y++;
@@ -123,10 +130,10 @@ void RigidBody::arrayToState(float* y)
 	mL[1] = *y++;
 	mL[2] = *y++;
 
-	calculateInternalData();
+	calculateInternalData(dt);
 }
 
-void RigidBody::calculateInternalData()
+void RigidBody::calculateInternalData(float deltaT)
 {
 	mQ = glm::normalize(mQ);
 	glm::mat3 R(mQ);
@@ -139,9 +146,10 @@ void RigidBody::calculateInternalData()
 	mW = mIinv * mL;
 
 	mWorldMat = glm::translate(glm::mat4(1.0f), mX) * glm::mat4(mQ);
+
 }
 
-void RigidBody::update(float* y)
+void RigidBody::update(float* y, float dt)
 {
-	arrayToState(y);
+	arrayToState(y, dt);
 }
