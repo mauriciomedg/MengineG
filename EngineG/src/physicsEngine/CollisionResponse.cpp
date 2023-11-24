@@ -20,11 +20,11 @@ namespace
 		RigidBody* b = contact->body[0];
 		glm::vec3& N = contact->contactNormal;
 		
-		//glm::vec3 v = glm::cross(b->mW, glm::vec3(contact->contactPoint - b->mX));
+		glm::vec3 v = glm::cross(b->mW, glm::vec3(contact->contactPoint - b->mX));
 		//v += b->mV;
 	
-		glm::vec3 v(0.0f);// = glm::cross(b->mPreviousW, glm::vec3(contact->contactPoint - b->mPreviousX));
-		v += b->mPreviousV;
+		//glm::vec3 v = glm::cross(b->mPreviousW, glm::vec3(contact->contactPoint - b->mPreviousX));
+		//v += b->mPreviousV;
 
 		float threshold = 0.5f;
 		float vrel = glm::dot(v, N);
@@ -93,6 +93,7 @@ namespace
 	{
 		glm::vec3 localPoint = contactPoint - b->mX;
 		float numerator = -(1 + epsilon) * glm::dot(v, N);
+		//float numerator = -glm::dot(v, N) - epsilon * (glm::dot(v, N) - glm::dot(b->mPreviousV, N));
 		float term1 = 1 / b->mMass;
 		float term3 = glm::dot(N, glm::cross(b->mIinv * glm::cross(localPoint, N), localPoint));
 
@@ -115,7 +116,7 @@ namespace
 		return force;
 	}
 	
-	void resolveFrictionContact(Contact* contact, float epsilon)
+	void resolveFrictionContact(Contact* contact, float epsilon, float dt)
 	{
 		RigidBody* b = contact->body[0];
 		glm::vec3& N = contact->contactNormal;
@@ -125,6 +126,10 @@ namespace
 		
 		b->mP += forceNormal;
 		b->mL += glm::cross(contact->contactPoint - b->mX, forceNormal);
+		b->mV = b->mP / b->mMass;
+		b->mW = b->mIinv * b->mL;
+
+		v = b->mV + glm::cross(b->mW, contact->contactPoint - b->mX);
 		
 		epsilon = 0.0f; // coefficent of restitution 0 <= epsilon <= 1
 		glm::vec3 velToKill = (v - glm::dot(v, N) * N);
@@ -371,6 +376,7 @@ void CollisionResponse::update(std::vector<RigidBody*>& bodies, float* y, float*
 		for (int i = 0; i < bodies.size(); i++)
 		{
 			RigidBody* b = bodies[i];
+
 			float max = 0.0f;
 			int index = -1;
 
@@ -378,16 +384,16 @@ void CollisionResponse::update(std::vector<RigidBody*>& bodies, float* y, float*
 			{
 				Contact* c = &(mContacts[j]);
 
-				if (c->body[0] == b) //&& c->type == Contact::COLLIDING)
+				if (c->body[0] == b)
 				{
-					if (c->contactDepth > max)// && c->type == Contact::COLLIDING)
+					if (c->contactDepth > max)
 					{
 						max = c->contactDepth;
 						index = j;
 					}
 				}
 			}
-			
+
 			if (index != -1)
 			{
 				Contact* c = &(mContacts[index]);
@@ -406,61 +412,35 @@ void CollisionResponse::update(std::vector<RigidBody*>& bodies, float* y, float*
 						collisionDetection(cc->body[0], vertex[cc->localContactId], cc);
 					}
 				}
-
-				if (c->type == Contact::COLLIDING)
-				{
-					//resolveFrictionlessContact(c, 0.4f);
-					//resolveFrictionContact(c);
-				}
 			}
-
-			max = 0.0f;
-			index = -1;
-
-			for (int j = 0; j < distance; j++)
+			
+			for (int velIteration = 0; velIteration < 5; ++velIteration)
 			{
-				Contact* c = &(mContacts[j]);
+				float max = 0.0f;
+				int index = -1;
 
-				if (c->body[0] == b) //&& c->type == Contact::COLLIDING)
+				for (int j = 0; j < distance; j++)
 				{
-					float desiredVel = desiredVelocity(c, 0.4f);
-					if (desiredVel > max)// && c->type == Contact::COLLIDING)
+					Contact* c = &(mContacts[j]);
+
+					if (c->body[0] == b)
 					{
-						max = desiredVel;
-						index = j;
+						float desiredVel = desiredVelocity(c, 0.4f);
+						if (desiredVel > max)
+						{
+							max = desiredVel;
+							index = j;
+						}
 					}
 				}
+
+				if (index != -1)
+				{
+					Contact* c = &(mContacts[index]);
+					//resolveFrictionlessContact(c, 0.4f);
+					resolveFrictionContact(c, 0.0f, dt);
+				}
 			}
-
-			if (index != -1)
-			{
-				Contact* c = &(mContacts[index]);
-				//resolveFrictionlessContact(c, 0.4f);
-				resolveFrictionContact(c, 0.0f);
-			}
-
-
-				//if (c->type == Contact::COLLIDING)
-				//{
-				//for (int k = 0; k < distance; k++)
-				//{
-				//	Contact* cc = &(mContacts[k]);
-				//	//resolveFrictionlessContact(cc);
-				//	resolveFrictionContact(cc);
-				//	//microCollision(cc);
-				//}
-				//}
-	//		}
-
-			//for (int k = 0; k < distance; k++)
-			//{
-			//	Contact* cc = &(mContacts[k]);
-			//	if (cc->type == Contact::RESTING)
-			//	{
-			//		//resolveFrictionContact(cc);
-			//		//microCollision(cc);
-			//	}
-			//}
 		}
 	}
 }

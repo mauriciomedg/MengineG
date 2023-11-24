@@ -31,13 +31,13 @@ void GEntity::bindAxis()
 
 void GEntity::moveForward(float val)
 {
-	glm::vec3 impulse(0.0f, 5000.0f, 0.0f);
+	glm::vec3 impulse(0.0f, 50000.0f, 0.0f);
 	rigidBody->addMovement(impulse, val);
 }
 
 void GEntity::moveSide(float val)
 {
-	glm::vec3 impulse(1000.0f, 0.0f, 0.0f);
+	glm::vec3 impulse(5000.0f, 0.0f, 0.0f);
 	rigidBody->addMovement(impulse, val);
 }
 

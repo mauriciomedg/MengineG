@@ -37,7 +37,7 @@ namespace
 
 void PhysicsWorld::runSimulation(float deltaT)
 {
-	int nbSuperSample = 10;
+	int nbSuperSample = 3;
 
 	deltaT = deltaT / nbSuperSample;
 
@@ -67,7 +67,7 @@ void PhysicsWorld::runSimulation(float deltaT)
 
 void PhysicsWorld::init()
 {
-	mGravity = glm::vec3(0.0f, -98.0f, 0.0f);
+	mGravity = glm::vec3(0.0f, -980.0f, 0.0f);
 
 	mY.resize(RigidBody::STATE_SIZE * mBodies.size());
 	mYdot.resize(RigidBody::STATE_SIZE * mBodies.size());
