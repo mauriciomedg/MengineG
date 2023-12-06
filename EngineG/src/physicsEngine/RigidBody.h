@@ -9,7 +9,7 @@ struct RigidBody
 public:
 
 	RigidBody();
-	void init(glm::mat4& mMat);
+	void init(const glm::mat4& mMat, glm::vec3& halfSize);
 
 	void prepareSystem(float* y, float* ydot, float deltaT, const glm::vec3& gravity);
 

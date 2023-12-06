@@ -38,7 +38,7 @@ void Cube::init(GLuint* vbo, const glm::mat4& modelMat)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexPositions), vertexPositions, GL_STATIC_DRAW);
 }
 
-void Cube::update(float currentTime, Camera* camera, GLuint renderingProgram)
+void Cube::update(Camera* camera, GLuint renderingProgram)
 {
 	glm::mat4 mvMat = camera->getViewMatrix() * getModelMatrix();
 	

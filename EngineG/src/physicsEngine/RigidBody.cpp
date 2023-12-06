@@ -9,7 +9,7 @@ RigidBody::RigidBody()
 {
 }
 
-void RigidBody::init(glm::mat4& mMat)
+void RigidBody::init(const glm::mat4& mMat, glm::vec3& halfSize)
 {
 	mX = mMat[3];
 	mP = mMass * mV;
@@ -17,9 +17,9 @@ void RigidBody::init(glm::mat4& mMat)
 
 	mWorldMat = mMat;
 
-	float x0 = 2.0f;
-	float y0 = 2.0f;
-	float z0 = 2.0f;
+	float x0 = 2.0f * halfSize[0];
+	float y0 = 2.0f * halfSize[0];
+	float z0 = 2.0f * halfSize[0];
 
 	mIbody[0][0] = glm::pow(y0, 2) + glm::pow(z0, 2);
 	mIbody[1][1] = glm::pow(x0, 2) + glm::pow(z0, 2);

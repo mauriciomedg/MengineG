@@ -58,21 +58,21 @@ void init(GLFWwindow* window)
 	glm::vec3 Pos(-5.0f, 40.0f, 25.0f);
 	auto R = glm::rotate(glm::mat4(1.0f), 1.75f, glm::vec3(1.0f, 0.0f, 0.0f));
 	auto Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
-	gameObject->init(&vbo[0], Mat);
+	glm::vec3 halfSize(1.0f, 1.0f, 1.0f);
+	gameObject->init(&vbo[0], Mat, pWorld->instanciatePrimitiveBox(Mat, halfSize, true));
 	//
 	// set body gameObject2 in the scene
 	Pos = glm::vec3(5.0f, 40.0f, 25.0f);
 	R = glm::rotate(glm::mat4(1.0f), 1.75f, glm::normalize(glm::vec3(1.0f, 1.0f, 0.0f)));
+	halfSize = glm::vec3(1.0f, 1.0f, 1.0f);
 	Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
-	gameObject2->init(&vbo[1], Mat);
+	gameObject2->init(&vbo[1], Mat, pWorld->instanciatePrimitiveBox(Mat, halfSize, true));
 	//
-	
-	//TODO: should be added in the world when there is a solver
-	gameObject->setIndexRigid(pWorld->mBodies.size());
-	pWorld->mBodies.push_back(gameObject->rigidBody);
-	gameObject2->setIndexRigid(pWorld->mBodies.size());
-	pWorld->mBodies.push_back(gameObject2->rigidBody);
-
+	Pos = glm::vec3(0.0f, 20.0f, 0.0f);
+	R = glm::mat4(1.0f);
+	Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
+	pWorld->instanciatePrimitivePlane(Mat, false);
+	//
 	pWorld->init();
 }
 
@@ -103,8 +103,9 @@ void display(GLFWwindow* window, double currentTime)
 	camera.update(window);
 	///
 	pWorld->runSimulation(elapsed);
-	gameObject->update(currentTime, &camera, renderingProgram);
-	gameObject2->update(currentTime, &camera, renderingProgram);
+
+	gameObject->update(&camera, renderingProgram, pWorld->getPrimitiveLocation(gameObject->mPhysicsObjectId));
+	gameObject2->update(&camera, renderingProgram, pWorld->getPrimitiveLocation(gameObject2->mPhysicsObjectId));
 	///
 	
 	lastTime = glfwGetTime();

@@ -2,6 +2,8 @@
 
 #include "PhysicsWorld.h"
 #include "RigidBody.h"
+#include "Contact.h"
+#include "CollisionDetection.h"
 #include "CollisionResponse.h"
 
 #include <iostream>
@@ -35,6 +37,51 @@ namespace
 	}
 }
 
+int PhysicsWorld::instanciatePrimitiveBox(const glm::mat4& transform, glm::vec3& halfSize, bool isSimulatingPhysics)
+{
+	CollisionBox* box = new CollisionBox;
+	box->halfSize = halfSize;
+	mPrimitive.push_back(box);
+	mPrimitive.back()->body = new RigidBody();
+	mPrimitive.back()->body->init(transform, halfSize);
+	mPrimitive.back()->calculateInternals();
+	mPrimitive.back()->mSimulatePhysics = isSimulatingPhysics;
+	return mPrimitive.size() - 1;
+}
+
+int PhysicsWorld::instanciatePrimitivePlane(const glm::mat4& transform, bool isSimulatingPhysics)
+{
+	CollisionPlane* plane = new CollisionPlane;
+	plane->direction = transform[1];
+	mPrimitive.push_back(plane);
+	mPrimitive.back()->body = nullptr;
+	mPrimitive.back()->calculateInternals(transform);
+	mPrimitive.back()->mSimulatePhysics = isSimulatingPhysics;
+	return mPrimitive.size() - 1;
+}
+
+void PhysicsWorld::generateContacts()
+{
+	mCollisionDetection->cData.reset(MAX_CONTACTS);
+	for (int i = 0; i < mPrimitive.size(); ++i)
+	{
+		CollisionBox* box = dynamic_cast<CollisionBox*>(mPrimitive[i]);
+
+		for (int j = i + 1; j < mPrimitive.size(); ++j)
+		{
+			if (box)
+			{
+				CollisionPlane* plane = dynamic_cast<CollisionPlane*>(mPrimitive[j]);
+
+				if (plane)
+				{
+					CollisionDetector::boxAndHalfSpace(*box, *plane, &mCollisionDetection->cData);
+				}
+			}
+		}
+	}
+}
+
 void PhysicsWorld::runSimulation(float deltaT)
 {
 	int nbSuperSample = 3;
@@ -43,12 +90,18 @@ void PhysicsWorld::runSimulation(float deltaT)
 
 	for (int sample = 0; sample < nbSuperSample; ++sample)
 	{
-		for (int i = 0; i < mBodies.size(); i++)
+		int indexBody = 0;
+		for (int i = 0; i < mPrimitive.size(); i++)
 		{
-			mBodies[i]->prepareSystem(&mY[0 + RigidBody::STATE_SIZE * i],
-				&mYdot[0 + RigidBody::STATE_SIZE * i],
-				deltaT,
-				mGravity);
+			if (mPrimitive[i]->mSimulatePhysics)
+			{
+				RigidBody* bodies = mPrimitive[i]->body;
+				bodies->prepareSystem(&mY[0 + RigidBody::STATE_SIZE * indexBody],
+					&mYdot[0 + RigidBody::STATE_SIZE * indexBody],
+					deltaT,
+					mGravity);
+				++indexBody;
+			}
 		}
 
 		if (mYdot.size() > 0)
@@ -56,21 +109,52 @@ void PhysicsWorld::runSimulation(float deltaT)
 			ode(&mY[0], &mYdot[0], deltaT, mYdot.size());
 		}
 		
-		for (int i = 0; i < mBodies.size(); i++)
+		indexBody = 0;
+		for (int i = 0; i < mPrimitive.size(); i++)
 		{
-			mBodies[i]->update(&mY[0 + RigidBody::STATE_SIZE * i]);
+			if (mPrimitive[i]->mSimulatePhysics)
+			{
+				RigidBody* bodies = mPrimitive[i]->body;
+				bodies->update(&mY[0 + RigidBody::STATE_SIZE * indexBody]);
+				mPrimitive[i]->calculateInternals();
+				++indexBody;
+			}
 		}
 
-		mCollisionResponse->update(mBodies);
+		generateContacts();
+		mCollisionResponse->update(&mCollisionDetection->cData, mPrimitive);
 	}
 }
 
 void PhysicsWorld::init()
 {
-	mGravity = glm::vec3(0.0f, -980.0f, 0.0f);
+	mGravity = glm::vec3(0.0f, -98.0f, 0.0f);
 
-	mY.resize(RigidBody::STATE_SIZE * mBodies.size());
-	mYdot.resize(RigidBody::STATE_SIZE * mBodies.size());
+	int nbSimulatedPhysicsPrimitives = 0;
+	for (int i = 0; i < mPrimitive.size(); i++)
+	{
+		RigidBody* bodies = mPrimitive[i]->body;
+		
+		if (mPrimitive[i]->mSimulatePhysics)
+		{
+			++nbSimulatedPhysicsPrimitives;
+		}
+	}
 
+	mY.resize(RigidBody::STATE_SIZE * nbSimulatedPhysicsPrimitives);
+	mYdot.resize(RigidBody::STATE_SIZE * nbSimulatedPhysicsPrimitives);
+
+	mContacts = new Contact[MAX_CONTACTS];
+	mCollisionDetection = new CollisionDetection;
+	mCollisionDetection->cData.contactArray = mContacts;
+	mCollisionDetection->cData.contactsLeft = MAX_CONTACTS;
 	mCollisionResponse = new CollisionResponse;
+}
+
+const glm::mat4* PhysicsWorld::getPrimitiveLocation(int id) const
+{
+	if (mPrimitive[id]->mSimulatePhysics)
+		return &mPrimitive[id]->getTransform();
+	else
+		return nullptr;
 }

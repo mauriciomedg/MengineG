@@ -2,12 +2,11 @@
 
 #include "Inputs.h"
 #include <GL/glew.h>
-#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 
 class Camera;
 class Cube;
-struct RigidBody;
 
 class GEntity
 {
@@ -16,16 +15,15 @@ public:
 
 	GEntity();
 
-	void init(GLuint* vbo, glm::mat4& modelMatrix);
+	void init(GLuint* vbo, glm::mat4& modelMatrix, int physicsObjectId);
 	void bindAxis();
 	void moveForward(float val);
 	void moveSide(float val);
 	void consumeInput();
-	void setIndexRigid(int index);
-	void update(float currentTime, Camera* camera, GLuint renderingProgram);
+	void update(Camera* camera, GLuint renderingProgram, const glm::mat4* modelMatrix);
 
-	RigidBody* rigidBody;
-
+	//RigidBody* rigidBody;
+	int mPhysicsObjectId = -1;
 private:
 	
 	Cube* meshCube;
