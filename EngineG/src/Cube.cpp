@@ -2,9 +2,14 @@
 #include <cmath>
 #include <glm/gtc/type_ptr.hpp>
 #include "Camera.h"
+#include "physicsEngine/CollisionDetection.h"
+
+GShape::GShape()
+	: mMat(1.0f), m_vbo(nullptr)
+{
+}
 
 Cube::Cube()
-	: mMat(1.0f)
 {
 }
 
@@ -40,7 +45,7 @@ void Cube::init(GLuint* vbo, const glm::mat4& modelMat)
 
 void Cube::update(Camera* camera, GLuint renderingProgram)
 {
-	glm::mat4 mvMat = camera->getViewMatrix() * getModelMatrix();
+	glm::mat4 mvMat = camera->getViewMatrix() * mMat;
 	
 	GLuint mvLoc = glGetUniformLocation(renderingProgram, "mv_matrix");
 	GLuint projLoc = glGetUniformLocation(renderingProgram, "proj_matrix");

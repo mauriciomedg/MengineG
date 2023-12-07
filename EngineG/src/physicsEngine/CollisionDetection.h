@@ -33,7 +33,7 @@ public:
      * Calculates the internals for the primitive.
      */
     virtual void calculateInternals();
-    void calculateInternals(const glm::mat4& transformMath);
+    virtual void calculateInternals(const glm::mat4& transformMath);
     /**
      * This is a convenience function to allow access to the
      * axis vectors in the transform for this primitive.

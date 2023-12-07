@@ -21,8 +21,8 @@ GLuint mvLoc, projLoc;
 
 ////////////////////////////
 PhysicsWorld* pWorld = new PhysicsWorld;
-GEntity* gameObject = new GEntity;
-GEntity* gameObject2 = new GEntity;
+GEntityBox* gameObject = new GEntityBox(pWorld);
+GEntityBox* gameObject2 = new GEntityBox(pWorld);
 
 ////////////////////////////
 
@@ -58,15 +58,13 @@ void init(GLFWwindow* window)
 	glm::vec3 Pos(-5.0f, 40.0f, 25.0f);
 	auto R = glm::rotate(glm::mat4(1.0f), 1.75f, glm::vec3(1.0f, 0.0f, 0.0f));
 	auto Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
-	glm::vec3 halfSize(1.0f, 1.0f, 1.0f);
-	gameObject->init(&vbo[0], Mat, pWorld->instanciatePrimitiveBox(Mat, halfSize, true));
+	gameObject->init(&vbo[0], Mat, true);
 	//
 	// set body gameObject2 in the scene
 	Pos = glm::vec3(5.0f, 40.0f, 25.0f);
 	R = glm::rotate(glm::mat4(1.0f), 1.75f, glm::normalize(glm::vec3(1.0f, 1.0f, 0.0f)));
-	halfSize = glm::vec3(1.0f, 1.0f, 1.0f);
 	Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
-	gameObject2->init(&vbo[1], Mat, pWorld->instanciatePrimitiveBox(Mat, halfSize, true));
+	gameObject2->init(&vbo[1], Mat, true);
 	//
 	Pos = glm::vec3(0.0f, 20.0f, 0.0f);
 	R = glm::mat4(1.0f);
@@ -104,8 +102,8 @@ void display(GLFWwindow* window, double currentTime)
 	///
 	pWorld->runSimulation(elapsed);
 
-	gameObject->update(&camera, renderingProgram, pWorld->getPrimitiveLocation(gameObject->mPhysicsObjectId));
-	gameObject2->update(&camera, renderingProgram, pWorld->getPrimitiveLocation(gameObject2->mPhysicsObjectId));
+	gameObject->update(&camera, renderingProgram);
+	gameObject2->update(&camera, renderingProgram);
 	///
 	
 	lastTime = glfwGetTime();

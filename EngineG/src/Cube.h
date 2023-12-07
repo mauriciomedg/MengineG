@@ -5,20 +5,29 @@
 
 class Camera;
 
-class Cube
+class GShape
+{
+public:
+	GShape();
+
+	virtual void init(GLuint* vbo, const glm::mat4& modelMat) {};
+	virtual void update(Camera* camera, GLuint renderingProgram) {};
+	virtual void setModelMatrix(const glm::mat4& modelMat) {};
+
+protected:
+	glm::mat4 mMat;
+	GLuint* m_vbo;
+};
+
+class Cube : public GShape
 {
 public:
 	Cube();
 
-	void init(GLuint* vbo, const glm::mat4& modelMat);
-	void update(Camera* camera, GLuint renderingProgram);
-	glm::mat4& getModelMatrix() { return mMat; };
-	void setModelMatrix(const glm::mat4& modelMat);
+	virtual void init(GLuint* vbo, const glm::mat4& modelMat);
+	virtual void update(Camera* camera, GLuint renderingProgram);
+	virtual void setModelMatrix(const glm::mat4& modelMat);
 	
 private:
 
-	//void updateModelMatrix();
-
-	glm::mat4 mMat;
-	GLuint* m_vbo;
 };

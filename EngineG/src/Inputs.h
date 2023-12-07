@@ -25,7 +25,14 @@ public:
 
 	~Inputs() {};
 
-	void addBinding(std::string axisName, ActionAxis actionInput, GEntity* obj);
+	template<class T>
+	void addBinding(std::string axisName, void (T::* ActionAxis)(float val), T* obj)
+	{
+	//https://simoncoenen.com/blog/programming/CPP_Delegates
+	//	obj->ActionAxis(3);
+		//m_bindings[axisName] = std::make_tuple(ActionAxis, obj);
+	}
+
 	void mapInput(std::string axisName, char key, float value)
 	{
 		m_InputsMapped[key] = std::make_tuple(axisName, value);

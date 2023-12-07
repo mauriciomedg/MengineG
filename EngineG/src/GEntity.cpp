@@ -2,45 +2,96 @@
 #include "physicsEngine/ParticlesSimulation.h"
 #include "Cube.h"
 #include "physicsEngine/RigidBody.h"
+#include "physicsEngine/PhysicsWorld.h"
 
-GEntity::GEntity()
+GPrimitiveEntity::GPrimitiveEntity(PhysicsWorld* pWorld)
+	: mWorld(pWorld), mShape(nullptr), mCollisionPrimitiveId(-1), mSimulatePhysics(false)
 {
-	meshCube = new Cube;
 }
 
-void GEntity::init(GLuint* vbo, glm::mat4& modelMatrix, int physicsObjectId)
+void GPrimitiveEntity::update(Camera* camera, GLuint renderingProgram)
 {
-	mPhysicsObjectId = physicsObjectId;
-	meshCube->init(vbo, modelMatrix);
+	if (mWorld)
+	{
+		mShape->setModelMatrix(mWorld->getPrimitiveLocation(mCollisionPrimitiveId));
+	}
+
+	if (mShape)
+	{
+		mShape->update(camera, renderingProgram);
+	}
+}
+
+void GPrimitiveEntity::init(GLuint* vbo, glm::mat4& modelMatrix, bool simulatePhysics)
+{
+	if (mShape)
+	{
+		mShape->init(vbo, modelMatrix);
+	}
+
+	if (mWorld && (mCollisionPrimitiveId == -1))
+	{
+		// instantiate generique primitive
+		//mCollisionPrimitiveId = mWorld->instanciatePrimitiveBox(modelMatrix, halfSize, simulatePhysics);
+	}
+}
+
+//////////////////////////////////////////////////////////
+
+GEntityBox::GEntityBox(PhysicsWorld* pWorld)
+	: GPrimitiveEntity(pWorld)
+{
+	mShape = new Cube;
+}
+
+void GEntityBox::init(GLuint* vbo, glm::mat4& modelMatrix, bool simulatePhysics)
+{
+	glm::vec3 halfSize(1.0f, 1.0f, 1.0f);
+	mCollisionPrimitiveId = mWorld->instanciatePrimitiveBox(modelMatrix, halfSize, simulatePhysics);
+
+	GPrimitiveEntity::init(vbo, modelMatrix, simulatePhysics);
+}
+
+void GEntityBox::update(Camera* camera, GLuint renderingProgram)
+{
+	GPrimitiveEntity::update(camera, renderingProgram);
+}
+
+////////////////////////////////////////////////////////////
+
+GEntityBoxControlled::GEntityBoxControlled(PhysicsWorld* pWorld)
+	: GEntityBox(pWorld)
+{
+}
+
+void GEntityBoxControlled::init(GLuint* vbo, glm::mat4& modelMatrix, bool simulatePhysics)
+{
+	GEntityBox::init(vbo, modelMatrix, simulatePhysics);
 
 	bindAxis();
 }
 
-void GEntity::bindAxis()
+void GEntityBoxControlled::bindAxis()
 {
-	Inputs::get().addBinding("MoveForward", &GEntity::moveForward, this);
-	Inputs::get().addBinding("MoveLeft", &GEntity::moveSide, this);
-	Inputs::get().addBinding("MoveRight", &GEntity::moveSide, this);
+	Inputs::get().addBinding<GEntityBoxControlled>("MoveForward", &GEntityBoxControlled::moveForward, this);
+	//Inputs::get().addBinding("MoveLeft", &GEntityBoxControlled::moveSide, this);
+	//Inputs::get().addBinding("MoveRight", &GEntityBoxControlled::moveSide, this);
 }
 
-void GEntity::moveForward(float val)
+void GEntityBoxControlled::moveForward(float val)
 {
 	glm::vec3 impulse(0.0f, 50000.0f, 0.0f);
 	//rigidBody->addMovement(impulse, val);
 }
 
-void GEntity::moveSide(float val)
+void GEntityBoxControlled::moveSide(float val)
 {
 	glm::vec3 impulse(5000.0f, 0.0f, 0.0f);
 	//rigidBody->addMovement(impulse, val);
 }
 
-void GEntity::update(Camera* camera, GLuint renderingProgram, const glm::mat4* modelMatrix)
+void GEntityBoxControlled::update(Camera* camera, GLuint renderingProgram)
 {
-	if (modelMatrix)
-	{
-		meshCube->setModelMatrix(*modelMatrix);
-	}
-	
-	meshCube->update(camera, renderingProgram);
+	GEntityBox::update(camera, renderingProgram);
 }
+////////////////////////////////////////////////////////////

@@ -37,14 +37,23 @@ namespace
 	}
 }
 
+int PhysicsWorld::instanciatePrimitive(const glm::mat4& transform, bool isSimulatingPhysics)
+{
+	return -1;
+}
+
 int PhysicsWorld::instanciatePrimitiveBox(const glm::mat4& transform, glm::vec3& halfSize, bool isSimulatingPhysics)
 {
 	CollisionBox* box = new CollisionBox;
 	box->halfSize = halfSize;
 	mPrimitive.push_back(box);
-	mPrimitive.back()->body = new RigidBody();
-	mPrimitive.back()->body->init(transform, halfSize);
-	mPrimitive.back()->calculateInternals();
+	mPrimitive.back()->body = (isSimulatingPhysics ? new RigidBody() : nullptr);
+	if (isSimulatingPhysics) 
+	{
+		mPrimitive.back()->body->init(transform, halfSize);
+		mPrimitive.back()->calculateInternals();
+	}
+	mPrimitive.back()->calculateInternals(transform);
 	mPrimitive.back()->mSimulatePhysics = isSimulatingPhysics;
 	return mPrimitive.size() - 1;
 }
@@ -151,10 +160,7 @@ void PhysicsWorld::init()
 	mCollisionResponse = new CollisionResponse;
 }
 
-const glm::mat4* PhysicsWorld::getPrimitiveLocation(int id) const
+const glm::mat4& PhysicsWorld::getPrimitiveLocation(int id) const
 {
-	if (mPrimitive[id]->mSimulatePhysics)
-		return &mPrimitive[id]->getTransform();
-	else
-		return nullptr;
+	return mPrimitive[id]->getTransform();
 }

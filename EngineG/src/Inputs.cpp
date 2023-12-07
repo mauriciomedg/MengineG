@@ -20,10 +20,11 @@ Inputs::Inputs()
 {
 }
 
-void Inputs::addBinding(std::string axisName, ActionAxis actionInput, GEntity* obj)
-{
-	m_bindings[axisName] = std::make_tuple(actionInput, obj);
-}
+//template<class T>
+//void Inputs::addBinding(std::string axisName, ActionAxis actionInput, T* obj)
+//{
+//	m_bindings[axisName] = std::make_tuple(actionInput, obj);
+//}
 
 void Inputs::update()
 {
