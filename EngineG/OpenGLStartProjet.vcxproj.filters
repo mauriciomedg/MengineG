@@ -95,5 +95,8 @@
     <ClInclude Include="src\physicsEngine\Contact.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Delegate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

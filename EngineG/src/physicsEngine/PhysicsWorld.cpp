@@ -91,6 +91,11 @@ void PhysicsWorld::generateContacts()
 	}
 }
 
+void PhysicsWorld::addMovement(int id, glm::vec3& intensity, float scale)
+{
+	mPrimitive[id]->body->addMovement(intensity, scale);
+}
+
 void PhysicsWorld::runSimulation(float deltaT)
 {
 	int nbSuperSample = 3;

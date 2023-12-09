@@ -8,6 +8,7 @@
 #include <map>
 #include <mutex>
 #include <queue>
+#include "Delegate.h"
 
 class GEntity;
 struct AxisParams;
@@ -25,12 +26,18 @@ public:
 
 	~Inputs() {};
 
-	template<class T>
-	void addBinding(std::string axisName, void (T::* ActionAxis)(float val), T* obj)
+	//template <class T, typename s = void (T::*)(float)>
+	//void addBinding(std::string axisName, s a, T* obj)
+	//{
+	////https://simoncoenen.com/blog/programming/CPP_Delegates
+	//// https://medium.com/@kayraurf/delegates-in-c-polos-56211a7536ba
+	////	obj->ActionAxis(3);
+	//	//m_bindings[axisName] = std::make_tuple(ActionAxis, obj);
+	//}
+
+	void addBinding(std::string axisName, delegate d)
 	{
-	//https://simoncoenen.com/blog/programming/CPP_Delegates
-	//	obj->ActionAxis(3);
-		//m_bindings[axisName] = std::make_tuple(ActionAxis, obj);
+		m_bindings[axisName] = d;
 	}
 
 	void mapInput(std::string axisName, char key, float value)
@@ -50,7 +57,7 @@ public:
 	void update();
 private:
 
-	std::map<std::string, std::tuple<ActionAxis, GEntity*>> m_bindings;
+	std::map<std::string, delegate> m_bindings;
 	std::map<char, std::tuple<std::string, float>> m_InputsMapped;
 private:
 

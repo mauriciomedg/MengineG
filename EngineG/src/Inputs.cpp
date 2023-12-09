@@ -20,12 +20,6 @@ Inputs::Inputs()
 {
 }
 
-//template<class T>
-//void Inputs::addBinding(std::string axisName, ActionAxis actionInput, T* obj)
-//{
-//	m_bindings[axisName] = std::make_tuple(actionInput, obj);
-//}
-
 void Inputs::update()
 {
 	mtx.lock();
@@ -35,10 +29,10 @@ void Inputs::update()
 		auto axisNameVal = m_InputsMapped[asciiChar];
 		if (std::get<0>(axisNameVal) != "")
 		{
-			auto pair = m_bindings[std::get<0>(axisNameVal)];
-			if (std::get<0>(pair) != nullptr)
+			auto itt = m_bindings.find(std::get<0>(axisNameVal));
+			if (itt != m_bindings.end())
 			{
-				std::invoke(std::get<0>(pair), std::get<1>(pair), std::get<1>(axisNameVal));
+				itt->second(std::get<1>(axisNameVal));
 			}
 		}
 		m_inputsAxisNames.pop();

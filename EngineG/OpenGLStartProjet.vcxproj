@@ -162,6 +162,7 @@
   <ItemGroup>
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Cube.h" />
+    <ClInclude Include="src\Delegate.h" />
     <ClInclude Include="src\GEntity.h" />
     <ClInclude Include="src\Inputs.h" />
     <ClInclude Include="src\physicsEngine\CollisionDetection.h" />

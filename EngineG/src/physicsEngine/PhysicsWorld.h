@@ -22,6 +22,7 @@ public:
 	int instanciatePrimitive(const glm::mat4& transform, bool isSimulatingPhysics = false);
 	int instanciatePrimitiveBox(const glm::mat4& transform, glm::vec3& halfSize, bool isSimulatingPhysics = false);
 	int instanciatePrimitivePlane(const glm::mat4& transform, bool isSimulatingPhysics = false);
+	void addMovement(int id, glm::vec3& intensity, float scale);
 	const glm::mat4& getPrimitiveLocation(int id) const;
 	void runSimulation(float deltaT);
 

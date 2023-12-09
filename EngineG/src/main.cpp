@@ -12,6 +12,7 @@
 
 #include "GEntity.h"
 #include "physicsEngine/PhysicsWorld.h"
+#include "Delegate.h"
 
 #define numVAOs 1
 GLuint renderingProgram;
@@ -22,7 +23,7 @@ GLuint mvLoc, projLoc;
 ////////////////////////////
 PhysicsWorld* pWorld = new PhysicsWorld;
 GEntityBox* gameObject = new GEntityBox(pWorld);
-GEntityBox* gameObject2 = new GEntityBox(pWorld);
+GEntityBoxControlled* gameObject2 = new GEntityBoxControlled(pWorld);
 
 ////////////////////////////
 
