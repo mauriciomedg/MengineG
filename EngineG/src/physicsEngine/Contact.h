@@ -1,7 +1,7 @@
 #pragma once
 #include <glm/gtc/type_ptr.hpp>
 
-class RigidBody;
+struct RigidBody;
 
 class Contact
 {
