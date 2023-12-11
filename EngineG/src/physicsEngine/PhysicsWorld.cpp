@@ -80,6 +80,13 @@ void PhysicsWorld::generateContacts()
 		{
 			if (box)
 			{
+				CollisionBox* box2 = dynamic_cast<CollisionBox*>(mPrimitive[j]);
+
+				if (box2)
+				{
+					CollisionDetector::boxAndBox(*box, *box2, &mCollisionDetection->cData);
+				}
+
 				CollisionPlane* plane = dynamic_cast<CollisionPlane*>(mPrimitive[j]);
 
 				if (plane)

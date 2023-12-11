@@ -94,7 +94,6 @@ namespace
 	{
 		glm::vec3 localPoint = contactPoint - b->mX;
 		float numerator = -(1 + epsilon) * glm::dot(v, N);
-		//float numerator = -glm::dot(v, N) - epsilon * (glm::dot(v, N) - glm::dot(b->mPreviousV, N));
 		float term1 = 1 / b->mMass;
 		float term3 = glm::dot(N, glm::cross(b->mIinv * glm::cross(localPoint, N), localPoint));
 
@@ -137,7 +136,6 @@ namespace
 		
 		if (glm::length(velToKill) > 0)
 		{
-			//std::cout << glm::length(velToKill) << std::endl;
 			glm::vec3 Nplanar = -glm::normalize(velToKill);
 			auto forcePlanar = applyImpulse(b, v, contact->contactPoint, Nplanar, epsilon);
 		
@@ -288,8 +286,8 @@ void CollisionResponse::update(CollisionData* cData, std::vector<CollisionPrimit
 				if (index != -1)
 				{
 					Contact* c = &(cData->contactArray[index]);
-					//resolveFrictionlessContact(c, 0.8f);
-					resolveFrictionContact(c, 0.0f);
+					resolveFrictionlessContact(c, 0.2f);
+					//resolveFrictionContact(c, 0.0f);
 				}
 			}
 		}

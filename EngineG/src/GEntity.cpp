@@ -81,13 +81,13 @@ void GEntityBoxControlled::bindAxis()
 
 void GEntityBoxControlled::moveForward(float val)
 {
-	glm::vec3 impulse(0.0f, 50000.0f, 0.0f);
+	glm::vec3 impulse(0.0f, 5000.0f, 0.0f);
 	mWorld->addMovement(mCollisionPrimitiveId, impulse, val);
 }
 
 void GEntityBoxControlled::moveSide(float val)
 {
-	glm::vec3 impulse(5000.0f, 0.0f, 0.0f);
+	glm::vec3 impulse(100.0f, 0.0f, 0.0f);
 	mWorld->addMovement(mCollisionPrimitiveId, impulse, val);
 }
 
