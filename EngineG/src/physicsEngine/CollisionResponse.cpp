@@ -103,19 +103,6 @@ namespace
 		return force;
 	}
 
-	//glm::vec3 applyImpulse2(RigidBody* b, const glm::vec3& v, const glm::vec3& contactPoint, const glm::vec3& N, float epsilon)
-	//{
-	//	glm::vec3 localPoint = contactPoint - b->mX;
-	//	float numerator = -(1 + epsilon) * glm::dot(v, N);
-	//	float term1 = 1 / b->mMass;
-	//	float term3 = glm::dot(N, glm::cross(b->mIinv * glm::cross(localPoint, N), localPoint));
-	//
-	//	float j = numerator / (term1 + term3);
-	//	glm::vec3 force = j * N;
-	//
-	//	return force;
-	//}
-	
 	void resolveFrictionContact(Contact* contact, float epsilon)
 	{
 		RigidBody* b = contact->body[0];
@@ -147,23 +134,68 @@ namespace
 		b->mW = b->mIinv * b->mL;
 	}
 
+	void velocity(RigidBody* b, const glm::vec3& P, glm::vec3& v)
+	{
+		if (b)
+		{
+			v = b->mV + glm::cross(b->mW, P - b->mX);
+		}
+	}
+
+	glm::vec3 applyImpulse(Contact* contact, float epsilon)
+	{
+		RigidBody* b1 = contact->body[0];
+		RigidBody* b2 = contact->body[1];
+
+		glm::vec3 v1(0.0f);
+		glm::vec3 v2(0.0f);
+		velocity(b1, contact->contactPoint, v1);
+		velocity(b2, contact->contactPoint, v2);
+
+		glm::vec3 v = v1 - v2;
+		glm::vec3& N = contact->contactNormal;
+		glm::vec3 localPoint1 = b1 ? contact->contactPoint - b1->mX : glm::vec3(0.0f);
+		glm::vec3 localPoint2 = b2 ? contact->contactPoint - b2->mX : glm::vec3(0.0f);
+
+		float numerator = -(1 + epsilon) * glm::dot(v, N);
+		float term1 = b1 ? 1 / b1->mMass : 0.0f;
+		float term2 = b2 ? 1 / b2->mMass : 0.0f;
+		float term3 = b1 ? glm::dot(N, glm::cross(b1->mIinv * glm::cross(localPoint1, N), localPoint1)) : 0.0f;
+		float term4 = b2 ? glm::dot(N, glm::cross(b2->mIinv * glm::cross(localPoint2, N), localPoint2)) : 0.0f;
+
+		float term = term1 + term2 + term3 + term4;
+		float j = term > 0.0f ? numerator / (term1 + term3) : 0.0f;
+		glm::vec3 force = j * N;
+
+		return force;
+	}
+
 	void resolveFrictionlessContact(Contact* contact, float epsilon)
 	{
-		RigidBody* b = contact->body[0];
-		glm::vec3& N = contact->contactNormal;
-		glm::vec3 v = b->mV + glm::cross(b->mW, contact->contactPoint - b->mX);
+		auto force = applyImpulse(contact, epsilon);
 
-		auto force = applyImpulse(b, v, contact->contactPoint, N, epsilon);
+		RigidBody* b1 = contact->body[0];
+		RigidBody* b2 = contact->body[1];
 
-		b->mP += force;
-		b->mL += glm::cross(contact->contactPoint - b->mX, force);
-	
-		b->mV = b->mP / b->mMass;
-		b->mW = b->mIinv * b->mL;
+		if (b1)
+		{
+			b1->mP += force;
+			b1->mL += glm::cross(contact->contactPoint - b1->mX, force);
+
+			b1->mV = b1->mP / b1->mMass;
+			b1->mW = b1->mIinv * b1->mL;
+		}
+		
+		if (b2)
+		{
+			b2->mP -= force;
+			b2->mL -= glm::cross(contact->contactPoint - b2->mX, force);
+
+			b2->mV = b2->mP / b2->mMass;
+			b2->mW = b2->mIinv * b2->mL;
+		}
 	}
 }
-
-
 
 CollisionResponse::CollisionResponse()
 {
