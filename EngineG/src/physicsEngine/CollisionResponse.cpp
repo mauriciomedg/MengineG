@@ -75,9 +75,9 @@ namespace
 			b2->mV = b2->mP / b2->mMass;
 			b2->mW = b2->mIinv * b2->mL;
 		}
-		
-		//if (contact->friction >= 0.0f)
-		//{
+
+		if (contact->friction >= 0.0f)
+		{
 			glm::vec3 v = desiredVelocity(contact);
 			glm::vec3 velToKill = (v - glm::dot(v, N) * N);
 
@@ -104,7 +104,7 @@ namespace
 					b2->mW = b2->mIinv * b2->mL;
 				}
 			}
-		//}
+		}
 	}
 }
 

@@ -84,7 +84,7 @@ void PhysicsWorld::generateContacts()
 
 				if (box2)
 				{
-					mCollisionDetection->cData.friction = 0.0f;
+					mCollisionDetection->cData.friction = -1.0f;
 					mCollisionDetection->cData.restitution = 0.0f;
 					CollisionDetector::boxAndBox(*box, *box2, &mCollisionDetection->cData);
 				}
@@ -93,7 +93,7 @@ void PhysicsWorld::generateContacts()
 
 				if (plane)
 				{
-					mCollisionDetection->cData.friction = 0.8f;
+					mCollisionDetection->cData.friction = 0.0f;
 					mCollisionDetection->cData.restitution = 0.4f;
 					CollisionDetector::boxAndHalfSpace(*box, *plane, &mCollisionDetection->cData);
 				}
