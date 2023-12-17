@@ -17,7 +17,7 @@ class GPrimitiveEntity
 public:
 	GPrimitiveEntity(PhysicsWorld* mWorld);
 
-	virtual void init(GLuint* vbo, glm::mat4& modelMatrix, bool simulatePhysics);
+	virtual void init(GLuint* vbo, const glm::mat4& modelMatrix, bool simulatePhysics);
 	virtual void update(Camera* camera, GLuint renderingProgram);
 
 protected:
@@ -35,7 +35,7 @@ public:
 
 	GEntityBox(PhysicsWorld* pWorld);
 
-	virtual void init(GLuint* vbo, glm::mat4& modelMatrix, bool simulatePhysics);
+	virtual void init(GLuint* vbo, const glm::mat4& modelMatrix, bool simulatePhysics);
 	virtual void update(Camera* camera, GLuint renderingProgram);
 private:
 
@@ -57,7 +57,7 @@ public:
 
 	GEntityBoxControlled(PhysicsWorld* pWorld);
 
-	virtual void init(GLuint* vbo, glm::mat4& modelMatrix, bool simulatePhysics);
+	virtual void init(GLuint* vbo, const glm::mat4& modelMatrix, bool simulatePhysics);
 	virtual void update(Camera* camera, GLuint renderingProgram);
 	void bindAxis();
 	void moveForward(float val);

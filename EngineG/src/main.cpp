@@ -22,7 +22,8 @@ GLuint mvLoc, projLoc;
 
 ////////////////////////////
 PhysicsWorld* pWorld = new PhysicsWorld;
-GEntityBox* gameObject = new GEntityBox(pWorld);
+
+std::vector<GEntityBox*> gameObjectArray;
 GEntityBoxControlled* gameObject2 = new GEntityBoxControlled(pWorld);
 
 ////////////////////////////
@@ -40,10 +41,6 @@ GLuint createShaderProgram()
 	return Utils::createShaderProgram(vshaderSource, fshaderSource);
 }
 
-float vPositions[] = { 0.25, -0.25, 0.0,
-						-0.25, -0.25, 0.0,
-						0.25, 0.25, 0.0 };
-
 Camera camera;
 
 //Pyramid onePyramid;
@@ -55,17 +52,26 @@ void init(GLFWwindow* window)
 	glBindVertexArray(vao[0]);
 	glGenBuffers(2, vbo);
 	
-	/// set body gameObject in the scene
-	glm::vec3 Pos(-5.0f, 40.0f, 25.0f);
-	auto R = glm::rotate(glm::mat4(1.0f), 1.75f, glm::vec3(1.0f, 0.0f, 0.0f));
-	auto Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
-	gameObject->init(&vbo[0], Mat, true);
-	//
 	// set body gameObject2 in the scene
-	Pos = glm::vec3(5.0f, 40.0f, 25.0f);
-	R = glm::rotate(glm::mat4(1.0f), 1.75f, glm::normalize(glm::vec3(1.0f, 1.0f, 0.0f)));
-	Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
+	glm::vec3 Pos = glm::vec3(3.0f, 40.0f, 25.0f);
+	auto R = glm::rotate(glm::mat4(1.0f), 1.75f, glm::normalize(glm::vec3(1.0f, 1.0f, 0.0f)));
+	auto Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
 	gameObject2->init(&vbo[1], Mat, true);
+	//
+
+	for (int i = 0; i < 3; ++i)
+	{
+		for (int j = 0; j < 3; ++j)
+		{
+			GEntityBox* obj = new GEntityBox(pWorld);
+			glm::vec3 Pos(-5.0f + j * 10.0f, 20 + i * 22.0f, 25.0f);
+			auto R = glm::rotate(glm::mat4(1.0f), 1.75f, glm::vec3(1.0f, 0.0f, 0.0f));
+			auto Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
+			obj->init(&vbo[0], Mat, true);
+			gameObjectArray.push_back(obj);
+		}
+	}
+
 	//
 	Pos = glm::vec3(0.0f, 20.0f, 0.0f);
 	R = glm::mat4(1.0f);
@@ -103,7 +109,11 @@ void display(GLFWwindow* window, double currentTime)
 	///
 	pWorld->runSimulation(elapsed);
 
-	gameObject->update(&camera, renderingProgram);
+	for (GEntityBox* obj : gameObjectArray)
+	{
+		obj->update(&camera, renderingProgram);
+	}
+
 	gameObject2->update(&camera, renderingProgram);
 	///
 	

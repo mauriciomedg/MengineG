@@ -83,6 +83,9 @@ namespace
 
 	float desiredVelocity(Contact* contact, float epsilon)
 	{
+		if (!contact->body[0])
+			return 0.0f;
+
 		RigidBody* b = contact->body[0];
 		glm::vec3& N = contact->contactNormal;
 		glm::vec3 v = b->mV + glm::cross(b->mW, contact->contactPoint - b->mX);
@@ -318,7 +321,7 @@ void CollisionResponse::update(CollisionData* cData, std::vector<CollisionPrimit
 				if (index != -1)
 				{
 					Contact* c = &(cData->contactArray[index]);
-					resolveFrictionlessContact(c, 0.2f);
+					resolveFrictionlessContact(c, 0.0f);
 					//resolveFrictionContact(c, 0.0f);
 				}
 			}

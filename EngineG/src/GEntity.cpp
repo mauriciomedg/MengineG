@@ -23,7 +23,7 @@ void GPrimitiveEntity::update(Camera* camera, GLuint renderingProgram)
 	}
 }
 
-void GPrimitiveEntity::init(GLuint* vbo, glm::mat4& modelMatrix, bool simulatePhysics)
+void GPrimitiveEntity::init(GLuint* vbo, const glm::mat4& modelMatrix, bool simulatePhysics)
 {
 	if (mShape)
 	{
@@ -45,7 +45,7 @@ GEntityBox::GEntityBox(PhysicsWorld* pWorld)
 	mShape = new Cube;
 }
 
-void GEntityBox::init(GLuint* vbo, glm::mat4& modelMatrix, bool simulatePhysics)
+void GEntityBox::init(GLuint* vbo, const glm::mat4& modelMatrix, bool simulatePhysics)
 {
 	glm::vec3 halfSize(1.0f, 1.0f, 1.0f);
 	mCollisionPrimitiveId = mWorld->instanciatePrimitiveBox(modelMatrix, halfSize, simulatePhysics);
@@ -65,7 +65,7 @@ GEntityBoxControlled::GEntityBoxControlled(PhysicsWorld* pWorld)
 {
 }
 
-void GEntityBoxControlled::init(GLuint* vbo, glm::mat4& modelMatrix, bool simulatePhysics)
+void GEntityBoxControlled::init(GLuint* vbo, const glm::mat4& modelMatrix, bool simulatePhysics)
 {
 	GEntityBox::init(vbo, modelMatrix, simulatePhysics);
 
