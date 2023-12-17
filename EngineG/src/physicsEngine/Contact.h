@@ -23,8 +23,8 @@ public:
     glm::vec3 contactNormal;
     glm::vec3 relContactPoint[2];
 
-    float friction;
-    float restitution;
+    float friction = 0.0f;
+    float restitution = 0.0f;
 
     float contactDepth;
     int localContactId;

@@ -59,12 +59,12 @@ void init(GLFWwindow* window)
 	gameObject2->init(&vbo[1], Mat, true);
 	//
 
-	for (int i = 0; i < 3; ++i)
+	for (int h = 0; h < 10; ++h)
 	{
 		for (int j = 0; j < 3; ++j)
 		{
 			GEntityBox* obj = new GEntityBox(pWorld);
-			glm::vec3 Pos(-5.0f + j * 10.0f, 20 + i * 22.0f, 25.0f);
+			glm::vec3 Pos(-5.0f + j * 10.0f, 20 + h * 5.0f, 25.0f);
 			auto R = glm::rotate(glm::mat4(1.0f), 1.75f, glm::vec3(1.0f, 0.0f, 0.0f));
 			auto Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
 			obj->init(&vbo[0], Mat, true);
