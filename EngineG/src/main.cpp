@@ -41,7 +41,7 @@ GLuint createShaderProgram()
 	return Utils::createShaderProgram(vshaderSource, fshaderSource);
 }
 
-Camera camera;
+Camera* camera = new Camera;
 
 //Pyramid onePyramid;
 
@@ -52,10 +52,16 @@ void init(GLFWwindow* window)
 	glBindVertexArray(vao[0]);
 	glGenBuffers(2, vbo);
 	
+	//
+	glm::vec3 Pos = glm::vec3(0.0f, 21.0f, 60.0f);
+	//auto R = glm::rotate(glm::mat4(1.0f), 1.75f, glm::normalize(glm::vec3(1.0f, 1.0f, 0.0f)));
+	auto Mat = glm::translate(glm::mat4(1.0f), Pos);
+	camera->init(Mat, pWorld, true);
+
 	// set body gameObject2 in the scene
-	glm::vec3 Pos = glm::vec3(3.0f, 40.0f, 25.0f);
+	Pos = glm::vec3(3.0f, 40.0f, 25.0f);
 	auto R = glm::rotate(glm::mat4(1.0f), 1.75f, glm::normalize(glm::vec3(1.0f, 1.0f, 0.0f)));
-	auto Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
+	Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
 	gameObject2->init(&vbo[1], Mat, true);
 	//
 
@@ -104,17 +110,15 @@ void display(GLFWwindow* window, double currentTime)
 	//
 	Inputs::get().update();
 	//
-	///
-	camera.update(window);
-	///
 	pWorld->runSimulation(elapsed);
+	camera->update(window);
 
 	for (GEntityBox* obj : gameObjectArray)
 	{
-		obj->update(&camera, renderingProgram);
+		obj->update(camera, renderingProgram);
 	}
 
-	gameObject2->update(&camera, renderingProgram);
+	gameObject2->update(camera, renderingProgram);
 	///
 	
 	lastTime = glfwGetTime();
@@ -132,9 +136,13 @@ int main(void)
 	init(window);
 	
 	Inputs& inputs = Inputs::get();
-	inputs.mapInput("MoveForward", 'w', 1.0f);
-	inputs.mapInput("MoveLeft", 'a', -1.0f);
-	inputs.mapInput("MoveRight", 'd', 1.0f);
+	inputs.mapInput("MoveForward", '8', 1.0f);
+	inputs.mapInput("MoveLeft", '4', -1.0f);
+	inputs.mapInput("MoveRight", '6', 1.0f);
+	inputs.mapInput("MoveForwardCamera", 'w', 1.0f);
+	inputs.mapInput("MoveBackwardCamera", 's', -1.0f);
+	inputs.mapInput("MoveLeftCamera", 'a', -1.0f);
+	inputs.mapInput("MoveRightCamera", 'd', 1.0f);
 
 	std::thread first([&]() { inputs.updateIO(); });     // spawn new thread that calls updateIO()
 		

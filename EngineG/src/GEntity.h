@@ -62,8 +62,7 @@ public:
 	void bindAxis();
 	void moveForward(float val);
 	void moveSide(float val);
-	void consumeInput();
-	
+
 private:
 
 };

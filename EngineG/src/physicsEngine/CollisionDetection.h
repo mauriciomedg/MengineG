@@ -50,6 +50,8 @@ public:
 
     bool mSimulatePhysics = false;
 
+    bool mIgnoreCollision = false;
+
 protected:
     /**
      * The resultant transform of the primitive. This is

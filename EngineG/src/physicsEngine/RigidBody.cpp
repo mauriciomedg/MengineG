@@ -42,11 +42,18 @@ void RigidBody::addMovement(glm::vec3& intensity, float scale)
 	mForceAdded += intensity * scale;
 }
 
+void RigidBody::move(const glm::vec3& distance)
+{
+	mX += distance;
+	calculateInternalData();
+}
+
 void RigidBody::computeForceAndTorque(float deltaT, const glm::vec3& gravity)
 {
 	// gravity and drag
 	float k_drag = 0.0f;
 
+	glm::vec3 gravityAcc = mIsAffectedByGravity ? gravity : glm::vec3(0.0f);
 	///////////////
 	mPreviousAcc = mForce / mMass;
 	mPreviousV = mPreviousAcc * deltaT;
@@ -64,7 +71,7 @@ void RigidBody::computeForceAndTorque(float deltaT, const glm::vec3& gravity)
 	
 	glm::vec3 torque = glm::cross(pos, force);
 	mTorque += torque - 0.8f * mW;
-	mForce += mMass * gravity - k_drag * mV + force;
+	mForce += mMass * gravityAcc - k_drag * mV + force;
 
 	mForceAdded = glm::vec3(0.0f, 0.0f, 0.0f);
 }

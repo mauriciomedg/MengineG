@@ -78,11 +78,11 @@ void PhysicsWorld::generateContacts()
 
 		for (int j = i + 1; j < mPrimitive.size(); ++j)
 		{
-			if (box)
+			if (box && !box->mIgnoreCollision)
 			{
 				CollisionBox* box2 = dynamic_cast<CollisionBox*>(mPrimitive[j]);
 
-				if (box2)
+				if (box2 && !box2->mIgnoreCollision)
 				{
 					mCollisionDetection->cData.friction = -1.0f;
 					mCollisionDetection->cData.restitution = 0.0f;
@@ -107,11 +107,27 @@ void PhysicsWorld::addMovement(int id, glm::vec3& intensity, float scale)
 	mPrimitive[id]->body->addMovement(intensity, scale);
 }
 
+void PhysicsWorld::move(int id, glm::vec3& velocity)
+{
+	mPrimitive[id]->body->move(velocity * mDeltaT);
+}
+
+void PhysicsWorld::setAffectedByGravity(int id, bool isAffetedByGravity)
+{
+	mPrimitive[id]->body->mIsAffectedByGravity = isAffetedByGravity;
+}
+
+void PhysicsWorld::setIgnoreCollision(int id, bool ignore)
+{
+	mPrimitive[id]->mIgnoreCollision = ignore;
+}
+
 void PhysicsWorld::runSimulation(float deltaT)
 {
 	int nbSuperSample = 3;
 
 	deltaT = deltaT / nbSuperSample;
+	mDeltaT = deltaT;
 
 	for (int sample = 0; sample < nbSuperSample; ++sample)
 	{

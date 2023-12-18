@@ -17,6 +17,7 @@ public:
 	void arrayToState(float* y);
 	void stateToArray(float* y);
 	void computeForceAndTorque(float deltaT, const glm::vec3& gravity);
+	void move(const glm::vec3& distance);
 	void update(float* y);
 
 	int mIndex = 0;
@@ -49,6 +50,7 @@ public:
 
 	/////////////////////////////////
 	glm::vec3 mForceAdded;
+	bool mIsAffectedByGravity = true;
 
 	void addMovement(glm::vec3& intensity, float scale);
 	void calculateInternalData();
