@@ -1,181 +1,41 @@
 #include "Inputs.h"
 #include "GEntity.h"
-#include <mutex>
+#include <GLFW/glfw3.h>
 
-namespace
+std::map<std::string, int> Inputs::m_conversion;
+void Inputs::bindConversion()
 {
-	struct AxisParams
-	{
-		CHAR  m_AsciiChar;
-		float m_InputValue;
-	};
-}
+	m_conversion["w"] = GLFW_KEY_W;
+	m_conversion["a"] = GLFW_KEY_A;
+	m_conversion["s"] = GLFW_KEY_S;
+	m_conversion["d"] = GLFW_KEY_D;
 
-void print_num(int i)
-{
-	std::cout << i << '\n';
+	m_conversion["up"] = GLFW_KEY_UP;
+	m_conversion["left"] = GLFW_KEY_LEFT;
+	m_conversion["right"] = GLFW_KEY_RIGHT;
+	m_conversion["down"] = GLFW_KEY_D;
 }
 
 Inputs::Inputs()
 {
 }
 
-void Inputs::update()
+void Inputs::update(GLFWwindow* window)
 {
-	mtx.lock();
-	while (!m_inputsAxisNames.empty())
+	//https://www.glfw.org/docs/3.3/input_guide.html
+
+	std::map<int, std::tuple<std::string, float>>::iterator itt;
+	for (itt = m_InputsMapped.begin(); itt != m_InputsMapped.end(); ++itt)
 	{
-		char asciiChar = m_inputsAxisNames.front();
-		auto axisNameVal = m_InputsMapped[asciiChar];
-		if (std::get<0>(axisNameVal) != "")
+		int state = glfwGetKey(window, itt->first);
+		if (state == GLFW_PRESS)
 		{
-			auto itt = m_bindings.find(std::get<0>(axisNameVal));
-			if (itt != m_bindings.end())
+			auto& axisNameVal = itt->second;
+			auto itt_binding = m_bindings.find(std::get<0>(axisNameVal));
+			if (itt_binding != m_bindings.end())
 			{
-				itt->second(std::get<1>(axisNameVal));
-			}
-		}
-		m_inputsAxisNames.pop();
-	}
-	mtx.unlock();
-}
-
-void Inputs::updateIO()
-{
-	////// <IO>
-	DWORD cNumRead, fdwMode, i;
-	INPUT_RECORD irInBuf[128];
-	int counter = 0;
-
-	// Get the standard input handle. 
-
-	hStdin = GetStdHandle(STD_INPUT_HANDLE);
-	if (hStdin == INVALID_HANDLE_VALUE)
-		ErrorExit("GetStdHandle");
-
-	// Save the current input mode, to be restored on exit. 
-
-	if (!GetConsoleMode(hStdin, &fdwSaveOldMode))
-		ErrorExit("GetConsoleMode");
-
-	// Enable the window and mouse input events. 
-
-	fdwMode = ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT | ENABLE_INSERT_MODE | ENABLE_EXTENDED_FLAGS;
-	if (!SetConsoleMode(hStdin, fdwMode))
-		ErrorExit("SetConsoleMode");
-	/// <returns></returns>
-
-	while (true)//counter++ <= 100)
-	{
-		if (!ReadConsoleInput(
-			hStdin,      // input buffer handle 
-			irInBuf,     // buffer to read into 
-			128,         // size of read buffer 
-			&cNumRead)) // number of records read 
-			ErrorExit("ReadConsoleInput");
-
-		// Dispatch the events to the appropriate handler. 
-
-		for (i = 0; i < cNumRead; i++)
-		{
-			switch (irInBuf[i].EventType)
-			{
-			case KEY_EVENT: // keyboard input 
-				KeyEventProc(irInBuf[i].Event.KeyEvent);
-				break;
-
-			case MOUSE_EVENT: // mouse input 
-				MouseEventProc(irInBuf[i].Event.MouseEvent);
-				break;
-
-			case WINDOW_BUFFER_SIZE_EVENT: // scrn buf. resizing 
-				ResizeEventProc(irInBuf[i].Event.WindowBufferSizeEvent);
-				break;
-
-			case FOCUS_EVENT:  // disregard focus events 
-
-			case MENU_EVENT:   // disregard menu events 
-				break;
-
-			default:
-				ErrorExit("Unknown event type");
-				break;
+				itt_binding->second(std::get<1>(axisNameVal));
 			}
 		}
 	}
-}
-
-VOID Inputs::ErrorExit(LPCSTR lpszMessage)
-{
-	fprintf(stderr, "%s\n", lpszMessage);
-
-	// Restore input mode on exit.
-
-	SetConsoleMode(hStdin, fdwSaveOldMode);
-
-	ExitProcess(0);
-}
-
-VOID Inputs::KeyEventProc(KEY_EVENT_RECORD ker)
-{
-	//printf("Key event: ");
-
-	if (ker.bKeyDown)
-	{
-		mtx.lock();
-		m_inputsAxisNames.push(ker.uChar.AsciiChar);
-		mtx.unlock();
-	}	
-	else
-	{
-		//printf("key released\n");
-	}
-}
-
-VOID Inputs::MouseEventProc(MOUSE_EVENT_RECORD mer)
-{
-#ifndef MOUSE_HWHEELED
-#define MOUSE_HWHEELED 0x0008
-#endif
-	//printf("Mouse event: ");
-
-	switch (mer.dwEventFlags)
-	{
-	case 0:
-
-		if (mer.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED)
-		{
-			//printf("left button press \n");
-		}
-		else if (mer.dwButtonState == RIGHTMOST_BUTTON_PRESSED)
-		{
-			//printf("right button press \n");
-		}
-		else
-		{
-			//printf("button press\n");
-		}
-		break;
-	case DOUBLE_CLICK:
-		//printf("double click\n");
-		break;
-	case MOUSE_HWHEELED:
-		//printf("horizontal mouse wheel\n");
-		break;
-	case MOUSE_MOVED:
-		//printf("mouse moved\n");
-		break;
-	case MOUSE_WHEELED:
-		//printf("vertical mouse wheel\n");
-		break;
-	default:
-		//printf("unknown\n");
-		break;
-	}
-}
-
-VOID Inputs::ResizeEventProc(WINDOW_BUFFER_SIZE_RECORD wbsr)
-{
-	printf("Resize event\n");
-	printf("Console screen buffer is %d columns by %d rows.\n", wbsr.dwSize.X, wbsr.dwSize.Y);
 }

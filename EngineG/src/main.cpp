@@ -12,7 +12,6 @@
 
 #include "GEntity.h"
 #include "physicsEngine/PhysicsWorld.h"
-#include "Delegate.h"
 
 #define numVAOs 1
 GLuint renderingProgram;
@@ -46,7 +45,7 @@ Camera* camera = new Camera;
 //Pyramid onePyramid;
 
 void init(GLFWwindow* window) 
-{ 
+{
 	renderingProgram = createShaderProgram();
 	glGenVertexArrays(numVAOs, vao);
 	glBindVertexArray(vao[0]);
@@ -56,7 +55,7 @@ void init(GLFWwindow* window)
 	glm::vec3 Pos = glm::vec3(0.0f, 21.0f, 60.0f);
 	//auto R = glm::rotate(glm::mat4(1.0f), 1.75f, glm::normalize(glm::vec3(1.0f, 1.0f, 0.0f)));
 	auto Mat = glm::translate(glm::mat4(1.0f), Pos);
-	camera->init(Mat, pWorld, true);
+	camera->init(Mat, pWorld, false);
 
 	// set body gameObject2 in the scene
 	Pos = glm::vec3(3.0f, 40.0f, 25.0f);
@@ -108,7 +107,7 @@ void display(GLFWwindow* window, double currentTime)
 	currentTime += elapsed;
 
 	//
-	Inputs::get().update();
+	Inputs::get().update(window);
 	//
 	pWorld->runSimulation(elapsed);
 	camera->update(window);
@@ -124,6 +123,14 @@ void display(GLFWwindow* window, double currentTime)
 	lastTime = glfwGetTime();
 }
 
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	if (key == GLFW_KEY_W && (action == GLFW_REPEAT || action == GLFW_PRESS))
+		std::cout << "w" << std::endl;
+	else if (key == GLFW_KEY_S && (action == GLFW_REPEAT || action == GLFW_PRESS))
+		std::cout << "s" << std::endl;
+}
+
 int main(void) 
 {
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
@@ -136,16 +143,14 @@ int main(void)
 	init(window);
 	
 	Inputs& inputs = Inputs::get();
-	inputs.mapInput("MoveForward", '8', 1.0f);
-	inputs.mapInput("MoveLeft", '4', -1.0f);
-	inputs.mapInput("MoveRight", '6', 1.0f);
-	inputs.mapInput("MoveForwardCamera", 'w', 1.0f);
-	inputs.mapInput("MoveBackwardCamera", 's', -1.0f);
-	inputs.mapInput("MoveLeftCamera", 'a', -1.0f);
-	inputs.mapInput("MoveRightCamera", 'd', 1.0f);
-
-	std::thread first([&]() { inputs.updateIO(); });     // spawn new thread that calls updateIO()
-		
+	inputs.mapInput("MoveForward", "up", 1.0f);
+	inputs.mapInput("MoveLeft", "left", -1.0f);
+	inputs.mapInput("MoveRight", "right", 1.0f);
+	inputs.mapInput("MoveForwardCamera", "w", 1.0f);
+	inputs.mapInput("MoveBackwardCamera", "s", -1.0f);
+	inputs.mapInput("MoveLeftCamera", "a", -1.0f);
+	inputs.mapInput("MoveRightCamera", "d", 1.0f);
+	
 	while (!glfwWindowShouldClose(window)) {
 		display(window, glfwGetTime());
 		glfwSwapBuffers(window);

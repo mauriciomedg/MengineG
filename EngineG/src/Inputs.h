@@ -12,6 +12,7 @@
 
 class GEntity;
 struct AxisParams;
+struct GLFWwindow;
 
 typedef  void (GEntity::* ActionAxis)(float val);
 
@@ -21,6 +22,7 @@ public:
 
 	static Inputs& get() {
 		static Inputs instance;
+		bindConversion();
 		return instance;
 	}
 
@@ -40,9 +42,9 @@ public:
 		m_bindings[axisName] = d;
 	}
 
-	void mapInput(std::string axisName, char key, float value)
+	void mapInput(std::string axisName, std::string key, float value)
 	{
-		m_InputsMapped[key] = std::make_tuple(axisName, value);
+		m_InputsMapped[m_conversion[key]] = std::make_tuple(axisName, value);
 	}
 
 private:
@@ -51,25 +53,13 @@ private:
 	Inputs(const Inputs&) {};
 	
 public:
-
-	void updateIO();
 	void init() {};
-	void update();
+	void update(GLFWwindow* window);
 private:
-
+	static std::map<std::string, int> m_conversion;
+	static void bindConversion();
 	std::map<std::string, delegate> m_bindings;
-	std::map<char, std::tuple<std::string, float>> m_InputsMapped;
-private:
-
-	HANDLE hStdin;
-	DWORD fdwSaveOldMode;
-	std::mutex mtx;
-	std::queue<char> m_inputsAxisNames;
-	VOID ErrorExit(LPCSTR);
-	VOID KeyEventProc(KEY_EVENT_RECORD);
-	VOID MouseEventProc(MOUSE_EVENT_RECORD);
-	VOID ResizeEventProc(WINDOW_BUFFER_SIZE_RECORD);
-
+	std::map<int, std::tuple<std::string, float>> m_InputsMapped;
 };
 
 

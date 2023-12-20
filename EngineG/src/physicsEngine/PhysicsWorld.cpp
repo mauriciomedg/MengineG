@@ -109,12 +109,24 @@ void PhysicsWorld::addMovement(int id, glm::vec3& intensity, float scale)
 
 void PhysicsWorld::move(int id, glm::vec3& velocity)
 {
-	mPrimitive[id]->body->move(velocity * mDeltaT);
+	if (mPrimitive[id]->body)
+	{
+		mPrimitive[id]->body->move(velocity * mDeltaT);
+	}
+	else
+	{
+		const glm::mat4& currentTransform = mPrimitive[id]->getTransform();
+		glm::mat4 translation = glm::translate(glm::mat4(1.0f), glm::vec3(currentTransform[3]) + velocity * mDeltaT);
+		mPrimitive[id]->calculateInternals(translation);
+	}
 }
 
 void PhysicsWorld::setAffectedByGravity(int id, bool isAffetedByGravity)
 {
-	mPrimitive[id]->body->mIsAffectedByGravity = isAffetedByGravity;
+	if (mPrimitive[id]->body)
+	{
+		mPrimitive[id]->body->mIsAffectedByGravity = isAffetedByGravity;
+	}
 }
 
 void PhysicsWorld::setIgnoreCollision(int id, bool ignore)
