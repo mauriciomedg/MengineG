@@ -73,6 +73,7 @@ void init(GLFWwindow* window)
 			auto R = glm::rotate(glm::mat4(1.0f), 1.75f, glm::vec3(1.0f, 0.0f, 0.0f));
 			auto Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
 			obj->init(&vbo[0], Mat, true);
+			obj->setAffectedByGravity(true);
 			gameObjectArray.push_back(obj);
 		}
 	}

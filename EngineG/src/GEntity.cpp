@@ -23,6 +23,14 @@ void GPrimitiveEntity::update(Camera* camera, GLuint renderingProgram)
 	}
 }
 
+void GPrimitiveEntity::setAffectedByGravity(bool isAffectedByGravity)
+{
+	if (mWorld && (mCollisionPrimitiveId != -1))
+	{
+		mWorld->setAffectedByGravity(mCollisionPrimitiveId, isAffectedByGravity);
+	}
+}
+
 void GPrimitiveEntity::init(GLuint* vbo, const glm::mat4& modelMatrix, bool simulatePhysics)
 {
 	if (mShape)
