@@ -84,9 +84,12 @@ void PhysicsWorld::generateContacts()
 
 				if (box2 && !box2->mIgnoreCollision)
 				{
-					mCollisionDetection->cData.friction = -1.0f;
-					mCollisionDetection->cData.restitution = 0.0f;
-					CollisionDetector::boxAndBox(*box, *box2, &mCollisionDetection->cData);
+					if (glm::length(box->getAxis(3) - box2->getAxis(3)) <= (glm::length(box->halfSize) + glm::length(box2->halfSize)))
+					{
+						mCollisionDetection->cData.friction = -1.0f;
+						mCollisionDetection->cData.restitution = 0.0f;
+						CollisionDetector::boxAndBox(*box, *box2, &mCollisionDetection->cData);
+					}
 				}
 
 				CollisionPlane* plane = dynamic_cast<CollisionPlane*>(mPrimitive[j]);
