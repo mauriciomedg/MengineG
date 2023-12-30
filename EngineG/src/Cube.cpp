@@ -18,6 +18,11 @@ void Cube::setModelMatrix(const glm::mat4& modelMat)
 	mMat = modelMat;
 }
 
+void Cube::setHalfSize(const float halfSize)
+{
+	mhalfSize = halfSize;
+}
+
 void Cube::init(GLuint* vbo, const glm::mat4& modelMat)
 {
 	setModelMatrix(modelMat);
@@ -25,18 +30,18 @@ void Cube::init(GLuint* vbo, const glm::mat4& modelMat)
 	m_vbo = vbo;
 
 	float vertexPositions[] = {
-		-1.0f, 1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, -1.0f, -1.0f,
-		1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f,
-		1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 1.0f, -1.0f,
-		1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f,
-		1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		-1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		-1.0f, -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, 1.0f,
-		-1.0f, -1.0f, -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f,
-		-1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, -1.0f,
-		1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,
-		-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f
+		-mhalfSize,  mhalfSize, -mhalfSize, -mhalfSize, -mhalfSize, -mhalfSize,  mhalfSize, -mhalfSize, -mhalfSize,
+		 mhalfSize, -mhalfSize, -mhalfSize,  mhalfSize,  mhalfSize, -mhalfSize, -mhalfSize,  mhalfSize, -mhalfSize,
+		 mhalfSize, -mhalfSize, -mhalfSize,  mhalfSize, -mhalfSize,  mhalfSize,  mhalfSize,  mhalfSize, -mhalfSize,
+		 mhalfSize, -mhalfSize,  mhalfSize,  mhalfSize,  mhalfSize,  mhalfSize,  mhalfSize,  mhalfSize, -mhalfSize,
+		 mhalfSize, -mhalfSize,  mhalfSize, -mhalfSize, -mhalfSize,  mhalfSize,  mhalfSize,  mhalfSize,  mhalfSize,
+		-mhalfSize, -mhalfSize,  mhalfSize, -mhalfSize,  mhalfSize,  mhalfSize,  mhalfSize,  mhalfSize,  mhalfSize,
+		-mhalfSize, -mhalfSize,  mhalfSize, -mhalfSize, -mhalfSize, -mhalfSize, -mhalfSize,  mhalfSize,  mhalfSize,
+		-mhalfSize, -mhalfSize, -mhalfSize, -mhalfSize,  mhalfSize, -mhalfSize, -mhalfSize,  mhalfSize,  mhalfSize,
+		-mhalfSize, -mhalfSize,  mhalfSize,  mhalfSize, -mhalfSize,  mhalfSize,  mhalfSize, -mhalfSize, -mhalfSize,
+		 mhalfSize, -mhalfSize, -mhalfSize, -mhalfSize, -mhalfSize, -mhalfSize, -mhalfSize, -mhalfSize,  mhalfSize,
+		-mhalfSize,  mhalfSize, -mhalfSize,  mhalfSize,  mhalfSize, -mhalfSize,  mhalfSize,  mhalfSize,  mhalfSize,
+		 mhalfSize,  mhalfSize,  mhalfSize, -mhalfSize,  mhalfSize,  mhalfSize, -mhalfSize,  mhalfSize, -mhalfSize
 	};
 
 	glBindBuffer(GL_ARRAY_BUFFER, *m_vbo);
@@ -53,7 +58,8 @@ void Cube::update(Camera* camera, GLuint renderingProgram)
 	// copy perspective and MV matrices to corresponding uniform variables
 	glUniformMatrix4fv(mvLoc, 1, GL_FALSE, glm::value_ptr(mvMat));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(camera->getProjectionMatrix()));
-	//glProgramUniform1f(renderingProgram, offsetLoc, x); // send value in "x" to "offset"
+	GLuint halfSizeLoc = glGetUniformLocation(renderingProgram, "halfSize"); // get ptr to "offset"
+	glUniform1f(halfSizeLoc, mhalfSize); // send value in "x" to "offset"
 
 	// associate VBO with the corresponding vertex attribute in the vertex shader
 	glBindBuffer(GL_ARRAY_BUFFER, *m_vbo); // make the 0th buffer "active"

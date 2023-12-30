@@ -27,7 +27,9 @@ public:
 	virtual void init(GLuint* vbo, const glm::mat4& modelMat);
 	virtual void update(Camera* camera, GLuint renderingProgram);
 	virtual void setModelMatrix(const glm::mat4& modelMat);
-	
+	void setHalfSize(const float halfSize);
+
 private:
 
+	float mhalfSize = 1.0f;
 };

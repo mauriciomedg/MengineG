@@ -53,9 +53,15 @@ GEntityBox::GEntityBox(PhysicsWorld* pWorld)
 	mShape = new Cube;
 }
 
+void GEntityBox::setHalfSize(const float halfSize)
+{
+	mhalfSize = halfSize;
+}
+
 void GEntityBox::init(GLuint* vbo, const glm::mat4& modelMatrix, bool simulatePhysics)
 {
-	glm::vec3 halfSize(1.0f, 1.0f, 1.0f);
+	glm::vec3 halfSize(mhalfSize, mhalfSize, mhalfSize);
+	static_cast<Cube*>(mShape)->setHalfSize(mhalfSize);
 	mCollisionPrimitiveId = mWorld->instanciatePrimitiveBox(modelMatrix, halfSize, simulatePhysics);
 
 	GPrimitiveEntity::init(vbo, modelMatrix, simulatePhysics);

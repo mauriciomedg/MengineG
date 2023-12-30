@@ -35,11 +35,13 @@ public:
 
 	GEntityBox(PhysicsWorld* pWorld);
 
+	void setHalfSize(const float halfSize);
 	virtual void init(GLuint* vbo, const glm::mat4& modelMatrix, bool simulatePhysics);
 	virtual void update(Camera* camera, GLuint renderingProgram);
 private:
 
 	Cube* meshCube;
+	float mhalfSize = 1.0f;
 };
 
 ////////////////////////////////////////////////////
