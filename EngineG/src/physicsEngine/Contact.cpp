@@ -12,8 +12,8 @@ void Contact::setBodyData(RigidBody* one, RigidBody* two,
 {
 	body[0] = one;
 	body[1] = two;
-	friction = friction;
-	restitution = restitution;
+	friction = frictionCoef;
+	restitution = restitutionCoef;
 }
 
 void Contact::applyPositionChange(glm::vec3 linearChange[2],
