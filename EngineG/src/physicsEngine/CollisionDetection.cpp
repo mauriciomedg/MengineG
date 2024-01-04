@@ -2,6 +2,87 @@
 #include "RigidBody.h"
 #include "Contact.h"
 
+///////////////////////////////////////////////////
+namespace MMG
+{
+    struct Object {
+        glm::vec2 center;    // Center point for object
+        float radius;        // Radius of object bounding sphere
+        Object* pNextObject; // Pointer to next object when linked into list
+    };
+
+    struct Node {
+        glm::vec2 center;  // Center point of octree node (not strictly needed)
+        float halfWidth;   // Half the width of the node volume (not strictly needed)
+        Node* pChild[4];   // Pointers to the eight children nodes
+        Object* pObjList;  // Linked list of objects contained at this node
+    };
+
+    // Preallocates an octree down to a specific depth
+    Node* BuildOctree(const glm::vec2& center, float halfWidth, int stopDepth)
+    {
+        if (stopDepth < 0)
+            return nullptr;
+                
+        // Construct and fill in ‘root’ of this subtree
+        Node* pNode = new Node;
+        pNode->center = center;
+        pNode->halfWidth = halfWidth;
+        pNode->pObjList = nullptr;
+        
+        // Recursively construct the eight children of the subtree
+        glm::vec2 offset;
+        float step = halfWidth * 0.5f;
+        for (int i = 0; i < 4; ++i)
+        {
+            offset.x = ((i & 1) ? step : -step);
+            offset.y = ((i & 2) ? step : -step);
+            //offset.z = ((i & 4) ? step : -step);
+            pNode->pChild[i] = BuildOctree(center + offset, step, stopDepth - 1);
+        }
+
+        return pNode;
+    }
+
+    void InsertObject(Node* pTree, Object* pObject)
+    {
+        int index = 0, straddle = 0;
+        // Compute the octant number [0..7] the object sphere center is in
+        // If straddling any of the dividing x, y, or z planes, exit directly
+        for (int i = 0; i < 2; ++i)
+        {
+            float delta = pObject->center[i] - pTree->center[i];
+            if (glm::abs(delta) <= pObject->radius)
+            {
+                straddle = 1;
+                break;
+            }
+            if (delta > 0.0f) index |= (1 << i); // YX
+        }
+
+        if (!straddle && pTree->pChild[index])
+        {
+            //if (pTree->pChild[index] == nullptr)
+            //{
+            //    //Node* pNode = new Node;
+            //    //pTree->pChild[index] = pNode;
+            //    //pNode->center = center;
+            //    //pNode->halfWidth = halfWidth;
+            //    //pNode->pObjList = nullptr;
+            //}
+            // Fully contained in existing child node; insert in that subtree
+            InsertObject(pTree->pChild[index], pObject);
+        }
+        else {
+            // Straddling, or no child node to descend into, so
+            // link object into linked list at this node
+            pObject->pNextObject = pTree->pObjList;
+            pTree->pObjList = pObject;
+        }
+    }
+}
+
+///////////////////////////////////////////////////
 namespace
 {
     float transformToAxis(
