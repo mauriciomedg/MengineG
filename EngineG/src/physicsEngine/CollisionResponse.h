@@ -29,6 +29,11 @@ public:
 
     CollisionResponse();
     //void generateContacts(std::vector<RigidBody*>& bodies);
+    
+    void solvePositions(CollisionData* cData, std::vector<CollisionPrimitive*>& primitives);
+    
+    void solvePositions(CollisionData* cData, float dt);
+
     void update(CollisionData* cData, std::vector<CollisionPrimitive*>& primitives);
     
 };

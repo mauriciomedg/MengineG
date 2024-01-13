@@ -11,6 +11,16 @@ class CollisionResponse;
 class Contact;
 class CollisionPrimitive;
 
+struct FixedConstraint
+{
+	FixedConstraint();
+
+	void execute(float dt);
+	void executeConnectionWithOrientation(float dt);
+	void executeConnectionWithExponential(float dt);
+	RigidBody* body[2];
+};
+
 class PhysicsWorld
 {
 private:
@@ -27,7 +37,8 @@ public:
 	void setAffectedByGravity(int id, bool isAffetedByGravity);
 	void setIgnoreCollision(int id, bool ignore);
 	const glm::mat4& getPrimitiveLocation(int id) const;
-	void runSimulation(float deltaT);
+	//void runSimulation(float deltaT);
+	void simulating(float deltaT);
 
 private:
 
@@ -36,6 +47,7 @@ private:
 	glm::vec3 mGravity;
 	int m_numberOfNodes;
 	std::vector<float> mY;
+	std::vector<float> mYposPrev;
 	std::vector<float> mYdot;
 	std::vector<CollisionPrimitive*> mPrimitive;
 	Contact* mContacts;
