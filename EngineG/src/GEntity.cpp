@@ -10,6 +10,11 @@ GPrimitiveEntity::GPrimitiveEntity(PhysicsWorld* pWorld)
 {
 }
 
+int GPrimitiveEntity::getPhysicsID() const
+{
+	return mCollisionPrimitiveId;
+}
+
 void GPrimitiveEntity::update(Camera* camera, GLuint renderingProgram)
 {
 	if (mWorld)

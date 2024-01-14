@@ -62,6 +62,7 @@ void init(GLFWwindow* window)
 	auto R = glm::rotate(glm::mat4(1.0f), 1.75f, glm::normalize(glm::vec3(1.0f, 1.0f, 0.0f)));
 	Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
 	boxControlled->init(&vbo[1], Mat, true);
+
 	//
 	{
 		GEntityBox* obj = new GEntityBox(pWorld);
@@ -72,6 +73,8 @@ void init(GLFWwindow* window)
 		obj->init(&vbo[0], Mat, true);
 		obj->setAffectedByGravity(true);
 		gameObjectArray.push_back(obj);
+
+		pWorld->addBallAndSocketConstraint(obj->getPhysicsID(), -1);
 	}
 	
 	//for (int h = 0; h < 10; ++h)

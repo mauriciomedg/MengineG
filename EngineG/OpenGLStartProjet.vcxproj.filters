@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Constraints">
+      <UniqueIdentifier>{2c10a868-ef6c-4c87-8106-94503d00c4e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Constraints">
+      <UniqueIdentifier>{ea696e5c-2d74-4754-82ca-89a274a7b77f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -54,8 +60,11 @@
     <ClCompile Include="src\physicsEngine\Contact.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\physicsEngine\exp-map.cpp">
+    <ClCompile Include="src\physicsEngine\MathUtils.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physicsEngine\Constraints\BallAndSocketJoint.cpp">
+      <Filter>Source Files\Constraints</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -101,8 +110,14 @@
     <ClInclude Include="src\Delegate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\physicsEngine\exp-map.h">
+    <ClInclude Include="src\physicsEngine\MathUtils.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physicsEngine\Constraints\BallAndSocketJoint.h">
+      <Filter>Header Files\Constraints</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physicsEngine\Constraints\Constraint.h">
+      <Filter>Header Files\Constraints</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -20,6 +20,7 @@ public:
 	virtual void init(GLuint* vbo, const glm::mat4& modelMatrix, bool simulatePhysics);
 	virtual void update(Camera* camera, GLuint renderingProgram);
 	virtual void setAffectedByGravity(bool isAffectedByGravity);
+	int getPhysicsID() const;
 protected:
 	glm::mat4 mMat;
 	PhysicsWorld* mWorld;

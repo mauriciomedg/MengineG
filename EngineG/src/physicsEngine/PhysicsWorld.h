@@ -2,24 +2,13 @@
 
 #include <vector>
 #include <glm/gtc/matrix_transform.hpp>
-
-typedef void (*dydt_func)(float t, float* ydot);
+#include "Constraints/Constraint.h"
 
 class RigidBody;
 class CollisionDetection;
 class CollisionResponse;
 class Contact;
 class CollisionPrimitive;
-
-struct FixedConstraint
-{
-	FixedConstraint();
-
-	void execute(float dt);
-	void executeConnectionWithOrientation(float dt);
-	void executeConnectionWithExponential(float dt);
-	RigidBody* body[2];
-};
 
 class PhysicsWorld
 {
@@ -29,6 +18,7 @@ private:
 
 public:
 	void init();
+	void addBallAndSocketConstraint(int id1, int id2);
 	int instanciatePrimitive(const glm::mat4& transform, bool isSimulatingPhysics = false);
 	int instanciatePrimitiveBox(const glm::mat4& transform, glm::vec3& halfSize, bool isSimulatingPhysics = false);
 	int instanciatePrimitivePlane(const glm::mat4& transform, bool isSimulatingPhysics = false);
@@ -45,12 +35,10 @@ private:
 	float mDeltaT;
 	void generateContacts();
 	glm::vec3 mGravity;
-	int m_numberOfNodes;
-	std::vector<float> mY;
-	std::vector<float> mYposPrev;
-	std::vector<float> mYdot;
+
 	std::vector<CollisionPrimitive*> mPrimitive;
 	Contact* mContacts;
 	CollisionDetection* mCollisionDetection;
 	CollisionResponse* mCollisionResponse;
+	std::vector<MG::Constraint*> mConstraints;
 };
