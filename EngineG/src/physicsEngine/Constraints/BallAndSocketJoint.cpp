@@ -24,7 +24,7 @@ namespace MG
 
 		RigidBody* b1 = mBody[0];
 
-		glm::vec3 localPost(1.0f, 1.0f, 1.0f);
+		glm::vec3 localPost(5.0f, 5.0f, 5.0f);
 
 		glm::vec3 x0(-10.0f, 30.0f, 0.0f);
 
