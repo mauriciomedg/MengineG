@@ -14,7 +14,7 @@ class PhysicsWorld
 {
 private:
 	/** Holds the maximum number of contacts. */
-	const static unsigned MAX_CONTACTS = 256;
+	const static unsigned MAX_CONTACTS = 1000;
 
 public:
 	void init();
