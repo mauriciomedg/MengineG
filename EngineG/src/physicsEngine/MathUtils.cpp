@@ -23,7 +23,7 @@ namespace MG
 				result[j + i * ncb] = 0;
 
 				for (int k = 0; k < nrb; k++) {
-					result[j + i * ncb] += (atrans ? a[i + k * nca] : a[k + i * nca]) * (btrans ? b[k + j * ncb] : b[j + k * ncb]);
+					result[j + i * ncb] += (atrans ? a[i + k * nra] : a[k + i * nca]) * (btrans ? b[k + j * nrb] : b[j + k * ncb]);
 				}
 			}
 		}
