@@ -10,8 +10,8 @@ namespace MG
 
 	void invA(std::vector<float>& a, int n, const std::vector<float>& p, std::vector<float>& Ainv);
 
-	void addBlockDiagonal(std::vector<float>& mat1, int r, int c, std::vector<float>& mat2, int rr, int cc);
+	void addBlockDiagonal(std::vector<float>& a, int nra, int nca, std::vector<float>& b, int nrb, int ncb);
 
-	void addBlockColumn(std::vector<float>& mat1, int r, int c, std::vector<float>& mat2, int cc);
+	void addBlockColumn(std::vector<float>& a, int nra, int nca, std::vector<float>& b, int ncb);
 	
 }

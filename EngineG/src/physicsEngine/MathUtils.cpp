@@ -81,50 +81,50 @@ namespace MG
 		multiply(a, n, n, true, a, n, n, false, Ainv);
 	}
 
-	void addBlockDiagonal(std::vector<float>& mat1, int r, int c, std::vector<float>& mat2, int rr, int cc)
+	void addBlockDiagonal(std::vector<float>& a, int nra, int nca, std::vector<float>& b, int nrb, int ncb)
 	{
-		std::vector<float> temp((r + rr) * (c + cc), 0.0f);
+		int row = nra + nrb;
+		int col = nca + ncb;
 
-		int row = r + rr;
-		int col = c + cc;
+		std::vector<float> temp(row * col, 0.0f);
 
 		for (int i = 0; i < row; ++i)
 		{
 			for (int j = 0; j < col; ++j)
 			{
-				int i1 = i % r;
-				int j1 = j % c;
+				int i1 = i % nra;
+				int j1 = j % nca;
 
-				temp[j1 + i1 * col] = mat1[j1 + i1 * c];
+				temp[j1 + i1 * col] = a[j1 + i1 * nca];
 
-				if (i >= r && j >= c)
+				if (i >= nra && j >= nca)
 				{
-					temp[j + i * col] = mat2[j - c + (i - r) * cc];
+					temp[j + i * col] = b[j - nca + (i - nra) * ncb];
 				}
 			}
 		}
-		mat1 = temp;
+		a = temp;
 	}
 
-	void addBlockColumn(std::vector<float>& mat1, int r, int c, std::vector<float>& mat2, int cc)
+	void addBlockColumn(std::vector<float>& a, int nra, int nca, std::vector<float>& b, int ncb)
 	{
-		std::vector<float> temp(r * (c + cc), 0.0f);
+		int row = nra;
+		int col = nca + ncb;
 
-		int row = r;
-		int col = c + cc;
+		std::vector<float> temp(row * col, 0.0f);
 
 		for (int i = 0; i < row; ++i)
 		{
 			for (int j = 0; j < col; ++j)
 			{
-				int j1 = j % c;
-				temp[j1 + i * col] = mat1[j1 + i * c];
+				int j1 = j % nca;
+				temp[j1 + i * col] = a[j1 + i * nca];
 
-				if (j >= c)
-					temp[j + i * col] = mat2[j - c + i * cc];
+				if (j >= nca)
+					temp[j + i * col] = b[j - nca + i * ncb];
 			}
 		}
 
-		mat1 = temp;
+		a = temp;
 	}
 }
