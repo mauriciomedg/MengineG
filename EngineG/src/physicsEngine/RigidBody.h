@@ -2,6 +2,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <vector>
 
 struct RigidBody
 {
@@ -35,6 +36,7 @@ public:
 	//Derived quantites
 	glm::vec3 mV;
 	glm::mat3 mIinv;
+	std::vector<float> mIinvArray;
 	glm::mat3 mI;
 	glm::vec3 mW; //w(t)
 	glm::mat4 mWorldMat;

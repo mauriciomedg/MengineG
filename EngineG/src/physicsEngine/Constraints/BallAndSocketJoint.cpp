@@ -36,23 +36,20 @@ namespace MG
 		glm::vec3 C = X - 10.0f * glm::normalize(X);
 
 		std::vector<float> Minv;
-		int n = 6, m = 6;
-		Minv.resize(n * m, 0.0f);
-		for (int i = 0; i < n; ++i)
-		{
-			for (int j = 0; j < m; ++j)
-			{
-				if (i == j && i < 3) Minv[j + i * m] = 1.0f / b1->mMass;
+		int r = 3, c = 3;
+		Minv.resize(r * c, 0.0f);
+		for (int j = 0; j < c; ++j)
+			Minv[j + j * c] = 1.0f / b1->mMass;
 
-				if (i > 2 && j > 2) Minv[j + i * m] = b1->mIinv[i - 3][j - 3];
-			}
-		}
-
+		addBlockDiagonal(Minv, r, c, b1->mIinvArray, 3, 3);
+	
 		/////////////////////////////
-		std::vector<float> J, Jt; //<3, 6>
-		n = 3, m = 6;
-		J.resize(n * m, 0.0f);
-		Jt.resize(n * m, 0.0f);
+		std::vector<float> J; //<3, 6>
+		r = 3, c = 3;
+		J.resize(r * c, 0.0f);
+		
+		for (int j = 0; j < c; ++j)
+			J[j + j * c] = 1.0f;
 
 		std::vector<float> skew_r1({
 			0.0f,  r1[2],  -r1[1],
@@ -60,23 +57,13 @@ namespace MG
 			r1[1],  -r1[0],  0.0f
 			});
 
-		for (int i = 0; i < n; ++i)
-		{
-			for (int j = 0; j < m; ++j)
-			{
-				if (i == j && i < 3) J[j + i * m] = 1.0f;
-
-				if (j > 2) J[j + i * m] = skew_r1[j - 3 + i * 3];
-
-				Jt[i + j * n] = J[j + i * m];
-			}
-		}
+		addBlockColumn(J, r, c, skew_r1, 3);
 
 		/////
 		std::vector<float> MinvJt;
 		MinvJt.resize(6 * 3);
 
-		multiply(Minv, 6, 6, false, Jt, 6, 3, false, MinvJt);
+		multiply(Minv, 6, 6, false, J, 3, 6, true, MinvJt);
 
 		std::vector<float> K;
 		K.resize(3 * 3);

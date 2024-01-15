@@ -9,4 +9,9 @@ namespace MG
 	void choldc(std::vector<float>& a, int n, std::vector<float>& p);
 
 	void invA(std::vector<float>& a, int n, const std::vector<float>& p, std::vector<float>& Ainv);
+
+	void addBlockDiagonal(std::vector<float>& mat1, int r, int c, std::vector<float>& mat2, int rr, int cc);
+
+	void addBlockColumn(std::vector<float>& mat1, int r, int c, std::vector<float>& mat2, int cc);
+	
 }

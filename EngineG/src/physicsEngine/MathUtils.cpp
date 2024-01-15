@@ -80,4 +80,51 @@ namespace MG
 
 		multiply(a, n, n, true, a, n, n, false, Ainv);
 	}
+
+	void addBlockDiagonal(std::vector<float>& mat1, int r, int c, std::vector<float>& mat2, int rr, int cc)
+	{
+		std::vector<float> temp((r + rr) * (c + cc), 0.0f);
+
+		int row = r + rr;
+		int col = c + cc;
+
+		for (int i = 0; i < row; ++i)
+		{
+			for (int j = 0; j < col; ++j)
+			{
+				int i1 = i % r;
+				int j1 = j % c;
+
+				temp[j1 + i1 * col] = mat1[j1 + i1 * c];
+
+				if (i >= r && j >= c)
+				{
+					temp[j + i * col] = mat2[j - c + (i - r) * cc];
+				}
+			}
+		}
+		mat1 = temp;
+	}
+
+	void addBlockColumn(std::vector<float>& mat1, int r, int c, std::vector<float>& mat2, int cc)
+	{
+		std::vector<float> temp(r * (c + cc), 0.0f);
+
+		int row = r;
+		int col = c + cc;
+
+		for (int i = 0; i < row; ++i)
+		{
+			for (int j = 0; j < col; ++j)
+			{
+				int j1 = j % c;
+				temp[j1 + i * col] = mat1[j1 + i * c];
+
+				if (j >= c)
+					temp[j + i * col] = mat2[j - c + i * cc];
+			}
+		}
+
+		mat1 = temp;
+	}
 }

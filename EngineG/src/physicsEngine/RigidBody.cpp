@@ -7,6 +7,7 @@ const int RigidBody::POSITION_BASE_STATE_SIZE = 7;
 RigidBody::RigidBody()
 	: mMass(1.0f), mL(0.0f), mForce(0.0f), mV(0.0f, 0.0f, 0.0f), mForceAdded(0.0f)
 {
+	mIinvArray.resize(3 * 3);
 }
 
 void RigidBody::init(const glm::mat4& mMat, glm::vec3& halfSize)
@@ -79,6 +80,13 @@ void RigidBody::calculateInternalData()
 
 	mWorldMat = glm::translate(glm::mat4(1.0f), mX) * glm::mat4(mQ);
 
+	for (int i = 0; i < 3; ++i)
+	{
+		for (int j = 0; j < 3; ++j)
+		{
+			mIinvArray[j + i * 3] = mIinv[i][j];
+		}
+	}
 }
 
 void RigidBody::update(float dt)
