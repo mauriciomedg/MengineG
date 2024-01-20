@@ -13,7 +13,7 @@ void Camera::init(const glm::mat4& modelMatrix, PhysicsWorld* pWorld, bool simul
 	mWorld = pWorld;
 	mMat = modelMatrix;
 	glm::vec3 halfSize(1.0f, 1.0f, 1.0f);
-	mCollisionPrimitiveId = mWorld->instanciatePrimitiveBox(modelMatrix, halfSize, simulatePhysics);
+	mCollisionPrimitiveId = mWorld->instanciatePrimitiveBox(modelMatrix, halfSize, 1.0f, simulatePhysics);
 	mWorld->setAffectedByGravity(mCollisionPrimitiveId, false);
 	mWorld->setIgnoreCollision(mCollisionPrimitiveId, false);
 

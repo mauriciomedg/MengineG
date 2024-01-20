@@ -19,9 +19,10 @@ private:
 public:
 	void init();
 	void addBallAndSocketConstraint(int id1, int id2);
-	int instanciatePrimitive(const glm::mat4& transform, bool isSimulatingPhysics = false);
-	int instanciatePrimitiveBox(const glm::mat4& transform, glm::vec3& halfSize, bool isSimulatingPhysics = false);
-	int instanciatePrimitivePlane(const glm::mat4& transform, bool isSimulatingPhysics = false);
+	void addRigidPointConstraint(int id);
+	int instanciatePrimitive(const glm::mat4& transform, bool isSimulatingPhysics);
+	int instanciatePrimitiveBox(const glm::mat4& transform, glm::vec3& halfSize, float mass, bool isSimulatingPhysics);
+	int instanciatePrimitivePlane(const glm::mat4& transform, float mass, bool isSimulatingPhysics);
 	void addMovement(int id, glm::vec3& intensity, float scale);
 	void move(int id, glm::vec3& velocity);
 	void setAffectedByGravity(int id, bool isAffetedByGravity);

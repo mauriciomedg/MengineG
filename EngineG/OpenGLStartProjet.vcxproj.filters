@@ -66,6 +66,9 @@
     <ClCompile Include="src\physicsEngine\Constraints\BallAndSocketJoint.cpp">
       <Filter>Source Files\Constraints</Filter>
     </ClCompile>
+    <ClCompile Include="src\physicsEngine\Constraints\RigidPointConstraint.cpp">
+      <Filter>Source Files\Constraints</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils.h">
@@ -117,6 +120,9 @@
       <Filter>Header Files\Constraints</Filter>
     </ClInclude>
     <ClInclude Include="src\physicsEngine\Constraints\Constraint.h">
+      <Filter>Header Files\Constraints</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physicsEngine\Constraints\RigidPointConstraint.h">
       <Filter>Header Files\Constraints</Filter>
     </ClInclude>
   </ItemGroup>

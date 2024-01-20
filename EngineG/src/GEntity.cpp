@@ -36,11 +36,11 @@ void GPrimitiveEntity::setAffectedByGravity(bool isAffectedByGravity)
 	}
 }
 
-void GPrimitiveEntity::init(GLuint* vbo, const glm::mat4& modelMatrix, bool simulatePhysics)
+void GPrimitiveEntity::init(GLuint* vbo, const glm::mat4& modelMatrix, float halfSize, bool simulatePhysics)
 {
 	if (mShape)
 	{
-		mShape->init(vbo, modelMatrix);
+		mShape->init(vbo, modelMatrix, halfSize);
 	}
 
 	if (mWorld && (mCollisionPrimitiveId == -1))
@@ -58,18 +58,13 @@ GEntityBox::GEntityBox(PhysicsWorld* pWorld)
 	mShape = new Cube;
 }
 
-void GEntityBox::setHalfSize(const float halfSize)
+void GEntityBox::init(GLuint* vbo, const glm::mat4& modelMatrix, float halfSize, float mass, bool simulatePhysics)
 {
-	mhalfSize = halfSize;
-}
+	glm::vec3 halfSizeVector(halfSize, halfSize, halfSize);
+	//static_cast<Cube*>(mShape)->setHalfSize(mhalfSize);
+	mCollisionPrimitiveId = mWorld->instanciatePrimitiveBox(modelMatrix, halfSizeVector, mass, simulatePhysics);
 
-void GEntityBox::init(GLuint* vbo, const glm::mat4& modelMatrix, bool simulatePhysics)
-{
-	glm::vec3 halfSize(mhalfSize, mhalfSize, mhalfSize);
-	static_cast<Cube*>(mShape)->setHalfSize(mhalfSize);
-	mCollisionPrimitiveId = mWorld->instanciatePrimitiveBox(modelMatrix, halfSize, simulatePhysics);
-
-	GPrimitiveEntity::init(vbo, modelMatrix, simulatePhysics);
+	GPrimitiveEntity::init(vbo, modelMatrix, halfSize, simulatePhysics);
 }
 
 void GEntityBox::update(Camera* camera, GLuint renderingProgram)
@@ -84,9 +79,9 @@ GEntityBoxControlled::GEntityBoxControlled(PhysicsWorld* pWorld)
 {
 }
 
-void GEntityBoxControlled::init(GLuint* vbo, const glm::mat4& modelMatrix, bool simulatePhysics)
+void GEntityBoxControlled::init(GLuint* vbo, const glm::mat4& modelMatrix, float halfSize, float mass, bool simulatePhysics)
 {
-	GEntityBox::init(vbo, modelMatrix, simulatePhysics);
+	GEntityBox::init(vbo, modelMatrix, halfSize, mass, simulatePhysics);
 
 	bindAxis();
 }

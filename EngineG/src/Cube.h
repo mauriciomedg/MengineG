@@ -10,7 +10,7 @@ class GShape
 public:
 	GShape();
 
-	virtual void init(GLuint* vbo, const glm::mat4& modelMat) {};
+	virtual void init(GLuint* vbo, const glm::mat4& modelMat, const float halfSize) {};
 	virtual void update(Camera* camera, GLuint renderingProgram) {};
 	virtual void setModelMatrix(const glm::mat4& modelMat) {};
 
@@ -24,10 +24,9 @@ class Cube : public GShape
 public:
 	Cube();
 
-	virtual void init(GLuint* vbo, const glm::mat4& modelMat);
+	virtual void init(GLuint* vbo, const glm::mat4& modelMat, const float halfSize);
 	virtual void update(Camera* camera, GLuint renderingProgram);
 	virtual void setModelMatrix(const glm::mat4& modelMat);
-	void setHalfSize(const float halfSize);
 
 private:
 

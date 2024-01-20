@@ -7,13 +7,13 @@ struct RigidBody;
 
 namespace MG
 {
-	class BallAndSocketJoint : public Constraint
+	class RigidPointConstraint : public Constraint
 	{
 	public:
-		BallAndSocketJoint();
-		BallAndSocketJoint(RigidBody* b1, RigidBody* b2);
+		RigidPointConstraint();
+		RigidPointConstraint(RigidBody* b);
 
-		virtual void prepare(std::vector<float>& J, std::vector<float>& C) {};
+		virtual void prepare(std::vector<float>& J, std::vector<float>& C);
 		virtual void execute(float dt);
 
 	private:
@@ -21,6 +21,8 @@ namespace MG
 
 	private:
 
-		RigidBody* mBody[2];
+		RigidBody* mBody;
+		std::vector<float> mMinv;
+		std::vector<float> mJ;
 	};
 }

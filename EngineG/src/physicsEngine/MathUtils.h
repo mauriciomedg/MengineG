@@ -14,4 +14,5 @@ namespace MG
 
 	void addBlockColumn(std::vector<float>& a, int nra, int nca, std::vector<float>& b, int ncb);
 	
+	void addBlockRow(std::vector<float>& a, int nra, int nca, std::vector<float>& b, int nrb);
 }

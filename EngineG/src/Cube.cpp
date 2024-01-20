@@ -18,13 +18,9 @@ void Cube::setModelMatrix(const glm::mat4& modelMat)
 	mMat = modelMat;
 }
 
-void Cube::setHalfSize(const float halfSize)
+void Cube::init(GLuint* vbo, const glm::mat4& modelMat, const float halfSize)
 {
 	mhalfSize = halfSize;
-}
-
-void Cube::init(GLuint* vbo, const glm::mat4& modelMat)
-{
 	setModelMatrix(modelMat);
 
 	m_vbo = vbo;

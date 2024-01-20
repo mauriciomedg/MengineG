@@ -61,20 +61,22 @@ void init(GLFWwindow* window)
 	Pos = glm::vec3(10.0f, 40.0f, 0.0f);
 	auto R = glm::rotate(glm::mat4(1.0f), 1.75f, glm::normalize(glm::vec3(1.0f, 1.0f, 0.0f)));
 	Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
-	boxControlled->init(&vbo[1], Mat, true);
-
+	boxControlled->init(&vbo[1], Mat, 3.0f, 3.0f, true);
+	
+	//pWorld->addRigidPointConstraint(boxControlled->getPhysicsID());
 	//
 	{
 		GEntityBox* obj = new GEntityBox(pWorld);
-		glm::vec3 Pos(-10.0f, 15.0, 0.0f);
+		glm::vec3 Pos(10.0f, 15.0, 0.0f);
 		auto R = glm::rotate(glm::mat4(1.0f), 1.75f, glm::vec3(1.0f, 0.0f, 0.0f));
 		auto Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
-		obj->setHalfSize(5.0f);
-		obj->init(&vbo[0], Mat, true);
+		obj->init(&vbo[0], Mat, 5.0f, 1.0f, true);
 		obj->setAffectedByGravity(true);
 		gameObjectArray.push_back(obj);
 
-		pWorld->addBallAndSocketConstraint(obj->getPhysicsID(), -1);
+		
+		pWorld->addBallAndSocketConstraint(obj->getPhysicsID(), boxControlled->getPhysicsID());
+		pWorld->addRigidPointConstraint(obj->getPhysicsID());
 	}
 	
 	//for (int h = 0; h < 10; ++h)
@@ -96,7 +98,7 @@ void init(GLFWwindow* window)
 	Pos = glm::vec3(0.0f, 0.0f, 0.0f);
 	R = glm::mat4(1.0f);
 	Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
-	pWorld->instanciatePrimitivePlane(Mat, false);
+	//pWorld->instanciatePrimitivePlane(Mat, 1.0, false);
 	
 	pWorld->init();
 }

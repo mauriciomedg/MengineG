@@ -92,10 +92,11 @@ namespace MG
 		{
 			for (int j = 0; j < col; ++j)
 			{
-				int i1 = i % nra;
-				int j1 = j % nca;
-
-				temp[j1 + i1 * col] = a[j1 + i1 * nca];
+				//int i1 = i % nra;
+				//int j1 = j % nca;
+				if (i < nra && j < nca)
+					temp[j + i * col] = a[j + i * nca];
+					//temp[j1 + i1 * col] = a[j1 + i1 * nca];
 
 				if (i >= nra && j >= nca)
 				{
@@ -117,11 +118,33 @@ namespace MG
 		{
 			for (int j = 0; j < col; ++j)
 			{
-				int j1 = j % nca;
-				temp[j1 + i * col] = a[j1 + i * nca];
+				if (j < nca)
+					temp[j + i * col] = a[j + i * nca];
 
 				if (j >= nca)
 					temp[j + i * col] = b[j - nca + i * ncb];
+			}
+		}
+
+		a = temp;
+	}
+
+	void addBlockRow(std::vector<float>& a, int nra, int nca, std::vector<float>& b, int nrb)
+	{
+		int row = nra + nrb;
+		int col = nca;
+
+		std::vector<float> temp(row * col, 0.0f);
+
+		for (int i = 0; i < row; ++i)
+		{
+			for (int j = 0; j < col; ++j)
+			{
+				if (i < nrb)
+					temp[j + i * col] = a[j + i * nca];
+
+				if (i >= nrb)
+					temp[j + i * col] = b[j + (i - nrb) * nca];
 			}
 		}
 

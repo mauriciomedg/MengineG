@@ -17,9 +17,10 @@ class GPrimitiveEntity
 public:
 	GPrimitiveEntity(PhysicsWorld* mWorld);
 
-	virtual void init(GLuint* vbo, const glm::mat4& modelMatrix, bool simulatePhysics);
+	virtual void init(GLuint* vbo, const glm::mat4& modelMatrix, float halfSize, bool simulatePhysics);
 	virtual void update(Camera* camera, GLuint renderingProgram);
 	virtual void setAffectedByGravity(bool isAffectedByGravity);
+
 	int getPhysicsID() const;
 protected:
 	glm::mat4 mMat;
@@ -36,13 +37,11 @@ public:
 
 	GEntityBox(PhysicsWorld* pWorld);
 
-	void setHalfSize(const float halfSize);
-	virtual void init(GLuint* vbo, const glm::mat4& modelMatrix, bool simulatePhysics);
+	virtual void init(GLuint* vbo, const glm::mat4& modelMatrix, float halfSize, float mass, bool simulatePhysics);
 	virtual void update(Camera* camera, GLuint renderingProgram);
 private:
 
 	Cube* meshCube;
-	float mhalfSize = 1.0f;
 };
 
 ////////////////////////////////////////////////////
@@ -60,7 +59,7 @@ public:
 
 	GEntityBoxControlled(PhysicsWorld* pWorld);
 
-	virtual void init(GLuint* vbo, const glm::mat4& modelMatrix, bool simulatePhysics);
+	virtual void init(GLuint* vbo, const glm::mat4& modelMatrix, float halfSize, float mass, bool simulatePhysics);
 	virtual void update(Camera* camera, GLuint renderingProgram);
 	void bindAxis();
 	void moveForward(float val);

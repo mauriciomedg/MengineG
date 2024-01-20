@@ -7,6 +7,7 @@
 #include "CollisionResponse.h"
 #include "MathUtils.h"
 #include "Constraints/BallAndSocketJoint.h"
+#include "Constraints/RigidPointConstraint.h"
 #include <iostream>
 #include <algorithm>
 
@@ -17,7 +18,7 @@ int PhysicsWorld::instanciatePrimitive(const glm::mat4& transform, bool isSimula
 	return -1;
 }
 
-int PhysicsWorld::instanciatePrimitiveBox(const glm::mat4& transform, glm::vec3& halfSize, bool isSimulatingPhysics)
+int PhysicsWorld::instanciatePrimitiveBox(const glm::mat4& transform, glm::vec3& halfSize, float mass, bool isSimulatingPhysics)
 {
 	CollisionBox* box = new CollisionBox;
 	box->halfSize = halfSize;
@@ -25,7 +26,7 @@ int PhysicsWorld::instanciatePrimitiveBox(const glm::mat4& transform, glm::vec3&
 	mPrimitive.back()->body = (isSimulatingPhysics ? new RigidBody() : nullptr);
 	if (isSimulatingPhysics) 
 	{
-		mPrimitive.back()->body->init(transform, halfSize);
+		mPrimitive.back()->body->init(transform, halfSize, mass);
 		mPrimitive.back()->calculateInternals();
 	}
 	mPrimitive.back()->calculateInternals(transform);
@@ -33,7 +34,7 @@ int PhysicsWorld::instanciatePrimitiveBox(const glm::mat4& transform, glm::vec3&
 	return mPrimitive.size() - 1;
 }
 
-int PhysicsWorld::instanciatePrimitivePlane(const glm::mat4& transform, bool isSimulatingPhysics)
+int PhysicsWorld::instanciatePrimitivePlane(const glm::mat4& transform, float mass, bool isSimulatingPhysics)
 {
 	CollisionPlane* plane = new CollisionPlane;
 	plane->direction = transform[1];
@@ -114,7 +115,7 @@ void PhysicsWorld::setIgnoreCollision(int id, bool ignore)
 
 void PhysicsWorld::simulating(float deltaT)
 {
-	int nbSuperSample = 3;
+	int nbSuperSample = 1;
 
 	deltaT = deltaT / nbSuperSample;
 	mDeltaT = deltaT;
@@ -140,13 +141,23 @@ void PhysicsWorld::simulating(float deltaT)
 			Contact* c = &(cData->contactArray[j]);
 		}
 
-		for (int posItt = 0; posItt < 5; ++posItt)
+		int nbIterationSolverPos = 5;
+		for (int posItt = 0; posItt < nbIterationSolverPos; ++posItt)
 		{
-			mCollisionResponse->solvePositions(&mCollisionDetection->cData, deltaT);
+			mCollisionResponse->solvePositions(&mCollisionDetection->cData, deltaT / nbIterationSolverPos);
 			
 			for (MG::Constraint* c : mConstraints)
 			{
 				c->execute(mDeltaT);
+			}
+
+			for (int i = 0; i < mPrimitive.size(); i++)
+			{
+				if (mPrimitive[i]->mSimulatePhysics)
+				{
+					RigidBody* bodies = mPrimitive[i]->body;
+					bodies->calculateInternalData();
+				}
 			}
 		}
 			
@@ -165,7 +176,7 @@ void PhysicsWorld::simulating(float deltaT)
 
 void PhysicsWorld::init()
 {
-	mGravity = glm::vec3(0.0f, -90.0f, 0.0f);
+	mGravity = glm::vec3(0.0f, -98.0f, 0.0f);
 
 	int nbSimulatedPhysicsPrimitives = 0;
 	for (int i = 0; i < mPrimitive.size(); i++)
@@ -193,4 +204,9 @@ const glm::mat4& PhysicsWorld::getPrimitiveLocation(int id) const
 void PhysicsWorld::addBallAndSocketConstraint(int id1, int id2)
 {
 	mConstraints.push_back(new BallAndSocketJoint(id1 >= 0 ? mPrimitive[id1]->body : nullptr, id2 >= 0 ? mPrimitive[id2]->body : nullptr));
+}
+
+void PhysicsWorld::addRigidPointConstraint(int id)
+{
+	mConstraints.push_back(new RigidPointConstraint(id >= 0 ? mPrimitive[id]->body : nullptr));
 }

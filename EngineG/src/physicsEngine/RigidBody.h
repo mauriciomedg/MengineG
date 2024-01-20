@@ -11,7 +11,7 @@ struct RigidBody
 public:
 
 	RigidBody();
-	void init(const glm::mat4& mMat, glm::vec3& halfSize);
+	void init(const glm::mat4& mMat, glm::vec3& halfSize, float mass);
 	void computeForceAndTorque(float deltaT, const glm::vec3& gravity);
 	void move(const glm::vec3& distance);
 	void update(float dt);
@@ -36,7 +36,8 @@ public:
 	//Derived quantites
 	glm::vec3 mV;
 	glm::mat3 mIinv;
-	std::vector<float> mIinvArray;
+	std::vector<float> mInvInertiaArray;
+std::vector<float> mIinvArray;
 	glm::mat3 mI;
 	glm::vec3 mW; //w(t)
 	glm::mat4 mWorldMat;
