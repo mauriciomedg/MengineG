@@ -10,17 +10,13 @@ namespace MG
 	class BallAndSocketJoint : public Constraint
 	{
 	public:
-		BallAndSocketJoint();
-		BallAndSocketJoint(RigidBody* b1, RigidBody* b2);
+		BallAndSocketJoint(RigidBody* b1, const glm::vec3& localPost1, RigidBody* b2, const glm::vec3& localPost2);
 
-		virtual void prepare(std::vector<float>& J, std::vector<float>& C) {};
 		virtual void execute(float dt);
-
-	private:
-		void prepareData(RigidBody* b, glm::vec3& C, std::vector<float>& skew_r);
 
 	private:
 
 		RigidBody* mBody[2];
+		glm::vec3 mLocalPost[2];
 	};
 }

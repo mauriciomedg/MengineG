@@ -201,12 +201,12 @@ const glm::mat4& PhysicsWorld::getPrimitiveLocation(int id) const
 	return mPrimitive[id]->getTransform();
 }
 
-void PhysicsWorld::addBallAndSocketConstraint(int id1, int id2)
+void PhysicsWorld::addBallAndSocketConstraint(int id1, const glm::vec3& localPost1, int id2, const glm::vec3& localPost2)
 {
-	mConstraints.push_back(new BallAndSocketJoint(id1 >= 0 ? mPrimitive[id1]->body : nullptr, id2 >= 0 ? mPrimitive[id2]->body : nullptr));
+	mConstraints.push_back(new BallAndSocketJoint(id1 >= 0 ? mPrimitive[id1]->body : nullptr, localPost1, id2 >= 0 ? mPrimitive[id2]->body : nullptr, localPost2));
 }
 
-void PhysicsWorld::addRigidPointConstraint(int id)
+void PhysicsWorld::addRigidPointConstraint(int id, const glm::vec3& localPost)
 {
-	mConstraints.push_back(new RigidPointConstraint(id >= 0 ? mPrimitive[id]->body : nullptr));
+	mConstraints.push_back(new RigidPointConstraint(id >= 0 ? mPrimitive[id]->body : nullptr, localPost));
 }

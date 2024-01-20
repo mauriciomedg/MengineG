@@ -74,9 +74,8 @@ void init(GLFWwindow* window)
 		obj->setAffectedByGravity(true);
 		gameObjectArray.push_back(obj);
 
-		
-		pWorld->addBallAndSocketConstraint(obj->getPhysicsID(), boxControlled->getPhysicsID());
-		pWorld->addRigidPointConstraint(obj->getPhysicsID());
+		pWorld->addBallAndSocketConstraint(obj->getPhysicsID(), glm::vec3(-5.0f, -5.0f, -5.0f), boxControlled->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f));
+		pWorld->addRigidPointConstraint(obj->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f));
 	}
 	
 	//for (int h = 0; h < 10; ++h)
@@ -98,7 +97,7 @@ void init(GLFWwindow* window)
 	Pos = glm::vec3(0.0f, 0.0f, 0.0f);
 	R = glm::mat4(1.0f);
 	Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
-	//pWorld->instanciatePrimitivePlane(Mat, 1.0, false);
+	pWorld->instanciatePrimitivePlane(Mat, 1.0, false);
 	
 	pWorld->init();
 }

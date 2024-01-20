@@ -10,18 +10,15 @@ namespace MG
 	class RigidPointConstraint : public Constraint
 	{
 	public:
-		RigidPointConstraint();
-		RigidPointConstraint(RigidBody* b);
 
-		virtual void prepare(std::vector<float>& J, std::vector<float>& C);
+		RigidPointConstraint(RigidBody* b, const glm::vec3& localPost);
+
 		virtual void execute(float dt);
-
-	private:
-		void prepareData(RigidBody* b, glm::vec3& C, std::vector<float>& skew_r);
 
 	private:
 
 		RigidBody* mBody;
+		glm::vec3 mLocalPost;
 		std::vector<float> mMinv;
 		std::vector<float> mJ;
 	};

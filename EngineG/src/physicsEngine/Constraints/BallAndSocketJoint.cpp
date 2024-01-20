@@ -6,53 +6,23 @@
 
 namespace MG
 {
-	BallAndSocketJoint::BallAndSocketJoint(RigidBody* b1, RigidBody* b2)
+	BallAndSocketJoint::BallAndSocketJoint(RigidBody* b1, const glm::vec3& localPost1, RigidBody* b2, const glm::vec3& localPost2)
 	{
 		mBody[0] = b1;
 		mBody[1] = b2;
-	}
-
-	BallAndSocketJoint::BallAndSocketJoint()
-	{
-		mBody[0] = nullptr;
-		mBody[1] = nullptr;
-	}
-
-	void BallAndSocketJoint::prepareData(RigidBody* b, glm::vec3& C, std::vector<float>& skew_r)
-	{
-				
-		//int r = glm::sqrt(mMinv.size());
-		//int c = r;
-		//
-		//addBlockDiagonal(mMinv, r, c, b->mInvInertiaArray, 6, 6);
-		//
-		//std::vector<float> dCdx({
-		//	1.0f,  0.0f,  0.0f,
-		//	0.0f,   1.0f, 0.0f,
-		//	0.0f,  0.0f,  1.0f
-		//	});
-		//
-		//r = 3;// mJ.size() > 0 ? 3 : 0;
-		//c = r > 0 ? mJ.size() / r : 0;
-		//addBlockColumn(mJ, r, c, dCdx, 3);
-		//
-		//r = 3;
-		//c = mJ.size() / r;
-		//addBlockColumn(mJ, r, c, skew_r, 3);
+		mLocalPost[0] = localPost1;
+		mLocalPost[1] = localPost2;
 	}
 
 	void BallAndSocketJoint::execute(float dt)
 	{
 		if (!mBody[0] || !mBody[1]) return;
 
-		//mMinv.clear();
-		//mJ.clear();
-
 		RigidBody* b1 = mBody[0];
 		RigidBody* b2 = mBody[1];
 
-		glm::vec3 localPost1(-5.0f, -5.0f, -5.0f);
-		glm::vec3 localPost2(3.0f, 3.0f, 3.0f);
+		glm::vec3 localPost1(mLocalPost[0]);
+		glm::vec3 localPost2(mLocalPost[1]);
 		
 		float d0 = 10.0f;
 
@@ -144,37 +114,15 @@ namespace MG
 
 		//////////////////////////////////////////////////////////////
 		
-		{
-			glm::vec3 n(glm::normalize(X));
-						
-			float w1 = glm::dot(n, b1->mIinv * n);
-			float w2 = glm::dot(n, b2->mIinv * n);
+		glm::quat Wquad(0.0f, dX[3], dX[4], dX[5]);
+		glm::quat qdot = 0.5f * (Wquad * b1->mQ);
+		b1->mQ += qdot;
 
-			float w = w1 + w2;
-
-			float cef1 = 1.0f;// w1 / w;
-			float cef2 = 1.0f;// w2 / w;
-
-			glm::quat Wquad(0.0f, dX[3] * cef1, dX[4] * cef1, dX[5] * cef1);
-			glm::quat qdot = 0.5f * (Wquad * b1->mQ);
-			b1->mQ += qdot;
-
-			glm::quat Wquad2(0.0f, dX[9] * cef2, dX[10] * cef2, dX[11] * cef2);
-			glm::quat qdot2 = 0.5f * (Wquad2 * b2->mQ);
-			b2->mQ += qdot2;
-		}
-
-		float w1 = b1->mShape->getMassInv();
-		float w2 = b2->mShape->getMassInv();
-		float w = w1 + w2;
-
-		float cef1 = 1.0f;//w1 / w;
-		float cef2 = 1.0f;//w2 / w;
-
-		b1->mX += glm::vec3(dX[0], dX[1], dX[2]) * cef1;
-		//b1->calculateInternalData();
-
-		b2->mX += glm::vec3(dX[6], dX[7], dX[8]) * cef2;
-		//b2->calculateInternalData();
+		glm::quat Wquad2(0.0f, dX[9], dX[10], dX[11]);
+		glm::quat qdot2 = 0.5f * (Wquad2 * b2->mQ);
+		b2->mQ += qdot2;
+		
+		b1->mX += glm::vec3(dX[0], dX[1], dX[2]);
+		b2->mX += glm::vec3(dX[6], dX[7], dX[8]);
 	}
 }
