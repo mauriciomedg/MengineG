@@ -74,8 +74,8 @@ void init(GLFWwindow* window)
 		obj->setAffectedByGravity(true);
 		gameObjectArray.push_back(obj);
 
-		pWorld->addRigidPointRigidPointConstraint(obj->getPhysicsID(), glm::vec3(-5.0f, -5.0f, -5.0f), boxControlled->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f));
-		pWorld->addRigidPointConstraint(obj->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f));
+		pWorld->addRigidPointRigidPointConstraint(obj->getPhysicsID(), glm::vec3(-5.0f, -5.0f, -5.0f), boxControlled->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), 10.0f);
+		pWorld->addRigidPointConstraint(obj->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), 10.0f);
 	}
 	
 	//for (int h = 0; h < 10; ++h)

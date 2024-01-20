@@ -6,12 +6,13 @@
 
 namespace MG
 {
-	RigidPointRigidPointConstraint::RigidPointRigidPointConstraint(RigidBody* b1, const glm::vec3& localPost1, RigidBody* b2, const glm::vec3& localPost2)
+	RigidPointRigidPointConstraint::RigidPointRigidPointConstraint(RigidBody* b1, const glm::vec3& localPost1, RigidBody* b2, const glm::vec3& localPost2, float distanceOffset)
 	{
 		mBody[0] = b1;
 		mBody[1] = b2;
 		mLocalPost[0] = localPost1;
 		mLocalPost[1] = localPost2;
+		mDistanceOffset = distanceOffset;
 	}
 
 	void RigidPointRigidPointConstraint::execute(float dt)
@@ -23,8 +24,6 @@ namespace MG
 
 		glm::vec3 localPost1(mLocalPost[0]);
 		glm::vec3 localPost2(mLocalPost[1]);
-		
-		float d0 = 10.0f;
 
 		glm::mat3 R1(b1->mQ);
 		glm::vec3 r1 = R1 * localPost1;
@@ -35,7 +34,7 @@ namespace MG
 		glm::vec3 x2 = b2->mX + r2;
 
 		glm::vec3 X(x2 - x1);
-		glm::vec3 C = X - d0 * glm::normalize(X);
+		glm::vec3 C = X - mDistanceOffset * glm::normalize(X);
 
 		// mass
 		std::vector<float> Minv;

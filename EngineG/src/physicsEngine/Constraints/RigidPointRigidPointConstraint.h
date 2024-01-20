@@ -10,7 +10,7 @@ namespace MG
 	class RigidPointRigidPointConstraint : public Constraint
 	{
 	public:
-		RigidPointRigidPointConstraint(RigidBody* b1, const glm::vec3& localPost1, RigidBody* b2, const glm::vec3& localPost2);
+		RigidPointRigidPointConstraint(RigidBody* b1, const glm::vec3& localPost1, RigidBody* b2, const glm::vec3& localPost2, float distanceOffset);
 
 		virtual void execute(float dt);
 
@@ -18,5 +18,6 @@ namespace MG
 
 		RigidBody* mBody[2];
 		glm::vec3 mLocalPost[2];
+		float mDistanceOffset;
 	};
 }

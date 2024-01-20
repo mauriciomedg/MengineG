@@ -201,12 +201,12 @@ const glm::mat4& PhysicsWorld::getPrimitiveLocation(int id) const
 	return mPrimitive[id]->getTransform();
 }
 
-void PhysicsWorld::addRigidPointRigidPointConstraint(int id1, const glm::vec3& localPost1, int id2, const glm::vec3& localPost2)
+void PhysicsWorld::addRigidPointRigidPointConstraint(int id1, const glm::vec3& localPost1, int id2, const glm::vec3& localPost2, float distanceOffset)
 {
-	mConstraints.push_back(new RigidPointRigidPointConstraint(id1 >= 0 ? mPrimitive[id1]->body : nullptr, localPost1, id2 >= 0 ? mPrimitive[id2]->body : nullptr, localPost2));
+	mConstraints.push_back(new RigidPointRigidPointConstraint(id1 >= 0 ? mPrimitive[id1]->body : nullptr, localPost1, id2 >= 0 ? mPrimitive[id2]->body : nullptr, localPost2, distanceOffset));
 }
 
-void PhysicsWorld::addRigidPointConstraint(int id, const glm::vec3& localPost)
+void PhysicsWorld::addRigidPointConstraint(int id, const glm::vec3& localPost, float distanceOffset)
 {
-	mConstraints.push_back(new RigidPointConstraint(id >= 0 ? mPrimitive[id]->body : nullptr, localPost));
+	mConstraints.push_back(new RigidPointConstraint(id >= 0 ? mPrimitive[id]->body : nullptr, localPost, distanceOffset));
 }
