@@ -206,7 +206,7 @@ void PhysicsWorld::addRigidPointRigidPointConstraint(int id1, const glm::vec3& l
 	mConstraints.push_back(new RigidPointRigidPointConstraint(id1 >= 0 ? mPrimitive[id1]->body : nullptr, localPost1, id2 >= 0 ? mPrimitive[id2]->body : nullptr, localPost2, distanceOffset));
 }
 
-void PhysicsWorld::addRigidPointConstraint(int id, const glm::vec3& localPost, float distanceOffset)
+void PhysicsWorld::addRigidPointConstraint(int id, const glm::vec3& localPost, const glm::vec3& position, float distanceOffset)
 {
-	mConstraints.push_back(new RigidPointConstraint(id >= 0 ? mPrimitive[id]->body : nullptr, localPost, distanceOffset));
+	mConstraints.push_back(new RigidPointConstraint(id >= 0 ? mPrimitive[id]->body : nullptr, localPost, position, distanceOffset));
 }

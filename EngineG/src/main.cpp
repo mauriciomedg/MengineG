@@ -75,7 +75,7 @@ void init(GLFWwindow* window)
 		gameObjectArray.push_back(obj);
 
 		pWorld->addRigidPointRigidPointConstraint(obj->getPhysicsID(), glm::vec3(-5.0f, -5.0f, -5.0f), boxControlled->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), 10.0f);
-		pWorld->addRigidPointConstraint(obj->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), 10.0f);
+		pWorld->addRigidPointConstraint(obj->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(-10.0f, 30.0f, 0.0f), 10.0f);
 	}
 	
 	//for (int h = 0; h < 10; ++h)
