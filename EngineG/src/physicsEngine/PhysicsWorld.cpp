@@ -6,7 +6,7 @@
 #include "CollisionDetection.h"
 #include "CollisionResponse.h"
 #include "MathUtils.h"
-#include "Constraints/BallAndSocketJoint.h"
+#include "Constraints/RigidPointRigidPointConstraint.h"
 #include "Constraints/RigidPointConstraint.h"
 #include <iostream>
 #include <algorithm>
@@ -201,9 +201,9 @@ const glm::mat4& PhysicsWorld::getPrimitiveLocation(int id) const
 	return mPrimitive[id]->getTransform();
 }
 
-void PhysicsWorld::addBallAndSocketConstraint(int id1, const glm::vec3& localPost1, int id2, const glm::vec3& localPost2)
+void PhysicsWorld::addRigidPointRigidPointConstraint(int id1, const glm::vec3& localPost1, int id2, const glm::vec3& localPost2)
 {
-	mConstraints.push_back(new BallAndSocketJoint(id1 >= 0 ? mPrimitive[id1]->body : nullptr, localPost1, id2 >= 0 ? mPrimitive[id2]->body : nullptr, localPost2));
+	mConstraints.push_back(new RigidPointRigidPointConstraint(id1 >= 0 ? mPrimitive[id1]->body : nullptr, localPost1, id2 >= 0 ? mPrimitive[id2]->body : nullptr, localPost2));
 }
 
 void PhysicsWorld::addRigidPointConstraint(int id, const glm::vec3& localPost)

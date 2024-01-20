@@ -152,8 +152,8 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\physicsEngine\CollisionDetection.cpp" />
     <ClCompile Include="src\physicsEngine\CollisionResponse.cpp" />
-    <ClCompile Include="src\physicsEngine\Constraints\BallAndSocketJoint.cpp" />
     <ClCompile Include="src\physicsEngine\Constraints\RigidPointConstraint.cpp" />
+    <ClCompile Include="src\physicsEngine\Constraints\RigidPointRigidPointConstraint.cpp" />
     <ClCompile Include="src\physicsEngine\Contact.cpp" />
     <ClCompile Include="src\physicsEngine\MathUtils.cpp" />
     <ClCompile Include="src\physicsEngine\ParticlesSimulation.cpp" />
@@ -170,9 +170,9 @@
     <ClInclude Include="src\Inputs.h" />
     <ClInclude Include="src\physicsEngine\CollisionDetection.h" />
     <ClInclude Include="src\physicsEngine\CollisionResponse.h" />
-    <ClInclude Include="src\physicsEngine\Constraints\BallAndSocketJoint.h" />
     <ClInclude Include="src\physicsEngine\Constraints\Constraint.h" />
     <ClInclude Include="src\physicsEngine\Constraints\RigidPointConstraint.h" />
+    <ClInclude Include="src\physicsEngine\Constraints\RigidPointRigidPointConstraint.h" />
     <ClInclude Include="src\physicsEngine\Contact.h" />
     <ClInclude Include="src\PhysicsEngine\Header.h" />
     <ClInclude Include="src\physicsEngine\MathUtils.h" />

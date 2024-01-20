@@ -7,10 +7,10 @@ struct RigidBody;
 
 namespace MG
 {
-	class BallAndSocketJoint : public Constraint
+	class RigidPointRigidPointConstraint : public Constraint
 	{
 	public:
-		BallAndSocketJoint(RigidBody* b1, const glm::vec3& localPost1, RigidBody* b2, const glm::vec3& localPost2);
+		RigidPointRigidPointConstraint(RigidBody* b1, const glm::vec3& localPost1, RigidBody* b2, const glm::vec3& localPost2);
 
 		virtual void execute(float dt);
 

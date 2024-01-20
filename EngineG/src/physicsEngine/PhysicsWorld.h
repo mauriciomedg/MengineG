@@ -18,7 +18,7 @@ private:
 
 public:
 	void init();
-	void addBallAndSocketConstraint(int id1, const glm::vec3& localPost1, int id2, const glm::vec3& localPost2);
+	void addRigidPointRigidPointConstraint(int id1, const glm::vec3& localPost1, int id2, const glm::vec3& localPost2);
 	void addRigidPointConstraint(int id, const glm::vec3& localPost);
 	int instanciatePrimitive(const glm::mat4& transform, bool isSimulatingPhysics);
 	int instanciatePrimitiveBox(const glm::mat4& transform, glm::vec3& halfSize, float mass, bool isSimulatingPhysics);

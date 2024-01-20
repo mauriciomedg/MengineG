@@ -1,4 +1,4 @@
-#include "BallAndSocketJoint.h"
+#include "RigidPointRigidPointConstraint.h"
 #include "../RigidBody.h"
 #include "../MathUtils.h"
 
@@ -6,7 +6,7 @@
 
 namespace MG
 {
-	BallAndSocketJoint::BallAndSocketJoint(RigidBody* b1, const glm::vec3& localPost1, RigidBody* b2, const glm::vec3& localPost2)
+	RigidPointRigidPointConstraint::RigidPointRigidPointConstraint(RigidBody* b1, const glm::vec3& localPost1, RigidBody* b2, const glm::vec3& localPost2)
 	{
 		mBody[0] = b1;
 		mBody[1] = b2;
@@ -14,7 +14,7 @@ namespace MG
 		mLocalPost[1] = localPost2;
 	}
 
-	void BallAndSocketJoint::execute(float dt)
+	void RigidPointRigidPointConstraint::execute(float dt)
 	{
 		if (!mBody[0] || !mBody[1]) return;
 
