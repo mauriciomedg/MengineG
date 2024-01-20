@@ -23,10 +23,10 @@ int PhysicsWorld::instanciatePrimitiveBox(const glm::mat4& transform, glm::vec3&
 	CollisionBox* box = new CollisionBox;
 	box->halfSize = halfSize;
 	mPrimitive.push_back(box);
-	mPrimitive.back()->body = (isSimulatingPhysics ? new RigidBody() : nullptr);
+	mPrimitive.back()->body = (isSimulatingPhysics ? new RigidBody(DynamicShape::createBlock(halfSize, mass)) : nullptr);
 	if (isSimulatingPhysics) 
 	{
-		mPrimitive.back()->body->init(transform, halfSize, mass);
+		mPrimitive.back()->body->init(transform);
 		mPrimitive.back()->calculateInternals();
 	}
 	mPrimitive.back()->calculateInternals(transform);

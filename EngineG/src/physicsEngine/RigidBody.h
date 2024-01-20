@@ -4,14 +4,39 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 
+class DynamicShape
+{
+public:
+	DynamicShape();
+	
+	float getMass() const;
+	float getMassInv() const;
+	const glm::mat3& getIbody() const;
+	const glm::mat3& getIbodyInv() const;
+
+	static DynamicShape* createBlock(glm::vec3& halfSize, float mass);
+
+protected:
+	float mMass;
+	float mMassInv;
+	glm::mat3 mIbody;
+	glm::mat3 mIbodyInv;
+};
+
+class DynamicBlock : public DynamicShape
+{
+public:
+	DynamicBlock(glm::vec3& halfSize, float mass);
+};
+
 struct RigidBody
 {
 	static const int STATE_SIZE;
 	static const int POSITION_BASE_STATE_SIZE;
 public:
 
-	RigidBody();
-	void init(const glm::mat4& mMat, glm::vec3& halfSize, float mass);
+	RigidBody(DynamicShape* shape);
+	void init(const glm::mat4& mMat);
 	void computeForceAndTorque(float deltaT, const glm::vec3& gravity);
 	void move(const glm::vec3& distance);
 	void update(float dt);
@@ -20,9 +45,10 @@ public:
 	int mIndex = 0;
 
 	// Constants
-	float mMass;
-	glm::mat3 mIbody;
-	glm::mat3 mIbodyInv;
+	//float mMass;
+	//glm::mat3 mIbody;
+	//glm::mat3 mIbodyInv;
+	DynamicShape* mShape;
 
 	// State variables
 	glm::vec3 mX;

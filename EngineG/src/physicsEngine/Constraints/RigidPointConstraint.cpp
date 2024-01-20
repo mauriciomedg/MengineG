@@ -117,7 +117,7 @@ namespace MG
 
 		Minv.resize(3 * 3, 0.0f);
 		for (int j = 0; j < 3; ++j)
-			Minv[j + j * 3] = 1.0f / b->mMass;
+			Minv[j + j * 3] = b->mShape->getMassInv();
 
 		addBlockDiagonal(Minv, 3, 3, b->mIinvArray, 3, 3);
 

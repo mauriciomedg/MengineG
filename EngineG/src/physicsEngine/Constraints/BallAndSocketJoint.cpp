@@ -71,14 +71,14 @@ namespace MG
 		std::vector<float> Minv;
 		Minv.resize(3 * 3, 0.0f);
 		for (int j = 0; j < 3; ++j)
-			Minv[j + j * 3] = 1.0f / b1->mMass;
+			Minv[j + j * 3] = b1->mShape->getMassInv();
 
 		addBlockDiagonal(Minv, 3, 3, b1->mIinvArray, 3, 3);
 		//
 		std::vector<float> Minv2;
 		Minv2.resize(3 * 3, 0.0f);
 		for (int j = 0; j < 3; ++j)
-			Minv2[j + j * 3] = 1.0f / b2->mMass;
+			Minv2[j + j * 3] = b2->mShape->getMassInv();
 
 		addBlockDiagonal(Minv2, 3, 3, b2->mIinvArray, 3, 3);
 		//
@@ -164,8 +164,8 @@ namespace MG
 			b2->mQ += qdot2;
 		}
 
-		float w1 = 1 / b1->mMass;
-		float w2 = 1 / b2->mMass;
+		float w1 = b1->mShape->getMassInv();
+		float w2 = b2->mShape->getMassInv();
 		float w = w1 + w2;
 
 		float cef1 = 1.0f;//w1 / w;

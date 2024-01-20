@@ -40,7 +40,7 @@ void Contact::applyPositionChange(glm::vec3 linearChange[2],
 		angularInertia[i] = term3;
 
 		// The linear component is simply the inverse mass
-		float term1 = 1 / body[i]->mMass;
+		float term1 = body[i]->mShape->getMassInv();
 		linearInertia[i] = term1;
 
 		// Keep track of the total inertia from all components

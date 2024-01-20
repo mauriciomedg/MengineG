@@ -5,37 +5,64 @@
 const int RigidBody::STATE_SIZE = 13;
 const int RigidBody::POSITION_BASE_STATE_SIZE = 7;
 
-RigidBody::RigidBody()
-	: mMass(1.0f), mL(0.0f), mForce(0.0f), mV(0.0f, 0.0f, 0.0f), mForceAdded(0.0f)
+DynamicShape::DynamicShape()
+{}
+
+float DynamicShape::getMass() const { return mMass; }
+float DynamicShape::getMassInv() const { return mMassInv; }
+const glm::mat3& DynamicShape::getIbody() const { return mIbody; }
+const glm::mat3& DynamicShape::getIbodyInv() const { return mIbodyInv; }
+
+DynamicShape* DynamicShape::createBlock(glm::vec3& halfSize, float mass)
+{
+	return new DynamicBlock(halfSize, mass);
+}
+
+DynamicBlock::DynamicBlock(glm::vec3& halfSize, float mass)
+{
+	mMass = mass;
+
+	if (mass > 0)
+	{
+		mMassInv = 1 / mass;
+
+		float x0 = 2.0f * halfSize[0];
+		float y0 = 2.0f * halfSize[0];
+		float z0 = 2.0f * halfSize[0];
+
+		mIbody[0][0] = glm::pow(y0, 2) + glm::pow(z0, 2);
+		mIbody[1][1] = glm::pow(x0, 2) + glm::pow(z0, 2);
+		mIbody[2][2] = glm::pow(x0, 2) + glm::pow(y0, 2);
+
+		mIbody *= mMass / 12;
+
+		mIbodyInv = glm::inverse(mIbody);
+	}
+	else
+	{
+		mMassInv = 0.0f;
+	}
+}
+
+RigidBody::RigidBody(DynamicShape* shape)
+	: mShape(shape), mL(0.0f), mForce(0.0f), mV(0.0f, 0.0f, 0.0f), mForceAdded(0.0f)
 {
 	mInvInertiaArray.resize(3 * 3, 0.0f);
 
 	mIinvArray.resize(3 * 3);
 }
 
-void RigidBody::init(const glm::mat4& mMat, glm::vec3& halfSize, float mass)
+void RigidBody::init(const glm::mat4& mMat)
 {
-	mMass = mass;
+	//mMass = mass;
 	mX = mMat[3];
-	mP = mMass * mV;
+	mP = mShape->getMass() * mV;
 	mQ = mMat;
 
 	mWorldMat = mMat;
 
-	float x0 = 2.0f * halfSize[0];
-	float y0 = 2.0f * halfSize[0];
-	float z0 = 2.0f * halfSize[0];
-
-	mIbody[0][0] = glm::pow(y0, 2) + glm::pow(z0, 2);
-	mIbody[1][1] = glm::pow(x0, 2) + glm::pow(z0, 2);
-	mIbody[2][2] = glm::pow(x0, 2) + glm::pow(y0, 2);
-	
-	mIbody *= mMass / 12;
-
-	mIbodyInv = glm::inverse(mIbody);
-
 	for (int j = 0; j < 3; ++j)
-		mInvInertiaArray[j + j * 3] = 1.0f / mMass;
+		mInvInertiaArray[j + j * 3] = mShape->getMassInv();
 }
 
 void RigidBody::addMovement(glm::vec3& intensity, float scale)
@@ -67,7 +94,7 @@ void RigidBody::computeForceAndTorque(float deltaT, const glm::vec3& gravity)
 	
 	glm::vec3 torque = glm::cross(pos, force);
 	mTorque += torque;
-	mForce += mMass * gravityAcc - k_drag * mV + force;
+	mForce += mShape->getMass() * gravityAcc - k_drag * mV + force;
 
 	mForceAdded = glm::vec3(0.0f, 0.0f, 0.0f);
 }
@@ -80,8 +107,8 @@ void RigidBody::calculateInternalData()
 	/* v(t) = P(t) * M */
 	//mV = mP / mMass;
 	/* I−1(t) = R(t)I−1 bodyR(t)T*/
-	mI = R * mIbody * glm::transpose(R);
-	mIinv = R * mIbodyInv * glm::transpose(R);
+	mI = R * mShape->getIbody() * glm::transpose(R);
+	mIinv = R * mShape->getIbodyInv() * glm::transpose(R);
 	/* ω(t) = I−1(t)L(t) */
 	//mW = mIinv * mL;
 
@@ -90,7 +117,7 @@ void RigidBody::calculateInternalData()
 	mInvInertiaArray.clear();
 	mInvInertiaArray.resize(3 * 3);
 	for (int j = 0; j < 3; ++j)
-		mInvInertiaArray[j + j * 3] = 1.0f / mMass;
+		mInvInertiaArray[j + j * 3] = mShape->getMassInv();
 
 	for (int i = 0; i < 3; ++i)
 	{
@@ -105,7 +132,7 @@ void RigidBody::calculateInternalData()
 void RigidBody::update(float dt)
 {
 	mXprev = mX;
-	mV += dt * mForce / mMass;
+	mV += dt * mForce * mShape->getMassInv();
 	mX += dt * mV;
 
 	mQprev = mQ;

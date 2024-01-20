@@ -39,8 +39,8 @@ namespace
 		glm::vec3 localPoint2 = b2 ? contact->contactPoint - b2->mX : glm::vec3(0.0f);
 
 		float numerator = -(1 + epsilon) * glm::dot(desiredVelocity(contact), N);
-		float term1 = b1 ? 1 / b1->mMass : 0.0f;
-		float term2 = b2 ? 1 / b2->mMass : 0.0f;
+		float term1 = b1 ? b1->mShape->getMassInv() : 0.0f;
+		float term2 = b2 ? b2->mShape->getMassInv() : 0.0f;
 		float term3 = b1 ? glm::dot(N, glm::cross(b1->mIinv * glm::cross(localPoint1, N), localPoint1)) : 0.0f;
 		float term4 = b2 ? glm::dot(N, glm::cross(b2->mIinv * glm::cross(localPoint2, N), localPoint2)) : 0.0f;
 
@@ -63,7 +63,7 @@ namespace
 			b1->mP += force;
 			b1->mL += glm::cross(contact->contactPoint - b1->mX, force);
 
-			b1->mV = b1->mP / b1->mMass;
+			b1->mV = b1->mP * b1->mShape->getMassInv();
 			b1->mW = b1->mIinv * b1->mL;
 			b1->calculateInternalData();
 		}
@@ -73,7 +73,7 @@ namespace
 			b2->mP -= force;
 			b2->mL -= glm::cross(contact->contactPoint - b2->mX, force);
 
-			b2->mV = b2->mP / b2->mMass;
+			b2->mV = b2->mP * b2->mShape->getMassInv();
 			b2->mW = b2->mIinv * b2->mL;
 			b2->calculateInternalData();
 		}
@@ -134,14 +134,14 @@ namespace
 		if (b1)
 		{
 			glm::vec3 localPoint1 = contact->contactPoint - b1->mX;
-			term1 = 1 / b1->mMass;
+			term1 = b1->mShape->getMassInv();
 			term3 = glm::dot(N, glm::cross(b1->mIinv * glm::cross(localPoint1, N), localPoint1));
 		}
 
 		if (b2)
 		{
 			glm::vec3 localPoint2 = contact->contactPoint - b2->mX;
-			term2 = 1 / b2->mMass;
+			term2 = b2->mShape->getMassInv();
 			term4 = glm::dot(N, glm::cross(b2->mIinv * glm::cross(localPoint2, N), localPoint2));
 		}
 		
