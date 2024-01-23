@@ -8,6 +8,7 @@
 #include "MathUtils.h"
 #include "Constraints/RigidPointRigidPointConstraint.h"
 #include "Constraints/RigidPointConstraint.h"
+#include "Constraints/ContactConstraint.h"
 #include <iostream>
 #include <algorithm>
 
@@ -45,9 +46,11 @@ int PhysicsWorld::instanciatePrimitivePlane(const glm::mat4& transform, float ma
 	return mPrimitive.size() - 1;
 }
 
-void PhysicsWorld::generateContacts()
+void PhysicsWorld::generateContacts(std::vector<MG::ContactConstraint>& contactConstraintList)
 {
 	mCollisionDetection->cData.reset(MAX_CONTACTS);
+	mCollisionDetection2->cData.reset(MAX_CONTACTS);
+
 	for (int i = 0; i < mPrimitive.size(); ++i)
 	{
 		CollisionBox* box = dynamic_cast<CollisionBox*>(mPrimitive[i]);
@@ -64,9 +67,18 @@ void PhysicsWorld::generateContacts()
 					{
 						mCollisionDetection->cData.friction = -1.0f;
 						mCollisionDetection->cData.restitution = 0.0f;
-						CollisionDetector::boxAndBox(*box, *box2, &mCollisionDetection->cData);
+
+						CollisionDetector::boxAndBox(*box, *box2, &mCollisionDetection2->cData);
+						//CollisionDetector::boxAndBox(*box, *box2, &mCollisionDetection->cData);
 					}
 				}
+				//
+				CollisionData* cData2 = &mCollisionDetection2->cData;
+				for (int j = 0; j < cData2->contactCount; j++)
+				{
+					contactConstraintList.push_back(MG::ContactConstraint(&(cData2->contactArray[j])));
+				}
+				//
 
 				CollisionPlane* plane = dynamic_cast<CollisionPlane*>(mPrimitive[j]);
 
@@ -133,22 +145,24 @@ void PhysicsWorld::simulating(float deltaT)
 			}
 		}
 
-		generateContacts();
-
-		CollisionData* cData = &(mCollisionDetection)->cData;
-		for (int j = 0; j < cData->contactCount; j++)
-		{
-			Contact* c = &(cData->contactArray[j]);
-		}
-
+		
 		int nbIterationSolverPos = 5;
 		for (int posItt = 0; posItt < nbIterationSolverPos; ++posItt)
 		{
-			mCollisionResponse->solvePositions(&mCollisionDetection->cData, deltaT / nbIterationSolverPos);
-			
+			//mCollisionResponse->solvePositions(&mCollisionDetection->cData, deltaT / nbIterationSolverPos);
+			std::vector<MG::ContactConstraint> contactConstraintList;
+			generateContacts(contactConstraintList);
+
+
 			for (MG::Constraint* c : mConstraints)
 			{
 				c->execute(mDeltaT);
+			}
+
+			for (MG::ContactConstraint& c : contactConstraintList)
+			{
+				c.execute(mDeltaT);
+				break;
 			}
 
 			for (int i = 0; i < mPrimitive.size(); i++)
@@ -157,11 +171,12 @@ void PhysicsWorld::simulating(float deltaT)
 				{
 					RigidBody* bodies = mPrimitive[i]->body;
 					bodies->calculateInternalData();
+					mPrimitive[i]->calculateInternals();
 				}
 			}
 		}
 			
-		mCollisionResponse->update(&mCollisionDetection->cData, mPrimitive);
+		//mCollisionResponse->update(&mCollisionDetection->cData, mPrimitive);
 
 		for (int i = 0; i < mPrimitive.size(); i++)
 		{
@@ -169,6 +184,7 @@ void PhysicsWorld::simulating(float deltaT)
 			{
 				RigidBody* bodies = mPrimitive[i]->body;
 				bodies->update2(deltaT);
+				mPrimitive[i]->calculateInternals();
 			}
 		}
 	}
@@ -193,6 +209,13 @@ void PhysicsWorld::init()
 	mCollisionDetection = new CollisionDetection;
 	mCollisionDetection->cData.contactArray = mContacts;
 	mCollisionDetection->cData.contactsLeft = MAX_CONTACTS;
+
+	//
+	mContacts2 = new Contact[MAX_CONTACTS];
+	mCollisionDetection2 = new CollisionDetection;
+	mCollisionDetection2->cData.contactArray = mContacts2;
+	mCollisionDetection2->cData.contactsLeft = MAX_CONTACTS;
+	//
 	mCollisionResponse = new CollisionResponse;
 }
 

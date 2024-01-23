@@ -3,6 +3,7 @@
 #include <vector>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Constraints/Constraint.h"
+#include "Constraints/ContactConstraint.h"
 
 class RigidBody;
 class CollisionDetection;
@@ -34,12 +35,14 @@ public:
 private:
 
 	float mDeltaT;
-	void generateContacts();
+	void generateContacts(std::vector<MG::ContactConstraint>& contactConstraintList);
 	glm::vec3 mGravity;
 
 	std::vector<CollisionPrimitive*> mPrimitive;
 	Contact* mContacts;
+	Contact* mContacts2;
 	CollisionDetection* mCollisionDetection;
+	CollisionDetection* mCollisionDetection2;
 	CollisionResponse* mCollisionResponse;
 	std::vector<MG::Constraint*> mConstraints;
 };
