@@ -40,6 +40,8 @@ DynamicBlock::DynamicBlock(glm::vec3& halfSize, float mass)
 	}
 	else
 	{
+		mIbody *= 0.0f;
+		mIbodyInv *= 0.0f;
 		mMassInv = 0.0f;
 	}
 }
@@ -47,9 +49,9 @@ DynamicBlock::DynamicBlock(glm::vec3& halfSize, float mass)
 RigidBody::RigidBody(DynamicShape* shape)
 	: mShape(shape), mL(0.0f), mForce(0.0f), mV(0.0f, 0.0f, 0.0f), mForceAdded(0.0f)
 {
+	mIinv *= 0.0f;
 	mInvInertiaArray.resize(3 * 3, 0.0f);
-
-	mIinvArray.resize(3 * 3);
+	mIinvArray.resize(3 * 3, 0.0f);
 }
 
 void RigidBody::init(const glm::mat4& mMat)
@@ -78,8 +80,10 @@ void RigidBody::move(const glm::vec3& distance)
 
 void RigidBody::computeForceAndTorque(float deltaT, const glm::vec3& gravity)
 {
+	if (!mIsSimulatingPhysics) return;
+
 	// gravity and drag
-	float k_drag = 0.6f;
+	float k_drag = 0.5f;
 
 	glm::vec3 gravityAcc = mIsAffectedByGravity ? gravity : glm::vec3(0.0f);
 	///////////////
@@ -101,6 +105,8 @@ void RigidBody::computeForceAndTorque(float deltaT, const glm::vec3& gravity)
 
 void RigidBody::calculateInternalData()
 {
+	if (!mIsSimulatingPhysics) return;
+
 	mQ = glm::normalize(mQ);
 	glm::mat3 R(mQ);
 	/* Compute auxiliary variables... */
@@ -129,15 +135,24 @@ void RigidBody::calculateInternalData()
 	MG::addBlockDiagonal(mInvInertiaArray, 3, 3, mIinvArray, 3, 3);
 }
 
-void RigidBody::update(float dt)
+void RigidBody::update1(float dt)
 {
-	mXprev = mX;
-	mV += dt * mForce * mShape->getMassInv();
-	mX += dt * mV;
+	if (!mIsSimulatingPhysics) return;
 
-	mQprev = mQ;
+	//update velocities	
+	mV += dt * mForce * mShape->getMassInv();
 	mW += dt * mIinv * (mTorque - glm::cross(mW, glm::cross(mW, mI * mW)));
-	
+}
+
+void RigidBody::update2(float dt)
+{
+	if (!mIsSimulatingPhysics) return;
+
+	//update positions
+	mXprev = mX;
+	mX += dt * mV;
+	mQprev = mQ;
+
 	glm::quat Wquad(0.0f, mW[0], mW[1], mW[2]);
 	glm::quat qdot = 0.5f * (Wquad * mQ);
 
@@ -146,8 +161,10 @@ void RigidBody::update(float dt)
 	calculateInternalData();
 }
 
-void RigidBody::update2(float dt)
+void RigidBody::postUpdate(float dt)
 {
+	if (!mIsSimulatingPhysics) return;
+
 	mV = (mX - mXprev) / dt;
 	auto dQ = mQ * glm::inverse(mQprev);
 	

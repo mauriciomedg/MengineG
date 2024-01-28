@@ -31,11 +31,14 @@ public:
 	const glm::mat4& getPrimitiveLocation(int id) const;
 	//void runSimulation(float deltaT);
 	void simulating(float deltaT);
+	void simulating2(float deltaT);
 
 private:
 
 	float mDeltaT;
-	void generateContacts(std::vector<MG::ContactConstraint>& contactConstraintList);
+	bool generateContactsOneContact(std::vector<MG::ContactConstraint>& contactConstraintList);
+	bool generateContacts(std::vector<MG::ContactConstraint>& contactConstraintList);
+
 	glm::vec3 mGravity;
 
 	std::vector<CollisionPrimitive*> mPrimitive;

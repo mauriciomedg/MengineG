@@ -39,8 +39,9 @@ public:
 	void init(const glm::mat4& mMat);
 	void computeForceAndTorque(float deltaT, const glm::vec3& gravity);
 	void move(const glm::vec3& distance);
-	void update(float dt);
+	void update1(float dt);
 	void update2(float dt);
+	void postUpdate(float dt);
 
 	int mIndex = 0;
 
@@ -49,6 +50,8 @@ public:
 	//glm::mat3 mIbody;
 	//glm::mat3 mIbodyInv;
 	DynamicShape* mShape;
+
+	bool mIsSimulatingPhysics = true;
 
 	// State variables
 	glm::vec3 mX;
@@ -63,7 +66,7 @@ public:
 	glm::vec3 mV;
 	glm::mat3 mIinv;
 	std::vector<float> mInvInertiaArray;
-std::vector<float> mIinvArray;
+	std::vector<float> mIinvArray;
 	glm::mat3 mI;
 	glm::vec3 mW; //w(t)
 	glm::mat4 mWorldMat;

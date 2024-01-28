@@ -349,7 +349,7 @@ unsigned CollisionDetector::boxAndHalfSpace(
             contact->contactDepth = plane.offset - vertexDistance;
 
             // Write the appropriate data
-            contact->setBodyData(box.body, NULL,
+            contact->setBodyData(box.body, plane.body,
                 data->friction, data->restitution);
 
             // Move onto the next contact

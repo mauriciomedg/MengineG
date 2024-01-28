@@ -44,6 +44,27 @@ Camera* camera = new Camera;
 
 //Pyramid onePyramid;
 
+void testBallSocket()
+{
+	for (int j = 0; j < 2; ++j)
+	{
+		GEntityBox* obj = new GEntityBox(pWorld);
+		glm::vec3 Pos(-10.0f, 45.0 - j * 5, 0.0f);
+		auto R = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+		auto Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
+		obj->init(&vbo[0], Mat, 3.0f, 2.0f, true);
+		obj->setAffectedByGravity(true);
+		gameObjectArray.push_back(obj);
+
+		//pWorld->addRigidPointRigidPointConstraint(obj->getPhysicsID(), glm::vec3(-5.0f, -5.0f, -5.0f), boxControlled->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), 15.0f);
+		//pWorld->addRigidPointConstraint(obj->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(-10.0f, 45.0f, 0.0f), 15.0f);
+	}
+
+	pWorld->addRigidPointConstraint(gameObjectArray[0]->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(-10.0f, 65.0f, 0.0f), 10.0f);
+	pWorld->addRigidPointRigidPointConstraint(gameObjectArray[0]->getPhysicsID(), glm::vec3(-3.0f, -3.0f, -3.0f), gameObjectArray[1]->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), 15.0f);
+
+}
+
 void init(GLFWwindow* window) 
 {
 	renderingProgram = createShaderProgram();
@@ -58,27 +79,29 @@ void init(GLFWwindow* window)
 	camera->init(Mat, pWorld, false);
 
 	// box controlled
-	Pos = glm::vec3(10.0f, 15.0f, 0.0f);
-	auto R = glm::rotate(glm::mat4(1.0f), 1.75f, glm::normalize(glm::vec3(1.0f, 1.0f, 0.0f)));
+	Pos = glm::vec3(10.0f, 45.0f, 0.0f);
+	auto R = glm::rotate(glm::mat4(1.0f), 0.0f, glm::normalize(glm::vec3(1.0f, 1.0f, 0.0f)));
 	Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
-	boxControlled->init(&vbo[1], Mat, 3.0f, 3.0f, true);
+	boxControlled->init(&vbo[1], Mat, 5.0f, 2.0f, true);
 	
-	//pWorld->addRigidPointConstraint(boxControlled->getPhysicsID());
+	//pWorld->addRigidPointConstraint(boxControlled->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(-10.0f, 45.0f, 0.0f), 5.0f);
+
 	//
-	for (int j = 0; j < 2; ++j)
+	for (int j = 0; j < 1; ++j)
 	{
 		GEntityBox* obj = new GEntityBox(pWorld);
-		glm::vec3 Pos(-10.0f, 15.0, 0.0f);
-		auto R = glm::rotate(glm::mat4(1.0f), 1.75f, glm::vec3(1.0f, 0.0f, 0.0f));
+		glm::vec3 Pos(-10.0f, 25.0, 0.0f);
+		auto R = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 		auto Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
-		obj->init(&vbo[0], Mat, 5.0f, 1.0f, true);
+		obj->init(&vbo[0], Mat, 5.0f, 2.0f, true);
 		obj->setAffectedByGravity(true);
 		gameObjectArray.push_back(obj);
 
-		//pWorld->addRigidPointRigidPointConstraint(obj->getPhysicsID(), glm::vec3(-5.0f, -5.0f, -5.0f), boxControlled->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), 10.0f);
-		pWorld->addRigidPointConstraint(boxControlled->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(-10.0f, 30.0f, 0.0f), 20.0f);
-		pWorld->addRigidPointConstraint(obj->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(-10.0f, 30.0f, 0.0f), 20.0f);
+		//pWorld->addRigidPointRigidPointConstraint(obj->getPhysicsID(), glm::vec3(-5.0f, -5.0f, -5.0f), boxControlled->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), 15.0f);
+		//pWorld->addRigidPointConstraint(obj->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(-10.0f, 45.0f, 0.0f), 15.0f);
 	}
+
+	testBallSocket();
 	
 	//for (int h = 0; h < 10; ++h)
 	//{
@@ -127,7 +150,7 @@ void display(GLFWwindow* window, double currentTime)
 	//
 	Inputs::get().update(window);
 	//
-	pWorld->simulating(elapsed);// runSimulation(elapsed);
+	pWorld->simulating2(elapsed);// runSimulation(elapsed);
 	camera->update(window);
 
 	for (GEntityBox* obj : gameObjectArray)
