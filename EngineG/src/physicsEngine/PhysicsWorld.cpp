@@ -159,7 +159,7 @@ void PhysicsWorld::simulating(float deltaT)
 			if (mPrimitive[i]->mSimulatePhysics)
 			{
 				RigidBody* bodies = mPrimitive[i]->body;
-				bodies->computeForceAndTorque(deltaT, mGravity);
+				//bodies->computeForceAndTorque(deltaT, mGravity);
 				bodies->update2(deltaT);
 				mPrimitive[i]->calculateInternals();
 			}
@@ -178,16 +178,6 @@ void PhysicsWorld::simulating(float deltaT)
 			{
 				c.execute(mDeltaT);
 			}
-
-			for (int i = 0; i < mPrimitive.size(); i++)
-			{
-				if (mPrimitive[i]->mSimulatePhysics)
-				{
-					RigidBody* bodies = mPrimitive[i]->body;
-					bodies->calculateInternalData();
-					mPrimitive[i]->calculateInternals();
-				}
-			}
 		}
 
 		for (int i = 0; i < mPrimitive.size(); i++)
@@ -203,16 +193,6 @@ void PhysicsWorld::simulating(float deltaT)
 		for (MG::ContactConstraint& c : contactConstraintList)
 		{
 			c.update2(mDeltaT);
-		}
-
-		for (int i = 0; i < mPrimitive.size(); i++)
-		{
-			if (mPrimitive[i]->mSimulatePhysics)
-			{
-				RigidBody* bodies = mPrimitive[i]->body;
-				bodies->calculateInternalData();
-				mPrimitive[i]->calculateInternals();
-			}
 		}
 	}
 }
