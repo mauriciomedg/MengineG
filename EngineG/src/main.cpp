@@ -55,9 +55,6 @@ void testBallSocket()
 		obj->init(&vbo[0], Mat, 3.0f, 2.0f, true);
 		obj->setAffectedByGravity(true);
 		gameObjectArray.push_back(obj);
-
-		//pWorld->addRigidPointRigidPointConstraint(obj->getPhysicsID(), glm::vec3(-5.0f, -5.0f, -5.0f), boxControlled->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), 15.0f);
-		//pWorld->addRigidPointConstraint(obj->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(-10.0f, 45.0f, 0.0f), 15.0f);
 	}
 
 	pWorld->addRigidPointConstraint(gameObjectArray[0]->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(-10.0f, 65.0f, 0.0f), 10.0f);
@@ -150,7 +147,7 @@ void display(GLFWwindow* window, double currentTime)
 	//
 	Inputs::get().update(window);
 	//
-	pWorld->simulating2(elapsed);// runSimulation(elapsed);
+	pWorld->simulating(elapsed);
 	camera->update(window);
 
 	for (GEntityBox* obj : gameObjectArray)

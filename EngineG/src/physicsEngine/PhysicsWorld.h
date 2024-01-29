@@ -29,23 +29,19 @@ public:
 	void setAffectedByGravity(int id, bool isAffetedByGravity);
 	void setIgnoreCollision(int id, bool ignore);
 	const glm::mat4& getPrimitiveLocation(int id) const;
-	//void runSimulation(float deltaT);
+
 	void simulating(float deltaT);
-	void simulating2(float deltaT);
 
 private:
 
 	float mDeltaT;
-	bool generateContactsOneContact(std::vector<MG::ContactConstraint>& contactConstraintList);
 	bool generateContacts(std::vector<MG::ContactConstraint>& contactConstraintList);
 
 	glm::vec3 mGravity;
 
 	std::vector<CollisionPrimitive*> mPrimitive;
 	Contact* mContacts;
-	Contact* mContacts2;
 	CollisionDetection* mCollisionDetection;
-	CollisionDetection* mCollisionDetection2;
 	CollisionResponse* mCollisionResponse;
 	std::vector<MG::Constraint*> mConstraints;
 };

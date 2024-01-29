@@ -12,9 +12,6 @@ namespace MG
 	{
 		mBody[0] = c->body[0];
 		mBody[1] = c->body[1];
-		
-		//mLocalContactPoint[0] = glm::inverse(glm::mat3(mBody[0]->mQ)) * (c->contactPoint - mBody[0]->mX);
-		//mLocalContactPoint[1] = glm::inverse(glm::mat3(mBody[1]->mQ)) * (c->contactPoint - c->contactDepth * c->contactNormal - mBody[1]->mX);
 
 		mContactPoint = c->contactPoint;
 		mN = c->contactNormal;
