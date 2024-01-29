@@ -16,7 +16,7 @@
 #define numVAOs 1
 GLuint renderingProgram;
 GLuint vao[numVAOs];
-GLuint vbo[2];
+GLuint vbo[3];
 GLuint mvLoc, projLoc;
 
 ////////////////////////////
@@ -46,19 +46,21 @@ Camera* camera = new Camera;
 
 void testBallSocket()
 {
+	std::vector<GEntityBox*> toConnect;
 	for (int j = 0; j < 2; ++j)
 	{
 		GEntityBox* obj = new GEntityBox(pWorld);
-		glm::vec3 Pos(-10.0f, 45.0 - j * 5, 0.0f);
+		glm::vec3 Pos(20.0f, 45.0 - j * 5, 0.0f);
 		auto R = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 		auto Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
-		obj->init(&vbo[0], Mat, 3.0f, 2.0f, true);
+		obj->init(&vbo[2], Mat, 3.0f, 2.0f, true);
 		obj->setAffectedByGravity(true);
 		gameObjectArray.push_back(obj);
+		toConnect.push_back(obj);
 	}
 
-	pWorld->addRigidPointConstraint(gameObjectArray[0]->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(-10.0f, 65.0f, 0.0f), 10.0f);
-	pWorld->addRigidPointRigidPointConstraint(gameObjectArray[0]->getPhysicsID(), glm::vec3(-3.0f, -3.0f, -3.0f), gameObjectArray[1]->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), 15.0f);
+	pWorld->addRigidPointConstraint(toConnect[0]->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(20.0f, 65.0f, 0.0f), 10.0f);
+	pWorld->addRigidPointRigidPointConstraint(toConnect[0]->getPhysicsID(), glm::vec3(-3.0f, -3.0f, -3.0f), toConnect[1]->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), 15.0f);
 
 }
 
@@ -67,7 +69,7 @@ void init(GLFWwindow* window)
 	renderingProgram = createShaderProgram();
 	glGenVertexArrays(numVAOs, vao);
 	glBindVertexArray(vao[0]);
-	glGenBuffers(2, vbo);
+	glGenBuffers(3, vbo);
 	
 	// Camera
 	glm::vec3 Pos = glm::vec3(0.0f, 21.0f, 60.0f);
@@ -76,10 +78,10 @@ void init(GLFWwindow* window)
 	camera->init(Mat, pWorld, false);
 
 	// box controlled
-	Pos = glm::vec3(10.0f, 45.0f, 0.0f);
+	Pos = glm::vec3(-20.0f, 45.0f, 0.0f);
 	auto R = glm::rotate(glm::mat4(1.0f), 0.0f, glm::normalize(glm::vec3(1.0f, 1.0f, 0.0f)));
 	Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
-	boxControlled->init(&vbo[1], Mat, 5.0f, 2.0f, true);
+	boxControlled->init(&vbo[0], Mat, 3.0f, 2.0f, true);
 	
 	//pWorld->addRigidPointConstraint(boxControlled->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(-10.0f, 45.0f, 0.0f), 5.0f);
 
@@ -87,10 +89,10 @@ void init(GLFWwindow* window)
 	for (int j = 0; j < 1; ++j)
 	{
 		GEntityBox* obj = new GEntityBox(pWorld);
-		glm::vec3 Pos(-10.0f, 25.0, 0.0f);
+		glm::vec3 Pos(-20.0f, 25.0, 0.0f);
 		auto R = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 		auto Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
-		obj->init(&vbo[0], Mat, 5.0f, 2.0f, true);
+		obj->init(&vbo[1], Mat, 10.0f, 1000.0f, true);
 		obj->setAffectedByGravity(true);
 		gameObjectArray.push_back(obj);
 
