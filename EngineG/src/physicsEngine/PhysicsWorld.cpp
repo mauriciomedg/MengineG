@@ -139,11 +139,11 @@ void PhysicsWorld::simulating(float deltaT)
 	deltaT = deltaT / numSubsteps;
 	mDeltaT = deltaT;
 
-	std::vector<MG::ContactConstraint> contactConstraintList;
-	generateContacts(contactConstraintList);
-
 	for (int sample = 0; sample < numSubsteps; ++sample)
 	{
+		std::vector<MG::ContactConstraint> contactConstraintList;
+		generateContacts(contactConstraintList);
+
 		for (int i = 0; i < mPrimitive.size(); i++)
 		{
 			if (mPrimitive[i]->mSimulatePhysics)
@@ -151,15 +151,6 @@ void PhysicsWorld::simulating(float deltaT)
 				RigidBody* bodies = mPrimitive[i]->body;
 				bodies->computeForceAndTorque(deltaT, mGravity);
 				bodies->update1(deltaT);
-			}
-		}
-
-		for (int i = 0; i < mPrimitive.size(); i++)
-		{
-			if (mPrimitive[i]->mSimulatePhysics)
-			{
-				RigidBody* bodies = mPrimitive[i]->body;
-				//bodies->computeForceAndTorque(deltaT, mGravity);
 				bodies->update2(deltaT);
 				mPrimitive[i]->calculateInternals();
 			}

@@ -117,6 +117,9 @@ namespace MG
 		if (C >= 0.0f)
 			return;
 
+		float s = 0.9f;
+		float Cmodif = glm::min(0.0f, C + mDepth) + s * glm::max(C, -mDepth);
+		C = Cmodif;
 		// mass
 		std::vector<float> Minv;
 		computeMassInverse(Minv);
@@ -189,12 +192,6 @@ namespace MG
 		mLambdaT += deltaLambda[0];
 		
 		updatePosition(dX);
-		
-		//mXprev[0] = mBody[0]->mX;
-		//mQprev[0] = mBody[0]->mQ;
-		//mXprev[1] = mBody[1]->mX;
-		//mQprev[1] = mBody[1]->mQ;
-
 	}
 
 	void ContactConstraint::update2(float dt)
