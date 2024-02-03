@@ -6,6 +6,9 @@
 class Utils
 {
 public:
+
+	static GLuint loadTexture(const char* texImagePath);
+
 	static std::string readShaderSource(const char* filePath);
 
 	static GLuint createShaderProgram(const char* vp, const char* fp);
