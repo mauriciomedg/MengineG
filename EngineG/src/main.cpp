@@ -75,7 +75,7 @@ void init(GLFWwindow* window)
 	glm::vec3 Pos = glm::vec3(0.0f, 21.0f, 60.0f);
 	//auto R = glm::rotate(glm::mat4(1.0f), 1.75f, glm::normalize(glm::vec3(1.0f, 1.0f, 0.0f)));
 	auto Mat = glm::translate(glm::mat4(1.0f), Pos);
-	camera->init(Mat, pWorld, false);
+	camera->init(window, Mat, pWorld, false);
 
 	// box controlled
 	Pos = glm::vec3(-10.0f, 30.0f, 0.0f);
@@ -151,7 +151,7 @@ void display(GLFWwindow* window, double currentTime)
 	Inputs::get().update(window);
 	//
 	pWorld->simulating(elapsed);
-	camera->update(window);
+	camera->update();
 
 	for (GEntityBox* obj : gameObjectArray)
 	{
@@ -164,6 +164,11 @@ void display(GLFWwindow* window, double currentTime)
 	lastTime = glfwGetTime();
 }
 
+void window_reshape_callback(GLFWwindow* window, int newWidth, int newHeight)
+{
+	camera->reshapeWindow(window, newWidth, newHeight);
+}
+
 int main(void) 
 {
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
@@ -171,10 +176,12 @@ int main(void)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	GLFWwindow* window = glfwCreateWindow(600, 600, "Chapter2 - program1", NULL, NULL);
 	glfwMakeContextCurrent(window);
+	
 	if (glewInit() != GLEW_OK) { exit(EXIT_FAILURE); }
 	glfwSwapInterval(1);
 	init(window);
-	
+	glfwSetWindowSizeCallback(window, window_reshape_callback);
+
 	Inputs& inputs = Inputs::get();
 	inputs.mapInput("MoveForward", "up", 1.0f);
 	inputs.mapInput("MoveLeft", "left", -1.0f);

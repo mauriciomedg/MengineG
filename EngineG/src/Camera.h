@@ -12,8 +12,9 @@ public:
 
 	Camera();
 
-	void init(const glm::mat4& modelMatrix, PhysicsWorld* pWorld, bool simulatePhysics);
-	void update(GLFWwindow* window);
+	void init(GLFWwindow* window, const glm::mat4& modelMatrix, PhysicsWorld* pWorld, bool simulatePhysics);
+	void update();
+	void reshapeWindow(GLFWwindow* window, int newWidth, int newHeight);
 	const glm::mat4& getViewMatrix() { return vMat; };
 	const glm::mat4& getProjectionMatrix() { return pMat; };
 

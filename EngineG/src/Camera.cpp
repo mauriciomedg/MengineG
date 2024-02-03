@@ -8,8 +8,14 @@ Camera::Camera()
 {	
 }
 
-void Camera::init(const glm::mat4& modelMatrix, PhysicsWorld* pWorld, bool simulatePhysics)
+void Camera::init(GLFWwindow* window, const glm::mat4& modelMatrix, PhysicsWorld* pWorld, bool simulatePhysics)
 {
+	// build perspective matrix
+	glfwGetFramebufferSize(window, &width, &height);
+	aspect = (float)width / (float)height;
+	pMat = glm::perspective(1.0472f, aspect, 0.1f, 1000.0f); // 1.0472 radians = 60 degrees
+	//
+
 	mWorld = pWorld;
 	mMat = modelMatrix;
 	glm::vec3 halfSize(1.0f, 1.0f, 1.0f);
@@ -18,6 +24,13 @@ void Camera::init(const glm::mat4& modelMatrix, PhysicsWorld* pWorld, bool simul
 	mWorld->setIgnoreCollision(mCollisionPrimitiveId, false);
 
 	bindAxis();
+}
+
+void Camera::reshapeWindow(GLFWwindow* window, int newWidth, int newHeight)
+{
+	aspect = (float)newWidth / (float)newHeight; // new width&height provided by the callback
+	glViewport(0, 0, newWidth, newHeight); // sets screen region associated with framebuffer 
+	pMat = glm::perspective(1.0472f, aspect, 0.1f, 1000.0f);
 }
 
 void Camera::bindAxis()
@@ -42,16 +55,12 @@ void Camera::moveSide(float val)
 	mWorld->move(mCollisionPrimitiveId, impulse);
 }
 
-void Camera::update(GLFWwindow* window)
+void Camera::update()
 {
 //https://learnopengl.com/Getting-started/Camera
 
 	mMat = mWorld->getPrimitiveLocation(mCollisionPrimitiveId);
-	// build perspective matrix
-	glfwGetFramebufferSize(window, &width, &height);
-	aspect = (float)width / (float)height;
-	pMat = glm::perspective(1.0472f, aspect, 0.1f, 1000.0f); // 1.0472 radians = 60 degrees
-
+	
 	// build view matrix
 	glm::vec3 cameraPos = mMat[3];
 	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
