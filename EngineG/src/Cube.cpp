@@ -71,6 +71,7 @@ void Cube::update(Camera* camera, GLuint renderingProgram)
 	// adjust OpenGL settings and draw model
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
+	glFrontFace(GL_CW); // the cube vertices have clockwise winding order
 	glDrawArrays(GL_TRIANGLES, 0, 36); // 36 number of vertices
 
 }
