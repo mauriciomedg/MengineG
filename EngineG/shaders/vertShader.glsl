@@ -1,6 +1,6 @@
 #version 430
 uniform float offset;
-uniform float halfSize;
+//uniform float halfSize;
 
 layout (location = 0) in vec3 position;
 uniform mat4 mv_matrix;
@@ -46,5 +46,6 @@ void main(void)
 	//gl_Position = rotate * vec4(position, 1.0) + vec4( offset, 0.0, 0.0, 1.0);
 	
 	gl_Position = proj_matrix * mv_matrix * vec4(position, 1.0);
-	varyingColor = (vec4(position, 1.0) / halfSize) * 0.5 + (vec4(0.5, 0.5, 0.5, 0.5));
+	//varyingColor = (vec4(position, 1.0) / halfSize) * 0.5 + (vec4(0.5, 0.5, 0.5, 0.5));
+	varyingColor = vec4(position, 1.0) * 0.5 + (vec4(0.5, 0.5, 0.5, 0.5));
 }

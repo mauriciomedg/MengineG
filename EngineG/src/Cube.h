@@ -24,6 +24,7 @@ class Cube : public GShape
 public:
 	Cube();
 
+	static void createCube(GLuint* vbo);
 	virtual void init(GLuint* vbo, const glm::mat4& modelMat, const float halfSize);
 	virtual void update(Camera* camera, GLuint renderingProgram);
 	virtual void setModelMatrix(const glm::mat4& modelMat);
