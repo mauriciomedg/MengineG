@@ -16,11 +16,11 @@ GLuint Utils::loadTexture(const char* texImagePath)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glGenerateMipmap(GL_TEXTURE_2D);
 
-	//if (glewIsSupported("GL_EXT_texture_filter_anisotropic")) {
-	//	GLfloat anisoSetting = 0.0f;
-	//	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &anisoSetting);
-	//	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisoSetting);
-	//}
+	if (glewIsSupported("GL_EXT_texture_filter_anisotropic")) {
+		GLfloat anisoSetting = 0.0f;
+		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &anisoSetting);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisoSetting);
+	}
 
 	return textureID;
 }
