@@ -36,11 +36,11 @@ void GPrimitiveEntity::setAffectedByGravity(bool isAffectedByGravity)
 	}
 }
 
-void GPrimitiveEntity::init(GLuint* vbo, const glm::mat4& modelMatrix, float halfSize, bool simulatePhysics)
+void GPrimitiveEntity::init(GLuint* vbo, GLuint* vboTextCoords, const glm::mat4& modelMatrix, float halfSize, bool simulatePhysics)
 {
 	if (mShape)
 	{
-		mShape->init(vbo, modelMatrix, halfSize);
+		mShape->init(vbo, vboTextCoords, modelMatrix, halfSize);
 	}
 
 	if (mWorld && (mCollisionPrimitiveId == -1))
@@ -58,13 +58,13 @@ GEntityBox::GEntityBox(PhysicsWorld* pWorld)
 	mShape = new Cube;
 }
 
-void GEntityBox::init(GLuint* vbo, const glm::mat4& modelMatrix, float halfSize, float mass, bool simulatePhysics)
+void GEntityBox::init(GLuint* vbo, GLuint* vboTextCoords, const glm::mat4& modelMatrix, float halfSize, float mass, bool simulatePhysics)
 {
 	glm::vec3 halfSizeVector(halfSize, halfSize, halfSize);
 	//static_cast<Cube*>(mShape)->setHalfSize(mhalfSize);
 	mCollisionPrimitiveId = mWorld->instanciatePrimitiveBox(modelMatrix, halfSizeVector, mass, simulatePhysics);
 
-	GPrimitiveEntity::init(vbo, modelMatrix, halfSize, simulatePhysics);
+	GPrimitiveEntity::init(vbo, vboTextCoords, modelMatrix, halfSize, simulatePhysics);
 }
 
 void GEntityBox::update(Camera* camera, GLuint renderingProgram)
@@ -79,9 +79,9 @@ GEntityBoxControlled::GEntityBoxControlled(PhysicsWorld* pWorld)
 {
 }
 
-void GEntityBoxControlled::init(GLuint* vbo, const glm::mat4& modelMatrix, float halfSize, float mass, bool simulatePhysics)
+void GEntityBoxControlled::init(GLuint* vbo, GLuint* vboTextCoords, const glm::mat4& modelMatrix, float halfSize, float mass, bool simulatePhysics)
 {
-	GEntityBox::init(vbo, modelMatrix, halfSize, mass, simulatePhysics);
+	GEntityBox::init(vbo, vboTextCoords, modelMatrix, halfSize, mass, simulatePhysics);
 
 	bindAxis();
 }
@@ -95,13 +95,13 @@ void GEntityBoxControlled::bindAxis()
 
 void GEntityBoxControlled::moveForward(float val)
 {
-	glm::vec3 impulse(0.0f, 5000.0f, 0.0f);
+	glm::vec3 impulse(0.0f, 2000.0f, 0.0f);
 	mWorld->addMovement(mCollisionPrimitiveId, impulse, val);
 }
 
 void GEntityBoxControlled::moveSide(float val)
 {
-	glm::vec3 impulse(1000.0f, 0.0f, 0.0f);
+	glm::vec3 impulse(500.0f, 0.0f, 0.0f);
 	mWorld->addMovement(mCollisionPrimitiveId, impulse, val);
 }
 

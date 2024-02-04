@@ -3,6 +3,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "Camera.h"
 #include "physicsEngine/CollisionDetection.h"
+#include "Utils.h"
 
 GShape::GShape()
 	: mMat(1.0f), m_vbo(nullptr)
@@ -18,7 +19,7 @@ void Cube::setModelMatrix(const glm::mat4& modelMat)
 	mMat = modelMat;
 }
 
-void Cube::createCube(GLuint* vbo)
+void Cube::createCube(GLuint* vbo, GLuint* vboTextCoords)
 {
 	float vertexPositions[] = {
 		-1.0f,  1.0f, -1.0f, -1.0f, -1.0f, -1.0f,  1.0f, -1.0f, -1.0f,
@@ -35,17 +36,31 @@ void Cube::createCube(GLuint* vbo)
 		 1.0f,  1.0f,  1.0f, -1.0f,  1.0f,  1.0f, -1.0f,  1.0f, -1.0f
 	};
 
+	float pyrTextCoords[] = {
+		0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+		0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+		0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f
+	};
+
 	glBindBuffer(GL_ARRAY_BUFFER, *vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexPositions), vertexPositions, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, *vboTextCoords);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(pyrTextCoords), pyrTextCoords, GL_STATIC_DRAW);
 }
 
-void Cube::init(GLuint* vbo, const glm::mat4& modelMat, const float halfSize)
+void Cube::init(GLuint* vbo, GLuint* vboTextCoords, const glm::mat4& modelMat, const float halfSize)
 {
-	createCube(vbo);
+	createCube(vbo, vboTextCoords);
+	mBrickTexture = Utils::loadTexture("textures/block.png");
 	mhalfSize = halfSize;
 	setModelMatrix(modelMat);
 
 	m_vbo = vbo;
+	m_vbo_textureCoords = vboTextCoords;
 }
 
 void Cube::update(Camera* camera, GLuint renderingProgram)
@@ -67,6 +82,14 @@ void Cube::update(Camera* camera, GLuint renderingProgram)
 	glBindBuffer(GL_ARRAY_BUFFER, *m_vbo); // make the 0th buffer "active"
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0); // associate 0th attribute with buffer
 	glEnableVertexAttribArray(0); // enable the 0th vertex attribute
+
+	//for texture
+	glBindBuffer(GL_ARRAY_BUFFER, *m_vbo_textureCoords);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(1);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, mBrickTexture);
 
 	// adjust OpenGL settings and draw model
 	glEnable(GL_DEPTH_TEST);

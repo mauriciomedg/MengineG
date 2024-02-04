@@ -14,9 +14,10 @@
 #include "physicsEngine/PhysicsWorld.h"
 
 #define numVAOs 1
+#define numVBOs 2
 GLuint renderingProgram;
 GLuint vao[numVAOs];
-GLuint vbo[3];
+GLuint vbo[numVBOs];
 GLuint mvLoc, projLoc;
 
 ////////////////////////////
@@ -53,7 +54,7 @@ void testBallSocket()
 		glm::vec3 Pos(20.0f, 45.0 - j * 5, 0.0f);
 		auto R = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 		auto Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
-		obj->init(&vbo[0], Mat, 3.0f, 2.0f, true);
+		obj->init(&vbo[0], &vbo[1], Mat, 3.0f, 1.0f, true);
 		obj->setAffectedByGravity(true);
 		gameObjectArray.push_back(obj);
 		toConnect.push_back(obj);
@@ -69,8 +70,8 @@ void init(GLFWwindow* window)
 	renderingProgram = createShaderProgram();
 	glGenVertexArrays(numVAOs, vao);
 	glBindVertexArray(vao[0]);
-	glGenBuffers(1, vbo);
-	
+	glGenBuffers(numVBOs, vbo);
+
 	// Camera
 	glm::vec3 Pos = glm::vec3(0.0f, 21.0f, 60.0f);
 	//auto R = glm::rotate(glm::mat4(1.0f), 1.75f, glm::normalize(glm::vec3(1.0f, 1.0f, 0.0f)));
@@ -81,7 +82,7 @@ void init(GLFWwindow* window)
 	Pos = glm::vec3(-10.0f, 30.0f, 0.0f);
 	auto R = glm::rotate(glm::mat4(1.0f), 0.0f, glm::normalize(glm::vec3(1.0f, 1.0f, 0.0f)));
 	Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
-	boxControlled->init(&vbo[0], Mat, 3.0f, 0.8f, true);
+	boxControlled->init(&vbo[0], &vbo[1], Mat, 5.0f, 0.8f, true);
 	
 	//pWorld->addRigidPointConstraint(boxControlled->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(-10.0f, 45.0f, 0.0f), 5.0f);
 
@@ -92,7 +93,7 @@ void init(GLFWwindow* window)
 		glm::vec3 Pos(0.0f, 25.0, 0.0f);
 		auto R = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 		auto Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
-		obj->init(&vbo[0], Mat, 10.0f, 1.0f, true);
+		obj->init(&vbo[0], &vbo[1], Mat, 10.0f, 1.0f, true);
 		obj->setAffectedByGravity(true);
 		gameObjectArray.push_back(obj);
 	
