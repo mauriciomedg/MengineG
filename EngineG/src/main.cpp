@@ -12,9 +12,10 @@
 
 #include "GEntity.h"
 #include "physicsEngine/PhysicsWorld.h"
+#include "Cube.h"
 
 #define numVAOs 1
-#define numVBOs 2
+#define numVBOs 7
 GLuint renderingProgram;
 GLuint vao[numVAOs];
 GLuint vbo[numVBOs];
@@ -42,6 +43,10 @@ GLuint createShaderProgram()
 }
 
 Camera* camera = new Camera;
+
+Sphere* sphere = new Sphere;
+
+Model* model = new Model;
 
 //Pyramid onePyramid;
 
@@ -84,40 +89,30 @@ void init(GLFWwindow* window)
 	Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
 	boxControlled->init(&vbo[0], &vbo[1], Mat, 5.0f, 0.8f, true);
 	
-	//pWorld->addRigidPointConstraint(boxControlled->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(-10.0f, 45.0f, 0.0f), 5.0f);
-
-	
 	for (int j = 0; j < 1; ++j)
 	{
 		GEntityBox* obj = new GEntityBox(pWorld);
-		glm::vec3 Pos(0.0f, 25.0, 0.0f);
+		glm::vec3 Pos(50.0f, 25.0, 0.0f);
 		auto R = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 		auto Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
 		obj->init(&vbo[0], &vbo[1], Mat, 10.0f, 1.0f, true);
 		obj->setAffectedByGravity(true);
 		gameObjectArray.push_back(obj);
 	
-		//pWorld->addRigidPointRigidPointConstraint(obj->getPhysicsID(), glm::vec3(-5.0f, -5.0f, -5.0f), boxControlled->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), 15.0f);
-		//pWorld->addRigidPointConstraint(obj->getPhysicsID(), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(-10.0f, 45.0f, 0.0f), 15.0f);
 	}
-
+	
 	testBallSocket();
 	
-	//for (int h = 0; h < 10; ++h)
-	//{
-	//	for (int j = 0; j < 3; ++j)
-	//	{
-	//		GEntityBox* obj = new GEntityBox(pWorld);
-	//		glm::vec3 Pos(-5.0f + j * 10.0f, 20 + h * 5.0f, 25.0f);
-	//		auto R = glm::rotate(glm::mat4(1.0f), 1.75f, glm::vec3(1.0f, 0.0f, 0.0f));
-	//		auto Mat = glm::translate(glm::mat4(1.0f), Pos) * glm::mat4(R);
-	//		obj->setHalfSize(2.0f);
-	//		obj->init(&vbo[0], Mat, true);
-	//		obj->setAffectedByGravity(true);
-	//		gameObjectArray.push_back(obj);
-	//	}
-	//}
-
+	// Sphere
+	Pos = glm::vec3(-5.0f, 30.0f, 0.0f);
+	Mat = glm::translate(glm::mat4(1.0f), Pos);
+	sphere->init(&vbo[2], &vbo[3], Mat, 10.0f);
+	// 
+	
+	// Model
+	Pos = glm::vec3(0.0f, 25.0, 0.0f);
+	Mat = glm::translate(glm::mat4(1.0f), Pos);
+	model->init(&vbo[4], &vbo[5], &vbo[6], Mat);
 	// Plane
 	Pos = glm::vec3(0.0f, -5.0f, 0.0f);
 	//R = glm::mat4(1.0f);
@@ -142,7 +137,7 @@ void display(GLFWwindow* window, double currentTime)
 	// get the uniform variables for the MV and projection matrices
 	mvLoc = glGetUniformLocation(renderingProgram, "mv_matrix");
 	projLoc = glGetUniformLocation(renderingProgram, "proj_matrix");
-	GLuint offsetLoc = glGetUniformLocation(renderingProgram, "offset"); // get ptr to "offset"
+	//GLuint offsetLoc = glGetUniformLocation(renderingProgram, "offset"); // get ptr to "offset"
 	
 	//////////////
 	double current = glfwGetTime();
@@ -162,8 +157,26 @@ void display(GLFWwindow* window, double currentTime)
 
 	boxControlled->update(camera, renderingProgram);
 	///
-	
+
+	//sphere->update(camera, renderingProgram);
+	model->update(camera, renderingProgram);
+
 	lastTime = glfwGetTime();
+
+	//Utils::drawLine(glm::vec3(0.0f), glm::vec3(10.0f), 10.0f);
+
+	//GLfloat line[] = {
+	//	10.0f, 10.0f, 10.0f,
+	//	0.0f, 0.0f, 0.0f
+	//};
+	//
+	//glEnable(GL_LINE_SMOOTH);
+	//glLineWidth(10);
+	//glEnableClientState(GL_VERTEX_ARRAY);
+	//glVertexPointer(3, GL_FLOAT, 0, line);
+	//glDrawArrays(GL_LINES, 0, 2);
+	//glDisableClientState(GL_VERTEX_ARRAY);
+	//glDisable(GL_LINE_SMOOTH);
 }
 
 void window_reshape_callback(GLFWwindow* window, int newWidth, int newHeight)

@@ -15,6 +15,7 @@ namespace MG
 
 		virtual void execute(float dt);
 		virtual void update2(float dt) {};
+		virtual void debugDraw() {};
 	private:
 
 		RigidBody* mBody;
