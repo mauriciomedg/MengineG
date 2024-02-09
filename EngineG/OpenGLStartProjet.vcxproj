@@ -150,6 +150,8 @@
     <ClCompile Include="src\GEntity.cpp" />
     <ClCompile Include="src\Inputs.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\MGame\MGame.cpp" />
+    <ClCompile Include="src\OGraphicsEngine\MGraphicsEngine.cpp" />
     <ClCompile Include="src\physicsEngine\CollisionDetection.cpp" />
     <ClCompile Include="src\physicsEngine\CollisionResponse.cpp" />
     <ClCompile Include="src\physicsEngine\Constraints\ContactConstraint.cpp" />
@@ -169,6 +171,8 @@
     <ClInclude Include="src\Delegate.h" />
     <ClInclude Include="src\GEntity.h" />
     <ClInclude Include="src\Inputs.h" />
+    <ClInclude Include="src\MGame\MGame.h" />
+    <ClInclude Include="src\OGraphicsEngine\MGraphicsEngine.h" />
     <ClInclude Include="src\physicsEngine\CollisionDetection.h" />
     <ClInclude Include="src\physicsEngine\CollisionResponse.h" />
     <ClInclude Include="src\physicsEngine\Constraints\Constraint.h" />

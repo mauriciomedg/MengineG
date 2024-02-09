@@ -72,6 +72,12 @@
     <ClCompile Include="src\physicsEngine\Constraints\ContactConstraint.cpp">
       <Filter>Source Files\Constraints</Filter>
     </ClCompile>
+    <ClCompile Include="src\MGame\MGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGraphicsEngine\MGraphicsEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils.h">
@@ -130,6 +136,12 @@
     </ClInclude>
     <ClInclude Include="src\physicsEngine\Constraints\ContactConstraint.h">
       <Filter>Header Files\Constraints</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MGame\MGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGraphicsEngine\MGraphicsEngine.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
