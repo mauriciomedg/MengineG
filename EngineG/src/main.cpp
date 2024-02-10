@@ -14,6 +14,8 @@
 #include "physicsEngine/PhysicsWorld.h"
 #include "Cube.h"
 
+#include "MGame/MGame.h"
+
 #define numVAOs 1
 #define numVBOs 7
 GLuint renderingProgram;
@@ -184,34 +186,43 @@ void window_reshape_callback(GLFWwindow* window, int newWidth, int newHeight)
 	camera->reshapeWindow(window, newWidth, newHeight);
 }
 
+
+
 int main(void) 
 {
-	if (!glfwInit()) { exit(EXIT_FAILURE); }
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	GLFWwindow* window = glfwCreateWindow(600, 600, "Chapter2 - program1", NULL, NULL);
-	glfwMakeContextCurrent(window);
-	
-	if (glewInit() != GLEW_OK) { exit(EXIT_FAILURE); }
-	glfwSwapInterval(1);
-	init(window);
-	glfwSetWindowSizeCallback(window, window_reshape_callback);
+	MG::MGame game;
 
-	Inputs& inputs = Inputs::get();
-	inputs.mapInput("MoveForward", "up", 1.0f);
-	inputs.mapInput("MoveLeft", "left", -1.0f);
-	inputs.mapInput("MoveRight", "right", 1.0f);
-	inputs.mapInput("MoveForwardCamera", "w", 1.0f);
-	inputs.mapInput("MoveBackwardCamera", "s", -1.0f);
-	inputs.mapInput("MoveLeftCamera", "a", -1.0f);
-	inputs.mapInput("MoveRightCamera", "d", 1.0f);
-	
-	while (!glfwWindowShouldClose(window)) {
-		display(window, glfwGetTime());
-		glfwSwapBuffers(window);
-		glfwPollEvents();	
-	}
-	glfwDestroyWindow(window);
-	glfwTerminate();
-	exit(EXIT_SUCCESS);
+	game.init();
+	game.update();
+
+	//C++ OpenGL 3D Game Tutorial 2: Making OpenGL 3D Engine
+
+	//if (!glfwInit()) { exit(EXIT_FAILURE); }
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	//GLFWwindow* window = glfwCreateWindow(600, 600, "Chapter2 - program1", NULL, NULL);
+	//glfwMakeContextCurrent(window);
+	//
+	//if (glewInit() != GLEW_OK) { exit(EXIT_FAILURE); }
+	//glfwSwapInterval(1);
+	//init(window);
+	//glfwSetWindowSizeCallback(window, window_reshape_callback);
+	//
+	//Inputs& inputs = Inputs::get();
+	//inputs.mapInput("MoveForward", "up", 1.0f);
+	//inputs.mapInput("MoveLeft", "left", -1.0f);
+	//inputs.mapInput("MoveRight", "right", 1.0f);
+	//inputs.mapInput("MoveForwardCamera", "w", 1.0f);
+	//inputs.mapInput("MoveBackwardCamera", "s", -1.0f);
+	//inputs.mapInput("MoveLeftCamera", "a", -1.0f);
+	//inputs.mapInput("MoveRightCamera", "d", 1.0f);
+	//
+	//while (!glfwWindowShouldClose(window)) {
+	//	display(window, glfwGetTime());
+	//	glfwSwapBuffers(window);
+	//	glfwPollEvents();	
+	//}
+	//glfwDestroyWindow(window);
+	//glfwTerminate();
+	//exit(EXIT_SUCCESS);
 }

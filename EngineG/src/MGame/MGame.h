@@ -1,5 +1,7 @@
 #pragma once
 #include <memory>
+#include <vector>
+#include "../OGraphicsEngine/MPrerequisites.h"
 
 namespace MG
 {
@@ -17,5 +19,6 @@ namespace MG
 	protected:
 		bool m_isRunning = true;
 		std::unique_ptr<MGraphicsEngine> m_GraphicsEngine;
+		std::vector<ui32> m_modelsToRender;
 	};
 }

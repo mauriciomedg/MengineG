@@ -5,20 +5,28 @@ using namespace MG;
 
 MGame::MGame()
 {
-	m_GraphicsEngine = std::unique_ptr<MGraphicsEngine>(new MGraphicsEngine);// std::make_unique<MGraphicsEngine>(new MGraphicsEngine());
+	m_GraphicsEngine = std::make_unique<MGraphicsEngine>();
 }
 
 void MGame::init()
 {
 	m_GraphicsEngine->init();
+
+	const f32 triangle[] = {
+		-0.5f, -0.5f, 0.0f,
+		0.5f, -0.5f, 0.0f,
+		0.0f, 0.5f, 0.0f
+	};
+
+	ui32 id = m_GraphicsEngine->createVextexArrayObject({(void*)triangle, sizeof(f32) * 3, 3});
+	m_modelsToRender.push_back(id);
 }
 
 void MGame::update()
 {
 	while (m_isRunning)
 	{
-		m_isRunning = m_GraphicsEngine->update();
-
+		m_isRunning = m_GraphicsEngine->update(m_modelsToRender);
 	}
 }
 
