@@ -8,7 +8,7 @@ layout (location = 0) out vec3 outColor;
 void main(void)
 { 
 	gl_Position.xyz = position;
-	gl_Position.y *= 1.5;
+	//gl_Position.y *= 1.5;
 	gl_Position.w = 1.0;
 	
 	outColor = inColor;

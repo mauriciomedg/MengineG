@@ -24,7 +24,7 @@ namespace MG
 		void setShaderProgram(const ui32 id);
 	private:
 		void display(const std::vector<ui32>& modelsToRender, const std::vector<ui32>& shaders);
-		void drawTriangles(ui32 vertexCount, ui32 offset);
+		void drawTriangles(const MTriangleType& triangleType, ui32 vertexCount, ui32 offset);
 
 		GLFWwindow* m_window;
 		std::vector<MVAOSharedPtr> m_VAOlist;

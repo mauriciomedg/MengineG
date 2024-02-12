@@ -44,22 +44,34 @@ void MGraphicsEngine::init()
 	window_reshape_callback(m_window, width, height);
 }
 
-void MGraphicsEngine::drawTriangles(ui32 vertexCount, ui32 offset)
+void MGraphicsEngine::drawTriangles(const MTriangleType& triangleType, ui32 vertexCount, ui32 offset)
 {
-	glDrawArrays(GL_TRIANGLES, offset, vertexCount);
+	auto glTriType = GL_TRIANGLES;
+	
+	switch(triangleType)
+	{
+	case TriangleList:
+		glTriType = GL_TRIANGLES;
+		break;
+	case TriangleStrip:
+		glTriType = GL_TRIANGLE_STRIP;
+		break;
+	}
+
+	glDrawArrays(glTriType, offset, vertexCount);
 }
 
 void MGraphicsEngine::display(const std::vector<ui32>& modelsToRender, const std::vector<ui32>& shaders)
 {
 	glClear(GL_DEPTH_BUFFER_BIT);
-	glClearColor(1.0, 0.0, 0.0, 1.0);
+	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT); // clear the background to black, each time
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 
 	for (ui32 id : modelsToRender)
 	{
 		glBindVertexArray(m_VAOlist[id]->getId());
-		glDrawArrays(GL_TRIANGLES, 0, m_VAOlist[id]->getVertexBufferSize()); // 36 number of vertices
+		drawTriangles(TriangleStrip, m_VAOlist[id]->getVertexBufferSize(), 0);
 	}
 
 	for (ui32 id : shaders)

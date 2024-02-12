@@ -35,6 +35,12 @@ namespace MG
 		const wchar_t* fragmentShaderFilePath;
 	};
 
+	enum MTriangleType
+	{
+		TriangleList = 0,
+		TriangleStrip
+	};
+
 	enum MShaderType
 	{
 		VertexShader = 0,

@@ -12,14 +12,25 @@ void MGame::init()
 {
 	m_GraphicsEngine->init();
 
-	const f32 triangle[] = {
+	const f32 polygonVertices[] = {
 		-0.5f, -0.5f, 0.0f,
 		1, 0, 0,
-		0.5f, -0.5f, 0.0f,
+		-0.5f, 0.5f, 0.0f,
 		0, 1, 0,
-		0.0f, 0.5f, 0.0f,
-		0, 0, 1
+		0.5f, -0.5f, 0.0f,
+		0, 0, 1,
+		0.5f, 0.5f, 0.0f,
+		1, 1, 0
 	};
+
+	//const f32 polygonVertices[] = {
+	//	-0.5f, -0.5f, 0.0f,
+	//	1, 0, 0,
+	//	0.5f, -0.5f, 0.0f,
+	//	0, 1, 0,
+	//	0.0f, 0.5f, 0.0f,
+	//	0, 0, 1
+	//};
 
 	MVertexAtrribute attributeList[] =
 	{
@@ -28,9 +39,9 @@ void MGame::init()
 	};
 
 	ui32 id = m_GraphicsEngine->createVextexArrayObject(
-		{(void*)triangle,
+		{(void*)polygonVertices,
 		sizeof(f32) * (3 + 3),
-		3,
+		4,
 
 		attributeList,
 		2
