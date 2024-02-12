@@ -53,6 +53,12 @@ void MShaderProgram::link()
 	}
 }
 
+void MShaderProgram::setUniformBufferSlot(const char* name, ui32 slot)
+{
+	ui32 index = glGetUniformBlockIndex(m_programId, name);
+	glUniformBlockBinding(m_programId, index, slot);
+}
+
 ui32 MShaderProgram::getId()
 {
 	return m_programId;

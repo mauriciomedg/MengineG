@@ -3,6 +3,14 @@
 
 using namespace MG;
 
+namespace MG
+{
+	struct UniformData
+	{
+		f32 scale;
+	};
+}
+
 MGame::MGame()
 {
 	m_GraphicsEngine = std::make_unique<MGraphicsEngine>();
@@ -46,18 +54,32 @@ void MGame::init()
 		attributeList,
 		2
 		});
-
+		
 	m_modelsToRender.push_back(id);
+
+	auto uniformId = m_GraphicsEngine->createUniformBuffer(
+		{
+			sizeof(UniformData)
+		}
+	);
+	m_uniforms.push_back(uniformId);
+	m_uniformData[uniformId] = { 1.0 };
 
 	id = m_GraphicsEngine->createShaderProgram({ L"shaders/basicVertShader.glsl", L"shaders/basicFragShader.glsl" });
 	m_shaders.push_back(id);
+
+	m_GraphicsEngine->setShaderUniformBufferSlot(id, uniformId, "UniformData", 0);
 }
 
 void MGame::update()
 {
 	while (m_isRunning)
 	{
-		m_isRunning = m_GraphicsEngine->update(m_modelsToRender, m_shaders);
+		auto uniformId = m_uniforms.at(0);
+		m_uniformData[uniformId] = { 0.1 };
+		m_GraphicsEngine->setUniformData(uniformId, &m_uniformData[uniformId]);
+
+		m_isRunning = m_GraphicsEngine->update(m_modelsToRender, m_shaders, m_uniforms);
 	}
 }
 

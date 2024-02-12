@@ -1,6 +1,7 @@
 #include "MGraphicsEngine.h"
 
 #include "MVertexArrayObject.h"
+#include "MUniformBuffer.h"
 #include "MShaderProgram.h"
 
 #include <iostream>
@@ -61,7 +62,7 @@ void MGraphicsEngine::drawTriangles(const MTriangleType& triangleType, ui32 vert
 	glDrawArrays(glTriType, offset, vertexCount);
 }
 
-void MGraphicsEngine::display(const std::vector<ui32>& modelsToRender, const std::vector<ui32>& shaders)
+void MGraphicsEngine::display(const std::vector<ui32>& modelsToRender, const std::vector<ui32>& shaders, const std::vector<ui32>& uniforms)
 {
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -74,17 +75,22 @@ void MGraphicsEngine::display(const std::vector<ui32>& modelsToRender, const std
 		drawTriangles(TriangleStrip, m_VAOlist[id]->getVertexBufferSize(), 0);
 	}
 
+	for (ui32 id : uniforms)
+	{
+		glBindBufferBase(GL_UNIFORM_BUFFER, m_uniformBufferSlots[id], m_uniformBuffers[id]->getId());
+	}
+
 	for (ui32 id : shaders)
 	{
 		glUseProgram(m_shadersProgram[id]->getId());
 	}
 }
 
-bool MGraphicsEngine::update(const std::vector<ui32>& modelsToRender, const std::vector<ui32>& shaders)
+bool MGraphicsEngine::update(const std::vector<ui32>& modelsToRender, const std::vector<ui32>& shaders, const std::vector<ui32>& uniforms)
 {
 	if (glfwWindowShouldClose(m_window)) return false;
 	
-	display(modelsToRender, shaders);
+	display(modelsToRender, shaders, uniforms);
 
 	glfwSwapBuffers(m_window);
 	glfwPollEvents();
@@ -108,6 +114,13 @@ ui32 MGraphicsEngine::createVextexArrayObject(const MVertexBufferDesc& data)
 	return m_VAOlist.size() - 1;
 }
 
+ui32 MGraphicsEngine::createUniformBuffer(const MUniformBufferDesc& data)
+{
+	auto uniformBuffer = std::make_shared<MUniformBuffer>(data);
+	m_uniformBuffers[uniformBuffer->getId()] = uniformBuffer;
+	return uniformBuffer->getId();
+}
+
 ui32 MGraphicsEngine::createShaderProgram(const MShaderProgramDesc& data)
 {
 	auto shaderProgram = std::make_shared<MShaderProgram>(data);
@@ -123,6 +136,17 @@ void MGraphicsEngine::setVextexArrayObject(const ui32 id)
 void MGraphicsEngine::setShaderProgram(const ui32 id)
 {
 	glUseProgram(m_shadersProgram[id]->getId());
+}
+
+void MGraphicsEngine::setShaderUniformBufferSlot(const ui32 shaderId, const ui32 uniformId, const char* name, ui32 slot)
+{
+	m_shadersProgram[shaderId]->setUniformBufferSlot(name, slot);
+	m_uniformBufferSlots[uniformId] = slot;
+}
+
+void MGraphicsEngine::setUniformData(const ui32 uniformId, void* data)
+{
+	m_uniformBuffers[uniformId]->setData(data);
 }
 
 

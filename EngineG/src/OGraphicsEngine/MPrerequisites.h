@@ -9,9 +9,11 @@ typedef unsigned int ui32;
 namespace MG
 {
 	class MVertexArrayObject;
+	class MUniformBuffer;
 	class MShaderProgram;
 
 	typedef std::shared_ptr<MVertexArrayObject> MVAOSharedPtr;
+	typedef std::shared_ptr<MUniformBuffer> MUniformBufferSharedPtr;
 	typedef std::shared_ptr<MShaderProgram> MShaderProgSharedPtr;
 
 	struct MVertexAtrribute
@@ -33,6 +35,11 @@ namespace MG
 	{
 		const wchar_t* vertexShaderFilePath;
 		const wchar_t* fragmentShaderFilePath;
+	};
+
+	struct MUniformBufferDesc
+	{
+		ui32 size = 0;
 	};
 
 	enum MTriangleType
