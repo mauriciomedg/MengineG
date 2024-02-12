@@ -35,8 +35,8 @@ using namespace std;
 
 GLuint createShaderProgram() 
 {
-	string vertShaderStr = Utils::readShaderSource("shaders/vertShader.glsl");
-	string fragShaderStr = Utils::readShaderSource("shaders/fragShader.glsl");
+	string vertShaderStr = Utils::readShaderSource(L"shaders/vertShader.glsl");
+	string fragShaderStr = Utils::readShaderSource(L"shaders/fragShader.glsl");
 
 	const char* vshaderSource = vertShaderStr.c_str();
 	const char* fshaderSource = fragShaderStr.c_str();
@@ -191,7 +191,7 @@ void window_reshape_callback(GLFWwindow* window, int newWidth, int newHeight)
 int main(void) 
 {
 	MG::MGame game;
-
+	
 	game.init();
 	game.update();
 

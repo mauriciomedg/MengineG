@@ -152,6 +152,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MGame\MGame.cpp" />
     <ClCompile Include="src\OGraphicsEngine\MGraphicsEngine.cpp" />
+    <ClCompile Include="src\OGraphicsEngine\MShaderProgram.cpp" />
     <ClCompile Include="src\OGraphicsEngine\MVertexArrayObject.cpp" />
     <ClCompile Include="src\physicsEngine\CollisionDetection.cpp" />
     <ClCompile Include="src\physicsEngine\CollisionResponse.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="src\MGame\MGame.h" />
     <ClInclude Include="src\OGraphicsEngine\MGraphicsEngine.h" />
     <ClInclude Include="src\OGraphicsEngine\MPrerequisites.h" />
+    <ClInclude Include="src\OGraphicsEngine\MShaderProgram.h" />
     <ClInclude Include="src\OGraphicsEngine\MVertexArrayObject.h" />
     <ClInclude Include="src\physicsEngine\CollisionDetection.h" />
     <ClInclude Include="src\physicsEngine\CollisionResponse.h" />

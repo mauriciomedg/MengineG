@@ -5,7 +5,7 @@
 #include "Constraints/Constraint.h"
 #include "Constraints/ContactConstraint.h"
 
-class RigidBody;
+struct RigidBody;
 class CollisionDetection;
 class CollisionResponse;
 class Contact;

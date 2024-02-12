@@ -3,20 +3,29 @@
 
 using namespace MG;
 
-MVertexArrayObject::MVertexArrayObject(const MVertexArrayBufferData& data)
+MVertexArrayObject::MVertexArrayObject(const MVertexBufferDesc& data)
 {
-	glGenBuffers(1, &m_vertexBufferObjectId);
-
 	glGenVertexArrays(1, &m_vertexArrayObjectId);
 	glBindVertexArray(m_vertexArrayObjectId);
 
+	glGenBuffers(1, &m_vertexBufferObjectId);
 	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferObjectId);
 	glBufferData(GL_ARRAY_BUFFER, data.vertexSize * data.listSize, data.vertexList, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, data.vertexSize, 0); // associate 0th attribute with buffer
-	glEnableVertexAttribArray(0); // enable the 0th vertex attribute
+	for (ui32 i = 0; i < data.attributesListSize; ++i)
+	{
+		glVertexAttribPointer(
+			i, //0,
+			data.attributesList[i].numElements,//3,
+			GL_FLOAT,
+			GL_FALSE,
+			data.vertexSize,
+			(void*)((i == 0) ? 0 : data.attributesList[i - 1].numElements * sizeof(f32)) // offset in bytes from the previous attribute.
+		);
 
-
+		glEnableVertexAttribArray(i); // enable the ith vertex attribute
+	}
+	
 	glBindVertexArray(0);
 
 	m_vertexBufferData = data;

@@ -14,19 +14,39 @@ void MGame::init()
 
 	const f32 triangle[] = {
 		-0.5f, -0.5f, 0.0f,
+		1, 0, 0,
 		0.5f, -0.5f, 0.0f,
-		0.0f, 0.5f, 0.0f
+		0, 1, 0,
+		0.0f, 0.5f, 0.0f,
+		0, 0, 1
 	};
 
-	ui32 id = m_GraphicsEngine->createVextexArrayObject({(void*)triangle, sizeof(f32) * 3, 3});
+	MVertexAtrribute attributeList[] =
+	{
+		3, // pos
+		3 // color
+	};
+
+	ui32 id = m_GraphicsEngine->createVextexArrayObject(
+		{(void*)triangle,
+		sizeof(f32) * (3 + 3),
+		3,
+
+		attributeList,
+		2
+		});
+
 	m_modelsToRender.push_back(id);
+
+	id = m_GraphicsEngine->createShaderProgram({ L"shaders/basicVertShader.glsl", L"shaders/basicFragShader.glsl" });
+	m_shaders.push_back(id);
 }
 
 void MGame::update()
 {
 	while (m_isRunning)
 	{
-		m_isRunning = m_GraphicsEngine->update(m_modelsToRender);
+		m_isRunning = m_GraphicsEngine->update(m_modelsToRender, m_shaders);
 	}
 }
 

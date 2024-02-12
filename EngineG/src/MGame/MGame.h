@@ -20,5 +20,6 @@ namespace MG
 		bool m_isRunning = true;
 		std::unique_ptr<MGraphicsEngine> m_GraphicsEngine;
 		std::vector<ui32> m_modelsToRender;
+		std::vector<ui32> m_shaders;
 	};
 }

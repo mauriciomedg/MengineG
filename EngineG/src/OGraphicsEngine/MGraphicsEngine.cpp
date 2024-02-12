@@ -1,6 +1,8 @@
 #include "MGraphicsEngine.h"
 
 #include "MVertexArrayObject.h"
+#include "MShaderProgram.h"
+
 #include <iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -47,7 +49,7 @@ void MGraphicsEngine::drawTriangles(ui32 vertexCount, ui32 offset)
 	glDrawArrays(GL_TRIANGLES, offset, vertexCount);
 }
 
-void MGraphicsEngine::display(const std::vector<ui32>& modelsToRender)
+void MGraphicsEngine::display(const std::vector<ui32>& modelsToRender, const std::vector<ui32>& shaders)
 {
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glClearColor(1.0, 0.0, 0.0, 1.0);
@@ -59,13 +61,18 @@ void MGraphicsEngine::display(const std::vector<ui32>& modelsToRender)
 		glBindVertexArray(m_VAOlist[id]->getId());
 		glDrawArrays(GL_TRIANGLES, 0, m_VAOlist[id]->getVertexBufferSize()); // 36 number of vertices
 	}
+
+	for (ui32 id : shaders)
+	{
+		glUseProgram(m_shadersProgram[id]->getId());
+	}
 }
 
-bool MGraphicsEngine::update(const std::vector<ui32>& modelsToRender)
+bool MGraphicsEngine::update(const std::vector<ui32>& modelsToRender, const std::vector<ui32>& shaders)
 {
 	if (glfwWindowShouldClose(m_window)) return false;
 	
-	display(modelsToRender);
+	display(modelsToRender, shaders);
 
 	glfwSwapBuffers(m_window);
 	glfwPollEvents();
@@ -82,16 +89,28 @@ MGraphicsEngine::~MGraphicsEngine()
 	}
 }
 
-ui32 MGraphicsEngine::createVextexArrayObject(const MVertexArrayBufferData& data)
+ui32 MGraphicsEngine::createVextexArrayObject(const MVertexBufferDesc& data)
 {
 	m_VAOlist.push_back(std::make_shared<MVertexArrayObject>(data));
 	
 	return m_VAOlist.size() - 1;
 }
 
+ui32 MGraphicsEngine::createShaderProgram(const MShaderProgramDesc& data)
+{
+	auto shaderProgram = std::make_shared<MShaderProgram>(data);
+	m_shadersProgram[shaderProgram->getId()] = shaderProgram;
+	return shaderProgram->getId();
+}
+
 void MGraphicsEngine::setVextexArrayObject(const ui32 id)
 {
 	glBindVertexArray(m_VAOlist[id]->getId()); // make the 0th buffer "active"
+}
+
+void MGraphicsEngine::setShaderProgram(const ui32 id)
+{
+	glUseProgram(m_shadersProgram[id]->getId());
 }
 
 

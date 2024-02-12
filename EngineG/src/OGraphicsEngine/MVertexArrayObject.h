@@ -7,7 +7,7 @@ namespace MG
 	class MVertexArrayObject
 	{
 	public:
-		MVertexArrayObject(const MVertexArrayBufferData& data);
+		MVertexArrayObject(const MVertexBufferDesc& data);
 		~MVertexArrayObject();
 
 		ui32 getId();
@@ -17,6 +17,6 @@ namespace MG
 	private:
 		ui32 m_vertexBufferObjectId = 0;
 		ui32 m_vertexArrayObjectId = 0;
-		MVertexArrayBufferData m_vertexBufferData;
+		MVertexBufferDesc m_vertexBufferData;
 	};
 }
