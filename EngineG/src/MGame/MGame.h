@@ -22,7 +22,7 @@ namespace MG
 		bool m_isRunning = true;
 		f32 m_lastTime = 0.0f;
 //for testing		
-f32 m_scale = 0.0f;
+f32 m_theta = 0.0f;
 //
 		std::unique_ptr<MGraphicsEngine> m_GraphicsEngine;
 		std::vector<ui32> m_modelsToRender;
