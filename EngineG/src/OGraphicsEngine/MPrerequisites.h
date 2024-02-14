@@ -31,6 +31,12 @@ namespace MG
 		ui32 attributesListSize = 0;
 	};
 
+	struct MIndexBufferDesc
+	{
+		void* indicesList = nullptr;
+		ui32 listSize = 0;
+	};
+
 	struct MShaderProgramDesc
 	{
 		const wchar_t* vertexShaderFilePath;

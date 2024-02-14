@@ -62,6 +62,23 @@ void MGraphicsEngine::drawTriangles(const MTriangleType& triangleType, ui32 vert
 	glDrawArrays(glTriType, offset, vertexCount);
 }
 
+void MGraphicsEngine::drawIndexedTriangles(const MTriangleType& triangleType, ui32 indecesCount)
+{
+	auto glTriType = GL_TRIANGLES;
+
+	switch (triangleType)
+	{
+	case TriangleList:
+		glTriType = GL_TRIANGLES;
+		break;
+	case TriangleStrip:
+		glTriType = GL_TRIANGLE_STRIP;
+		break;
+	}
+
+	glDrawElements(glTriType, indecesCount, GL_UNSIGNED_INT, nullptr); // Is nullptr because it was binded before with the vertexArray
+}
+
 void MGraphicsEngine::display(const std::vector<ui32>& modelsToRender, const std::vector<ui32>& shaders, const std::vector<ui32>& uniforms)
 {
 	glClear(GL_DEPTH_BUFFER_BIT);
@@ -72,7 +89,8 @@ void MGraphicsEngine::display(const std::vector<ui32>& modelsToRender, const std
 	for (ui32 id : modelsToRender)
 	{
 		glBindVertexArray(m_VAOlist[id]->getId());
-		drawTriangles(TriangleStrip, m_VAOlist[id]->getVertexBufferSize(), 0);
+		//drawTriangles(TriangleStrip, m_VAOlist[id]->getVertexBufferSize(), 0);
+		drawIndexedTriangles(TriangleStrip, m_VAOlist[id]->getElementBufferSize() / sizeof(int));
 	}
 
 	for (ui32 id : uniforms)
@@ -107,10 +125,15 @@ MGraphicsEngine::~MGraphicsEngine()
 	}
 }
 
-ui32 MGraphicsEngine::createVextexArrayObject(const MVertexBufferDesc& data)
+ui32 MGraphicsEngine::createVextexArrayObject(const MVertexBufferDesc& vbDes)
 {
-	m_VAOlist.push_back(std::make_shared<MVertexArrayObject>(data));
-	
+	m_VAOlist.push_back(std::make_shared<MVertexArrayObject>(vbDes));
+	return m_VAOlist.size() - 1;
+}
+
+ui32 MGraphicsEngine::createVextexArrayObject(const MVertexBufferDesc& vbDes, const MIndexBufferDesc& ibDes)
+{
+	m_VAOlist.push_back(std::make_shared<MVertexArrayObject>(vbDes, ibDes));
 	return m_VAOlist.size() - 1;
 }
 
