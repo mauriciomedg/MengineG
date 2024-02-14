@@ -51,10 +51,10 @@ void MGraphicsEngine::drawTriangles(const MTriangleType& triangleType, ui32 vert
 	
 	switch(triangleType)
 	{
-	case TriangleList:
+	case MTriangleType::TriangleList:
 		glTriType = GL_TRIANGLES;
 		break;
-	case TriangleStrip:
+	case MTriangleType::TriangleStrip:
 		glTriType = GL_TRIANGLE_STRIP;
 		break;
 	}
@@ -68,10 +68,10 @@ void MGraphicsEngine::drawIndexedTriangles(const MTriangleType& triangleType, ui
 
 	switch (triangleType)
 	{
-	case TriangleList:
+	case MTriangleType::TriangleList:
 		glTriType = GL_TRIANGLES;
 		break;
-	case TriangleStrip:
+	case MTriangleType::TriangleStrip:
 		glTriType = GL_TRIANGLE_STRIP;
 		break;
 	}
@@ -92,7 +92,7 @@ void MGraphicsEngine::display(const std::vector<ui32>& modelsToRender, const std
 	{
 		glBindVertexArray(m_VAOlist[id]->getId());
 		//drawTriangles(TriangleStrip, m_VAOlist[id]->getVertexBufferSize(), 0);
-		drawIndexedTriangles(TriangleList, m_VAOlist[id]->getElementBufferSize() / sizeof(int));
+		drawIndexedTriangles(MTriangleType::TriangleList, m_VAOlist[id]->getElementBufferSize() / sizeof(int));
 	}
 
 	for (ui32 id : uniforms)

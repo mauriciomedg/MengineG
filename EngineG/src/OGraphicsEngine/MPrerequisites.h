@@ -48,26 +48,26 @@ namespace MG
 		ui32 size = 0;
 	};
 
-	enum MTriangleType
+	enum class MTriangleType
 	{
 		TriangleList = 0,
 		TriangleStrip
 	};
 
-	enum MCullType
+	enum class MCullType
 	{
 		BackFace = 0,
 		FrontFace,
 		Both
 	};
 
-	enum MWindingOrder
+	enum class MWindingOrder
 	{
 		ClockWise = 0,
 		CounterClockWise
 	};
 
-	enum MShaderType
+	enum class MShaderType
 	{
 		VertexShader = 0,
 		FragmentShader

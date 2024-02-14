@@ -9,8 +9,8 @@ using namespace MG;
 MShaderProgram::MShaderProgram(const MShaderProgramDesc& desc)
 {
 	m_programId = glCreateProgram();
-	attach(desc.vertexShaderFilePath, VertexShader);
-	attach(desc.fragmentShaderFilePath, FragmentShader);
+	attach(desc.vertexShaderFilePath, MShaderType::VertexShader);
+	attach(desc.fragmentShaderFilePath, MShaderType::FragmentShader);
 	link();
 }
 
@@ -19,9 +19,9 @@ void MShaderProgram::attach(const wchar_t* shaderFilePath, const MShaderType& ty
 	std::string shaderCode = Utils::readShaderSource(shaderFilePath);
 
 	ui32 shaderId = 0;
-	if (type == VertexShader)
+	if (type == MShaderType::VertexShader)
 		shaderId = glCreateShader(GL_VERTEX_SHADER);
-	else if (type == FragmentShader)
+	else if (type == MShaderType::FragmentShader)
 		shaderId = glCreateShader(GL_FRAGMENT_SHADER);
 
 	const char* sourcePointer = shaderCode.c_str();
@@ -37,7 +37,7 @@ void MShaderProgram::attach(const wchar_t* shaderFilePath, const MShaderType& ty
 	}
 
 	glAttachShader(m_programId, shaderId);
-	m_attachedShaders[type] = shaderId;
+	m_attachedShaders[(ui32)type] = shaderId;
 }
 
 void MShaderProgram::link()
