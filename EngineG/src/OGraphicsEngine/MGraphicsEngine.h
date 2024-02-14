@@ -27,6 +27,9 @@ namespace MG
 		void setShaderUniformBufferSlot(const ui32 shaderId, const ui32 uniformId, const char* name, ui32 slot);
 		void setUniformData(const ui32 uniformId, void* data);
 
+		void setFaceCulling(const MCullType& type);
+		void setWindingOrder(const MWindingOrder& order);
+
 	private:
 		void display(const std::vector<ui32>& modelsToRender, const std::vector<ui32>& shaders, const std::vector<ui32>& uniforms);
 		void drawTriangles(const MTriangleType& triangleType, ui32 vertexCount, ui32 offset);

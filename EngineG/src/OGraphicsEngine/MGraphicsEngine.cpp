@@ -84,13 +84,15 @@ void MGraphicsEngine::display(const std::vector<ui32>& modelsToRender, const std
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT); // clear the background to black, each time
-	//glEnable(GL_CULL_FACE);
+	setFaceCulling(MCullType::BackFace);
+	setWindingOrder(MWindingOrder::ClockWise);
 
+	glFrontFace(GL_CW);
 	for (ui32 id : modelsToRender)
 	{
 		glBindVertexArray(m_VAOlist[id]->getId());
 		//drawTriangles(TriangleStrip, m_VAOlist[id]->getVertexBufferSize(), 0);
-		drawIndexedTriangles(TriangleStrip, m_VAOlist[id]->getElementBufferSize() / sizeof(int));
+		drawIndexedTriangles(TriangleList, m_VAOlist[id]->getElementBufferSize() / sizeof(int));
 	}
 
 	for (ui32 id : uniforms)
@@ -170,6 +172,28 @@ void MGraphicsEngine::setShaderUniformBufferSlot(const ui32 shaderId, const ui32
 void MGraphicsEngine::setUniformData(const ui32 uniformId, void* data)
 {
 	m_uniformBuffers[uniformId]->setData(data);
+}
+
+void MGraphicsEngine::setFaceCulling(const MCullType& type)
+{
+	auto cullType = GL_BACK;
+
+	if (type == MCullType::FrontFace) cullType = GL_FRONT;
+	else if (type == MCullType::BackFace) cullType = GL_BACK;
+	else if (type == MCullType::FrontFace) cullType = GL_FRONT_AND_BACK;
+
+	glEnable(GL_CULL_FACE);
+	glCullFace(cullType);
+}
+
+void MGraphicsEngine::setWindingOrder(const MWindingOrder& order)
+{
+	auto orderType = GL_CW;
+
+	if (order == MWindingOrder::ClockWise) orderType = GL_CW;
+	else if (order == MWindingOrder::CounterClockWise) orderType = GL_CCW;
+
+	glFrontFace(orderType);
 }
 
 

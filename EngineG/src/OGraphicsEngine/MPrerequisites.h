@@ -54,6 +54,19 @@ namespace MG
 		TriangleStrip
 	};
 
+	enum MCullType
+	{
+		BackFace = 0,
+		FrontFace,
+		Both
+	};
+
+	enum MWindingOrder
+	{
+		ClockWise = 0,
+		CounterClockWise
+	};
+
 	enum MShaderType
 	{
 		VertexShader = 0,
