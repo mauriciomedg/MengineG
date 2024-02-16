@@ -15,12 +15,17 @@ namespace MG
 		MGame();
 		virtual ~MGame();
 
+		void run();
+
 		MEntitySystem* getEntitySystem();
 
 	protected:
 		virtual void onCreate();
-		virtual void update();
+		virtual void update(f32 dt) {};
 		virtual void quit();
+
+	private:
+		void updateInternal();
 
 	protected:
 		bool m_isRunning = true;

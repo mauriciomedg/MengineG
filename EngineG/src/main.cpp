@@ -193,7 +193,7 @@ int main(void)
 	MG::MyGame game;
 	
 	game.onCreate();
-	game.update();
+	game.run();
 
 	//C++ OpenGL 3D Game Tutorial 2: Making OpenGL 3D Engine
 

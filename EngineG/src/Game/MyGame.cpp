@@ -15,12 +15,19 @@ MyGame::~MyGame()
 void MyGame::onCreate()
 {
 	MGame::onCreate();
-	auto e = getEntitySystem()->createEntity<MEntity>();
+	m_entity = getEntitySystem()->createEntity<MEntity>();
 }
 
-void MyGame::update()
+void MyGame::update(f32 dt)
 {
-	MGame::update();
+	m_timeSec += dt;
+
+	if (m_entity && m_timeSec > 3.0f)
+	{
+		m_entity->release();
+		m_entity = nullptr;
+	}
+
 }
 
 void MyGame::quit()

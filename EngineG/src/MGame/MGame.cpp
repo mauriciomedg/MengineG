@@ -194,13 +194,17 @@ void MGame::onCreate()
 	m_GraphicsEngine->setShaderUniformBufferSlot(id, uniformId, "UniformData", 0);
 }
 
-void MGame::update()
+void MGame::updateInternal()
 {
 	while (m_isRunning)
 	{
 		DeltaTime deltaTime(m_lastTime);
 		float dt = deltaTime.calculate();
 		dt = 0.016;
+
+		update(dt);
+		m_entitySystem->update(dt);
+
 		m_theta += 1.0 * dt;
 		//std::cout << dt << std::endl;
 		//std::this_thread::sleep_for(std::chrono::milliseconds(16));
@@ -226,6 +230,11 @@ void MGame::quit()
 
 MGame::~MGame()
 {
+}
+
+void MGame::run()
+{
+	updateInternal();
 }
 
 MEntitySystem* MGame::getEntitySystem()
