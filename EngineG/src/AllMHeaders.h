@@ -1,0 +1,5 @@
+#pragma once
+
+#include "Entity/MEntity.h"
+#include "Entity/MEntitySystem.h"
+#include "MGame/MGame.h"

@@ -7,20 +7,26 @@
 namespace MG
 {
 	class MGraphicsEngine;
+	class MEntitySystem;
 	class UniformData;
-
 	class MGame
 	{
 	public:
 		MGame();
-		void init();
-		~MGame();
+		virtual ~MGame();
 
-		void update();
-		void quit();
+		MEntitySystem* getEntitySystem();
+
+	protected:
+		virtual void onCreate();
+		virtual void update();
+		virtual void quit();
+
 	protected:
 		bool m_isRunning = true;
 		f32 m_lastTime = 0.0f;
+
+		std::unique_ptr<MEntitySystem> m_entitySystem;
 //for testing		
 f32 m_theta = 0.0f;
 //

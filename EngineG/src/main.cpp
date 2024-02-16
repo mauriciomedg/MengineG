@@ -14,7 +14,7 @@
 #include "physicsEngine/PhysicsWorld.h"
 #include "Cube.h"
 
-#include "MGame/MGame.h"
+#include "Game/MyGame.h"
 
 #define numVAOs 1
 #define numVBOs 7
@@ -190,9 +190,9 @@ void window_reshape_callback(GLFWwindow* window, int newWidth, int newHeight)
 
 int main(void) 
 {
-	MG::MGame game;
+	MG::MyGame game;
 	
-	game.init();
+	game.onCreate();
 	game.update();
 
 	//C++ OpenGL 3D Game Tutorial 2: Making OpenGL 3D Engine

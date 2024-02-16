@@ -1,5 +1,6 @@
 #include "MGame.h"
 #include "../OGraphicsEngine/MGraphicsEngine.h"
+#include "../Entity/MEntitySystem.h"
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -49,9 +50,10 @@ namespace MG
 MGame::MGame()
 {
 	m_GraphicsEngine = std::make_unique<MGraphicsEngine>();
+	m_entitySystem = std::make_unique<MEntitySystem>();
 }
 
-void MGame::init()
+void MGame::onCreate()
 {
 	m_GraphicsEngine->init();
 
@@ -224,4 +226,9 @@ void MGame::quit()
 
 MGame::~MGame()
 {
+}
+
+MEntitySystem* MGame::getEntitySystem()
+{
+	return m_entitySystem.get();
 }
