@@ -1,4 +1,6 @@
 #pragma once
+#include "../OGraphicsEngine/MPrerequisites.h"
+
 namespace MG
 {
 	class MEntitySystem;
@@ -8,9 +10,12 @@ namespace MG
 		MEntity();
 		virtual ~MEntity();
 
-		virtual void onCreate() {}
+		virtual void create() {}
+		virtual void update(f32 dt) {}
 
 		void release();
+
+		MEntitySystem* getEntitySystem();
 
 	protected:
 		size_t m_id = 0;

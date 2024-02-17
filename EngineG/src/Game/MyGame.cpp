@@ -1,4 +1,5 @@
 #include "MyGame.h"
+#include "MyPlayer.h"
 
 using namespace MG;
 
@@ -12,21 +13,15 @@ MyGame::~MyGame()
 
 }
 
-void MyGame::onCreate()
+void MyGame::create()
 {
-	MGame::onCreate();
-	m_entity = getEntitySystem()->createEntity<MEntity>();
+	MGame::create();
+	m_player = getEntitySystem()->createEntity<MyPlayer>();
 }
 
 void MyGame::update(f32 dt)
 {
-	m_timeSec += dt;
-
-	if (m_entity && m_timeSec > 3.0f)
-	{
-		m_entity->release();
-		m_entity = nullptr;
-	}
+	
 
 }
 

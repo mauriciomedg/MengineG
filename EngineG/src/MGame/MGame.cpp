@@ -53,7 +53,7 @@ MGame::MGame()
 	m_entitySystem = std::make_unique<MEntitySystem>();
 }
 
-void MGame::onCreate()
+void MGame::create()
 {
 	m_GraphicsEngine->init();
 

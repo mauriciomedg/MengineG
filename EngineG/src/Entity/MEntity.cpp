@@ -15,3 +15,8 @@ void MEntity::release()
 {
 	m_entitySystem->removeEntity(this);
 }
+
+MEntitySystem* MG::MEntity::getEntitySystem()
+{
+	return m_entitySystem;
+}

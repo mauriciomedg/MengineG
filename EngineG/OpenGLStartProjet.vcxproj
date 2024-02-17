@@ -150,6 +150,7 @@
     <ClCompile Include="src\Entity\MEntity.cpp" />
     <ClCompile Include="src\Entity\MEntitySystem.cpp" />
     <ClCompile Include="src\Game\MyGame.cpp" />
+    <ClCompile Include="src\Game\MyPlayer.cpp" />
     <ClCompile Include="src\GEntity.cpp" />
     <ClCompile Include="src\Inputs.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="src\Entity\MEntity.h" />
     <ClInclude Include="src\Entity\MEntitySystem.h" />
     <ClInclude Include="src\Game\MyGame.h" />
+    <ClInclude Include="src\Game\MyPlayer.h" />
     <ClInclude Include="src\GEntity.h" />
     <ClInclude Include="src\Inputs.h" />
     <ClInclude Include="src\MGame\MGame.h" />

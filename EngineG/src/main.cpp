@@ -192,10 +192,16 @@ int main(void)
 {
 	MG::MyGame game;
 	
-	game.onCreate();
+	game.create();
 	game.run();
 
+	//fix create vertex array to return a shared pointer
+	//C++ 3D Game Tutorial 16
+	//C++ 3D Game Tutorial 15
+
+	//OpenGL / C++ 3D Tutorial 25 - Mesh class (A humble beginning!)
 	//C++ OpenGL 3D Game Tutorial 2: Making OpenGL 3D Engine
+	//C++ 3D Game Tutorial Series 33
 
 	//if (!glfwInit()) { exit(EXIT_FAILURE); }
 	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);

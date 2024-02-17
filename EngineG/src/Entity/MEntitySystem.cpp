@@ -20,7 +20,7 @@ bool MEntitySystem::createEntityInternal(MEntity* entity, size_t id)
 	
 	entity->m_id = id;
 	entity->m_entitySystem = this;
-	entity->onCreate();
+	entity->create();
 
 	return true;
 }
@@ -37,4 +37,20 @@ void MEntitySystem::update(f32 dt)
 		m_entities[e->m_id].erase(e);
 	}
 	m_entitiesToDestroy.clear();
+
+	//for (auto&& [id, entities] : m_entities) // std:c++17
+	//{
+	//	for (auto&& [ptr, entity] : entities)
+	//	{
+	//		//entity->
+	//	}
+	//}
+
+	for (auto& v : m_entities) // std:c++17
+	{
+		for (auto& entity : v.second)
+		{
+			entity.second->update(dt);
+		}
+	}
 }

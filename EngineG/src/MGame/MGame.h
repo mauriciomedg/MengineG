@@ -20,7 +20,7 @@ namespace MG
 		MEntitySystem* getEntitySystem();
 
 	protected:
-		virtual void onCreate();
+		virtual void create();
 		virtual void update(f32 dt) {};
 		virtual void quit();
 

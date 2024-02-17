@@ -4,18 +4,17 @@
 
 namespace MG
 {
-	class MyPlayer;
-	class MyGame : public MGame
+	class MyPlayer : public MEntity
 	{
 	public:
-		MyGame();
-		~MyGame();
+		MyPlayer();
+		~MyPlayer();
 
 		virtual void create() override;
 		virtual void update(f32 dt) override;
-		virtual void quit() override;
 
 	private:
-		MyPlayer* m_player = nullptr;
+		f32 m_timeSec = 0.0f;
+		MEntity* m_entity = nullptr;
 	};
 }
