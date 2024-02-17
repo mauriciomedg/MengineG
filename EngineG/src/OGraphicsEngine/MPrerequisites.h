@@ -11,10 +11,13 @@ namespace MG
 	class MVertexArrayObject;
 	class MUniformBuffer;
 	class MShaderProgram;
+	class MDeviceContext;
+	class MRenderSystem;
 
 	typedef std::shared_ptr<MVertexArrayObject> MVAOSharedPtr;
 	typedef std::shared_ptr<MUniformBuffer> MUniformBufferSharedPtr;
 	typedef std::shared_ptr<MShaderProgram> MShaderProgSharedPtr;
+	typedef std::shared_ptr<MDeviceContext> MDeviceContextSharedPtr;
 
 	struct MVertexAtrribute
 	{

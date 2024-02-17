@@ -35,7 +35,6 @@ namespace MG
 		//for testing		
 		f32 m_theta = 0.0f;
 		//
-		std::unique_ptr<MGraphicsEngine> m_GraphicsEngine;
 		MVAOSharedPtr m_vertexArrayObject;
 		MShaderProgSharedPtr m_shader;
 		MUniformBufferSharedPtr m_uniform;

@@ -1,7 +1,7 @@
 #include "MShaderProgram.h"
 #include <GL/glew.h>
 #include <glm/glm.hpp>
-#include "../Utils.h"
+#include "../../Utils.h"
 #include <iostream>
 
 using namespace MG;

@@ -78,15 +78,6 @@
     <ClCompile Include="src\OGraphicsEngine\MGraphicsEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\OGraphicsEngine\MVertexArrayObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\OGraphicsEngine\MShaderProgram.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\OGraphicsEngine\MUniformBuffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Entity\MEntitySystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -97,6 +88,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\MyPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGraphicsEngine\RenderSystem\MRenderSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGraphicsEngine\RenderSystem\MShaderProgram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGraphicsEngine\RenderSystem\MUniformBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGraphicsEngine\RenderSystem\MVertexArrayObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGraphicsEngine\RenderSystem\MDeviceContext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -164,16 +170,7 @@
     <ClInclude Include="src\OGraphicsEngine\MGraphicsEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\OGraphicsEngine\MVertexArrayObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\OGraphicsEngine\MPrerequisites.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\OGraphicsEngine\MShaderProgram.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\OGraphicsEngine\MUniformBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Entity\MEntitySystem.h">
@@ -189,6 +186,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\MyPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGraphicsEngine\RenderSystem\MRenderSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGraphicsEngine\RenderSystem\MShaderProgram.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGraphicsEngine\RenderSystem\MUniformBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGraphicsEngine\RenderSystem\MVertexArrayObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGraphicsEngine\RenderSystem\MDeviceContext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

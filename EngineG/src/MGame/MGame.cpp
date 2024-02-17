@@ -1,9 +1,11 @@
 #include "MGame.h"
 #include "../OGraphicsEngine/MGraphicsEngine.h"
 #include "../Entity/MEntitySystem.h"
-#include "../OGraphicsEngine/MVertexArrayObject.h"
-#include "../OGraphicsEngine/MShaderProgram.h"
-#include "../OGraphicsEngine/MUniformBuffer.h"
+#include "../OGraphicsEngine/RenderSystem/MVertexArrayObject.h"
+#include "../OGraphicsEngine/RenderSystem/MShaderProgram.h"
+#include "../OGraphicsEngine/RenderSystem/MUniformBuffer.h"
+#include "../OGraphicsEngine/RenderSystem/MDeviceContext.h"
+
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -52,14 +54,12 @@ namespace MG
 
 MGame::MGame()
 {
-	m_GraphicsEngine = std::make_unique<MGraphicsEngine>();
+	MGraphicsEngine::getInstance();
 	m_entitySystem = std::make_unique<MEntitySystem>();
 }
 
 void MGame::create()
 {
-	m_GraphicsEngine->init();
-
 	const glm::vec3 positionsList[] = {
 		glm::vec3(-0.5f, -0.5f, -0.5f),
 		glm::vec3(-0.5f, 0.5f, -0.5f),
@@ -165,7 +165,7 @@ void MGame::create()
 		sizeof(glm::vec2) / sizeof(f32) // text coord
 	};
 
-	m_vertexArrayObject = m_GraphicsEngine->createVextexArrayObject(
+	m_vertexArrayObject = MGraphicsEngine::getInstance().getRenderSystem()->createVextexArrayObject(
 		{(void*)verticesList,
 		sizeof(Vertex),
 		sizeof(verticesList) / sizeof(Vertex),
@@ -180,19 +180,20 @@ void MGame::create()
 		}
 	);
 
-	m_uniform = m_GraphicsEngine->createUniformBuffer(
+	m_uniform = MGraphicsEngine::getInstance().getRenderSystem()->createUniformBuffer(
 		{
 			sizeof(UniformData)
 		}
 	);
 
-	m_shader = m_GraphicsEngine->createShaderProgram({ L"shaders/basicVertShader.glsl", L"shaders/basicFragShader.glsl" });
+	m_shader = MGraphicsEngine::getInstance().getRenderSystem()->createShaderProgram({ L"shaders/basicVertShader.glsl", L"shaders/basicFragShader.glsl" });
 	m_shader->setUniformBufferSlot("UniformData", 0);
 }
 
 void MGame::updateInternal()
 {
-	while (m_isRunning && !m_GraphicsEngine->shouldCloseWindow())
+	MGraphicsEngine& graphicEngine = MGraphicsEngine::getInstance();
+	while (m_isRunning && !graphicEngine.getRenderSystem()->getDeviceContext()->shouldCloseWindow())
 	{
 		DeltaTime deltaTime(m_lastTime);
 		float dt = deltaTime.calculate();
@@ -208,15 +209,15 @@ void MGame::updateInternal()
 		UniformData data = { mat };
 		m_uniform->setData(&data);
 		
-		m_GraphicsEngine->clear();
-		m_GraphicsEngine->setFaceCulling(MCullType::BackFace);
-		m_GraphicsEngine->setWindingOrder(MWindingOrder::ClockWise);
+		graphicEngine.getRenderSystem()->getDeviceContext()->clear();
+		graphicEngine.getRenderSystem()->getDeviceContext()->setFaceCulling(MCullType::BackFace);
+		graphicEngine.getRenderSystem()->getDeviceContext()->setWindingOrder(MWindingOrder::ClockWise);
 
-		m_GraphicsEngine->setVextexArrayObject(m_vertexArrayObject);
-		m_GraphicsEngine->setUniformBuffer(m_uniform, 0);
-		m_GraphicsEngine->setShaderProgram(m_shader);
-		m_GraphicsEngine->drawIndexedTriangles(MTriangleType::TriangleList, m_vertexArrayObject.get()->getElementBufferSize() / sizeof(int));
-		m_GraphicsEngine->swapBuffer();
+		graphicEngine.getRenderSystem()->getDeviceContext()->setVextexArrayObject(m_vertexArrayObject);
+		graphicEngine.getRenderSystem()->getDeviceContext()->setUniformBuffer(m_uniform, 0);
+		graphicEngine.getRenderSystem()->getDeviceContext()->setShaderProgram(m_shader);
+		graphicEngine.getRenderSystem()->getDeviceContext()->drawIndexedTriangles(MTriangleType::TriangleList, m_vertexArrayObject.get()->getElementBufferSize() / sizeof(int));
+		graphicEngine.getRenderSystem()->getDeviceContext()->swapBuffer();
 	}
 }
 

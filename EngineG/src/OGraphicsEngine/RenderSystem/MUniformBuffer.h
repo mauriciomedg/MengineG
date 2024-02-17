@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MPrerequisites.h"
+#include "../MPrerequisites.h"
 
 namespace MG
 {
