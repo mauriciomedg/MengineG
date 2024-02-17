@@ -32,13 +32,12 @@ namespace MG
 		f32 m_lastTime = 0.0f;
 
 		std::unique_ptr<MEntitySystem> m_entitySystem;
-//for testing		
-f32 m_theta = 0.0f;
-//
+		//for testing		
+		f32 m_theta = 0.0f;
+		//
 		std::unique_ptr<MGraphicsEngine> m_GraphicsEngine;
-		std::vector<ui32> m_modelsToRender;
-		std::vector<ui32> m_shaders;
-		std::vector<ui32> m_uniforms;
-		std::map<ui32, UniformData> m_uniformData;
+		MVAOSharedPtr m_vertexArrayObject;
+		MShaderProgSharedPtr m_shader;
+		MUniformBufferSharedPtr m_uniform;
 	};
 }

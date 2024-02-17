@@ -1,6 +1,9 @@
 #include "MGame.h"
 #include "../OGraphicsEngine/MGraphicsEngine.h"
 #include "../Entity/MEntitySystem.h"
+#include "../OGraphicsEngine/MVertexArrayObject.h"
+#include "../OGraphicsEngine/MShaderProgram.h"
+#include "../OGraphicsEngine/MUniformBuffer.h"
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -162,7 +165,7 @@ void MGame::create()
 		sizeof(glm::vec2) / sizeof(f32) // text coord
 	};
 
-	ui32 id = m_GraphicsEngine->createVextexArrayObject(
+	m_vertexArrayObject = m_GraphicsEngine->createVextexArrayObject(
 		{(void*)verticesList,
 		sizeof(Vertex),
 		sizeof(verticesList) / sizeof(Vertex),
@@ -176,27 +179,20 @@ void MGame::create()
 			sizeof(indicesList)
 		}
 	);
-		
-	m_modelsToRender.push_back(id);
 
-	auto uniformId = m_GraphicsEngine->createUniformBuffer(
+	m_uniform = m_GraphicsEngine->createUniformBuffer(
 		{
 			sizeof(UniformData)
 		}
 	);
-	m_uniforms.push_back(uniformId);
 
-	m_uniformData[uniformId] = { glm::mat4() };
-
-	id = m_GraphicsEngine->createShaderProgram({ L"shaders/basicVertShader.glsl", L"shaders/basicFragShader.glsl" });
-	m_shaders.push_back(id);
-
-	m_GraphicsEngine->setShaderUniformBufferSlot(id, uniformId, "UniformData", 0);
+	m_shader = m_GraphicsEngine->createShaderProgram({ L"shaders/basicVertShader.glsl", L"shaders/basicFragShader.glsl" });
+	m_shader->setUniformBufferSlot("UniformData", 0);
 }
 
 void MGame::updateInternal()
 {
-	while (m_isRunning)
+	while (m_isRunning && !m_GraphicsEngine->shouldCloseWindow())
 	{
 		DeltaTime deltaTime(m_lastTime);
 		float dt = deltaTime.calculate();
@@ -206,20 +202,21 @@ void MGame::updateInternal()
 		m_entitySystem->update(dt);
 
 		m_theta += 1.0 * dt;
-		//std::cout << dt << std::endl;
-		//std::this_thread::sleep_for(std::chrono::milliseconds(16));
-		//auto currentScale = glm::abs(glm::sin(m_scale));
-		//std::cout << currentScale << " " << dt << std::endl;
-		auto uniformId = m_uniforms.at(0);
+		
 		auto R = glm::rotate(glm::mat4(1.0f), m_theta, glm::normalize(glm::vec3(1.0f, 1.0f, 1.0f)));
-
-		//glm::mat4 mat = glm::scale(glm::mat4(1.0f), glm::vec3(currentScale, currentScale, currentScale));
 		glm::mat4 mat = glm::mat4(R);
-		m_uniformData[uniformId] = { mat };
-		m_GraphicsEngine->setUniformData(uniformId, &m_uniformData[uniformId]);
+		UniformData data = { mat };
+		m_uniform->setData(&data);
+		
+		m_GraphicsEngine->clear();
+		m_GraphicsEngine->setFaceCulling(MCullType::BackFace);
+		m_GraphicsEngine->setWindingOrder(MWindingOrder::ClockWise);
 
-		m_isRunning = m_GraphicsEngine->update(m_modelsToRender, m_shaders, m_uniforms);
-
+		m_GraphicsEngine->setVextexArrayObject(m_vertexArrayObject);
+		m_GraphicsEngine->setUniformBuffer(m_uniform, 0);
+		m_GraphicsEngine->setShaderProgram(m_shader);
+		m_GraphicsEngine->drawIndexedTriangles(MTriangleType::TriangleList, m_vertexArrayObject.get()->getElementBufferSize() / sizeof(int));
+		m_GraphicsEngine->swapBuffer();
 	}
 }
 

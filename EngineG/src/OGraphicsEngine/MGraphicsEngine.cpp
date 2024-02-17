@@ -62,7 +62,7 @@ void MGraphicsEngine::drawTriangles(const MTriangleType& triangleType, ui32 vert
 	glDrawArrays(glTriType, offset, vertexCount);
 }
 
-void MGraphicsEngine::drawIndexedTriangles(const MTriangleType& triangleType, ui32 indecesCount)
+void MGraphicsEngine::drawIndexedTriangles(const MTriangleType& triangleType, ui32 indexCount)
 {
 	auto glTriType = GL_TRIANGLES;
 
@@ -76,45 +76,25 @@ void MGraphicsEngine::drawIndexedTriangles(const MTriangleType& triangleType, ui
 		break;
 	}
 
-	glDrawElements(glTriType, indecesCount, GL_UNSIGNED_INT, nullptr); // Is nullptr because it was binded before with the vertexArray
+	glDrawElements(glTriType, indexCount, GL_UNSIGNED_INT, nullptr); // Is nullptr because it was binded before with the vertexArray
 }
 
-void MGraphicsEngine::display(const std::vector<ui32>& modelsToRender, const std::vector<ui32>& shaders, const std::vector<ui32>& uniforms)
+bool MGraphicsEngine::shouldCloseWindow()
+{
+	return glfwWindowShouldClose(m_window);
+}
+
+void MGraphicsEngine::clear()
 {
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT); // clear the background to black, each time
-	setFaceCulling(MCullType::BackFace);
-	setWindingOrder(MWindingOrder::ClockWise);
-
-	glFrontFace(GL_CW);
-	for (ui32 id : modelsToRender)
-	{
-		glBindVertexArray(m_VAOlist[id]->getId());
-		//drawTriangles(TriangleStrip, m_VAOlist[id]->getVertexBufferSize(), 0);
-		drawIndexedTriangles(MTriangleType::TriangleList, m_VAOlist[id]->getElementBufferSize() / sizeof(int));
-	}
-
-	for (ui32 id : uniforms)
-	{
-		glBindBufferBase(GL_UNIFORM_BUFFER, m_uniformBufferSlots[id], m_uniformBuffers[id]->getId());
-	}
-
-	for (ui32 id : shaders)
-	{
-		glUseProgram(m_shadersProgram[id]->getId());
-	}
 }
 
-bool MGraphicsEngine::update(const std::vector<ui32>& modelsToRender, const std::vector<ui32>& shaders, const std::vector<ui32>& uniforms)
+void MGraphicsEngine::swapBuffer()
 {
-	if (glfwWindowShouldClose(m_window)) return false;
-	
-	display(modelsToRender, shaders, uniforms);
-
 	glfwSwapBuffers(m_window);
 	glfwPollEvents();
-	return true;
 }
 
 MGraphicsEngine::~MGraphicsEngine()
@@ -127,51 +107,39 @@ MGraphicsEngine::~MGraphicsEngine()
 	}
 }
 
-ui32 MGraphicsEngine::createVextexArrayObject(const MVertexBufferDesc& vbDes)
+MVAOSharedPtr MGraphicsEngine::createVextexArrayObject(const MVertexBufferDesc& vbDes)
 {
-	m_VAOlist.push_back(std::make_shared<MVertexArrayObject>(vbDes));
-	return m_VAOlist.size() - 1;
+	return std::make_shared<MVertexArrayObject>(vbDes);
 }
 
-ui32 MGraphicsEngine::createVextexArrayObject(const MVertexBufferDesc& vbDes, const MIndexBufferDesc& ibDes)
+MVAOSharedPtr MGraphicsEngine::createVextexArrayObject(const MVertexBufferDesc& vbDes, const MIndexBufferDesc& ibDes)
 {
-	m_VAOlist.push_back(std::make_shared<MVertexArrayObject>(vbDes, ibDes));
-	return m_VAOlist.size() - 1;
+	return std::make_shared<MVertexArrayObject>(vbDes, ibDes);
 }
 
-ui32 MGraphicsEngine::createUniformBuffer(const MUniformBufferDesc& data)
+MUniformBufferSharedPtr MGraphicsEngine::createUniformBuffer(const MUniformBufferDesc& data)
 {
-	auto uniformBuffer = std::make_shared<MUniformBuffer>(data);
-	m_uniformBuffers[uniformBuffer->getId()] = uniformBuffer;
-	return uniformBuffer->getId();
+	return std::make_shared<MUniformBuffer>(data);
 }
 
-ui32 MGraphicsEngine::createShaderProgram(const MShaderProgramDesc& data)
+MShaderProgSharedPtr MGraphicsEngine::createShaderProgram(const MShaderProgramDesc& data)
 {
-	auto shaderProgram = std::make_shared<MShaderProgram>(data);
-	m_shadersProgram[shaderProgram->getId()] = shaderProgram;
-	return shaderProgram->getId();
+	return std::make_shared<MShaderProgram>(data);
 }
 
-void MGraphicsEngine::setVextexArrayObject(const ui32 id)
+void MGraphicsEngine::setVextexArrayObject(const MVAOSharedPtr& vao)
 {
-	glBindVertexArray(m_VAOlist[id]->getId()); // make the 0th buffer "active"
+	glBindVertexArray(vao->getId());
 }
 
-void MGraphicsEngine::setShaderProgram(const ui32 id)
+void MGraphicsEngine::setShaderProgram(const MShaderProgSharedPtr& shader)
 {
-	glUseProgram(m_shadersProgram[id]->getId());
+	glUseProgram(shader->getId());
 }
 
-void MGraphicsEngine::setShaderUniformBufferSlot(const ui32 shaderId, const ui32 uniformId, const char* name, ui32 slot)
+void MGraphicsEngine::setUniformBuffer(const MUniformBufferSharedPtr& uniform, ui32 slot)
 {
-	m_shadersProgram[shaderId]->setUniformBufferSlot(name, slot);
-	m_uniformBufferSlots[uniformId] = slot;
-}
-
-void MGraphicsEngine::setUniformData(const ui32 uniformId, void* data)
-{
-	m_uniformBuffers[uniformId]->setData(data);
+	glBindBufferBase(GL_UNIFORM_BUFFER, slot, uniform->getId());
 }
 
 void MGraphicsEngine::setFaceCulling(const MCullType& type)

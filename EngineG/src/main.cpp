@@ -196,6 +196,7 @@ int main(void)
 	game.run();
 
 	//fix create vertex array to return a shared pointer
+	//OpenGL Chemo https://www.youtube.com/watch?v=Bcs56Mm-FJY&list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2&index=12&ab_channel=TheCherno
 	//C++ 3D Game Tutorial 16
 	//C++ 3D Game Tutorial 15
 
