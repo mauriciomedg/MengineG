@@ -18,7 +18,7 @@ namespace MG
 		void run();
 
 		MEntitySystem* getEntitySystem();
-
+		MGraphicsEngine* getGraphicEngine();
 	protected:
 		virtual void create();
 		virtual void update(f32 dt) {};
@@ -30,8 +30,11 @@ namespace MG
 	protected:
 		bool m_isRunning = true;
 		f32 m_lastTime = 0.0f;
-
+				
 		std::unique_ptr<MEntitySystem> m_entitySystem;
+		std::unique_ptr<MGraphicsEngine> m_graphicEngine;
+		std::unique_ptr<MResourceManager> m_resourceManager;
+
 		//for testing		
 		f32 m_theta = 0.0f;
 		//

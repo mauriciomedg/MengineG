@@ -172,6 +172,9 @@
     <ClCompile Include="src\physicsEngine\PhysicsWorld.cpp" />
     <ClCompile Include="src\physicsEngine\RigidBody.cpp" />
     <ClCompile Include="src\Pyramid.cpp" />
+    <ClCompile Include="src\Resource\MMesh.cpp" />
+    <ClCompile Include="src\Resource\MResource.cpp" />
+    <ClCompile Include="src\Resource\MResourceManager.cpp" />
     <ClCompile Include="src\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -206,6 +209,9 @@
     <ClInclude Include="src\physicsEngine\PhysicsWorld.h" />
     <ClInclude Include="src\physicsEngine\RigidBody.h" />
     <ClInclude Include="src\Pyramid.h" />
+    <ClInclude Include="src\Resource\MMesh.h" />
+    <ClInclude Include="src\Resource\MResource.h" />
+    <ClInclude Include="src\Resource\MResourceManager.h" />
     <ClInclude Include="src\Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <glm/glm.hpp>
 
 typedef float f32;
 typedef int i32;
@@ -13,11 +14,15 @@ namespace MG
 	class MShaderProgram;
 	class MDeviceContext;
 	class MRenderSystem;
+	class MResource;
+	class MResourceManager;
 
 	typedef std::shared_ptr<MVertexArrayObject> MVAOSharedPtr;
 	typedef std::shared_ptr<MUniformBuffer> MUniformBufferSharedPtr;
 	typedef std::shared_ptr<MShaderProgram> MShaderProgSharedPtr;
 	typedef std::shared_ptr<MDeviceContext> MDeviceContextSharedPtr;
+	typedef std::shared_ptr<MResource> MResourceSharedPtr;
+	
 
 	struct MVertexAtrribute
 	{
@@ -49,6 +54,12 @@ namespace MG
 	struct MUniformBufferDesc
 	{
 		ui32 size = 0;
+	};
+
+	struct VertexMesh
+	{
+		glm::vec3 position;
+		glm::vec2 textcoord;
 	};
 
 	enum class MTriangleType

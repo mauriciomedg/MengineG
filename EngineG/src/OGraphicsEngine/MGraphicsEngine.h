@@ -6,14 +6,15 @@ namespace MG
 {
 	class MGraphicsEngine
 	{
+	public:
+
 		MGraphicsEngine();
 		~MGraphicsEngine();
 
-	public:
 		MRenderSystem* getRenderSystem();
-		static MGraphicsEngine& getInstance();
+
 	private:
 		
-		MRenderSystem* m_renderSystem;
+		std::unique_ptr<MRenderSystem> m_renderSystem;
 	};
 }

@@ -8,23 +8,16 @@ using namespace MG;
 
 MGraphicsEngine::MGraphicsEngine()
 {
-	m_renderSystem = new MRenderSystem();
-}
-
-MGraphicsEngine& MGraphicsEngine::getInstance()
-{
-	static MGraphicsEngine graphicEngine;
-	return graphicEngine;
+	m_renderSystem = std::make_unique<MRenderSystem>();
 }
 
 MGraphicsEngine::~MGraphicsEngine()
 {
-	delete m_renderSystem;
 }
 
 MRenderSystem* MGraphicsEngine::getRenderSystem()
 {
-	return m_renderSystem;
+	return m_renderSystem.get();
 }
 
 
