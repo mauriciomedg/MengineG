@@ -41,5 +41,10 @@ namespace MG
 		MVAOSharedPtr m_vertexArrayObject;
 		MShaderProgSharedPtr m_shader;
 		MUniformBufferSharedPtr m_uniform;
+
+
+		MMeshSharedPtr m_mesh;
+		MMaterialSharedPtr m_material;
+
 	};
 }

@@ -7,6 +7,10 @@
 #include "../OGraphicsEngine/RenderSystem/MDeviceContext.h"
 #include "../Resource/MResourceManager.h"
 
+// to remove
+#include "../Resource/MMesh.h"
+#include "../Resource/MMaterial.h"
+
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -56,134 +60,116 @@ MGame::MGame()
 
 void MGame::create()
 {
-	const glm::vec3 positionsList[] = {
-		glm::vec3(-0.5f, -0.5f, -0.5f),
-		glm::vec3(-0.5f, 0.5f, -0.5f),
-		glm::vec3(0.5f, 0.5f, -0.5f),
-		glm::vec3(0.5f, -0.5f, -0.5f),
-
-		glm::vec3(0.5f, -0.5f, 0.5f),
-		glm::vec3(0.5f, 0.5f, 0.5f),
-		glm::vec3(-0.5f, 0.5f, 0.5f),
-		glm::vec3(-0.5f, -0.5f, 0.5f)
-	};
-
-	glm::vec2 texCoordsList[]
-	{
-		glm::vec2(0, 0),
-		glm::vec2(0, 1),
-		glm::vec2(1, 0),
-		glm::vec2(1, 1)
-	};
-
-	VertexMesh verticesList[] =
-	{
-		//front
-		{ positionsList[0], texCoordsList[1] },
-		{ positionsList[1], texCoordsList[0] },
-		{ positionsList[2], texCoordsList[2] },
-		{ positionsList[3], texCoordsList[3] },
-
-		//back
-		{ positionsList[4], texCoordsList[1] },
-		{ positionsList[5], texCoordsList[0] },
-		{ positionsList[6], texCoordsList[2] },
-		{ positionsList[7], texCoordsList[3] },
-
-		//top
-		{ positionsList[1], texCoordsList[1] },
-		{ positionsList[6], texCoordsList[0] },
-		{ positionsList[5], texCoordsList[2] },
-		{ positionsList[2], texCoordsList[3] },
-		
-		// bottom
-		{ positionsList[7], texCoordsList[1] },
-		{ positionsList[0], texCoordsList[0] },
-		{ positionsList[3], texCoordsList[2] },
-		{ positionsList[4], texCoordsList[3] },
-
-		// right
-		{ positionsList[3], texCoordsList[1] },
-		{ positionsList[2], texCoordsList[0] },
-		{ positionsList[5], texCoordsList[2] },
-		{ positionsList[4], texCoordsList[3] },
-
-		// left
-		{ positionsList[7], texCoordsList[1] },
-		{ positionsList[6], texCoordsList[0] },
-		{ positionsList[1], texCoordsList[2] },
-		{ positionsList[0], texCoordsList[3] }
-	};
-
-	ui32 indicesList[] = {
-		0, 1, 2,
-		2, 3, 0,
-
-		4, 5, 6,
-		6, 7, 4,
-
-		8, 9, 10,
-		10, 11, 8,
-
-		12, 13, 14,
-		14, 15, 12,
-
-		16, 17, 18,
-		18, 19, 16,
-
-		20, 21, 22,
-		22, 23, 20
-	};
-
-	//const f32 polygonVertices[] = {
-	//	-0.5f, -0.5f, 0.0f,
-	//	1, 0, 0,
-	//	-0.5f, 0.5f, 0.0f,
-	//	0, 1, 0,
-	//	0.5f, -0.5f, 0.0f,
-	//	0, 0, 1,
-	//	0.5f, 0.5f, 0.0f,
-	//	1, 1, 0
+	m_mesh = m_resourceManager->createResourceFromFile<MMesh>("models/BlockModel3.obj");
+	m_material = m_resourceManager->createResourceFromFile<MMaterial>("shaders/basicVertShader.glsl", "shaders/basicFragShader.glsl");
+	//const glm::vec3 positionsList[] = {
+	//	glm::vec3(-0.5f, -0.5f, -0.5f),
+	//	glm::vec3(-0.5f, 0.5f, -0.5f),
+	//	glm::vec3(0.5f, 0.5f, -0.5f),
+	//	glm::vec3(0.5f, -0.5f, -0.5f),
+	//
+	//	glm::vec3(0.5f, -0.5f, 0.5f),
+	//	glm::vec3(0.5f, 0.5f, 0.5f),
+	//	glm::vec3(-0.5f, 0.5f, 0.5f),
+	//	glm::vec3(-0.5f, -0.5f, 0.5f)
 	//};
-
-	//const f32 polygonVertices[] = {
-	//	-0.5f, -0.5f, 0.0f,
-	//	1, 0, 0,
-	//	0.5f, -0.5f, 0.0f,
-	//	0, 1, 0,
-	//	0.0f, 0.5f, 0.0f,
-	//	0, 0, 1
+	//
+	//glm::vec2 texCoordsList[]
+	//{
+	//	glm::vec2(0, 0),
+	//	glm::vec2(0, 1),
+	//	glm::vec2(1, 0),
+	//	glm::vec2(1, 1)
 	//};
-
-	MVertexAtrribute attributeList[] =
-	{
-		sizeof(glm::vec3) / sizeof(f32), // pos
-		sizeof(glm::vec2) / sizeof(f32) // text coord
-	};
-
-	m_vertexArrayObject = m_graphicEngine->getRenderSystem()->createVextexArrayObject(
-		{(void*)verticesList,
-		sizeof(VertexMesh),
-		sizeof(verticesList) / sizeof(VertexMesh),
-
-		attributeList,
-		sizeof(attributeList) / (sizeof(MVertexAtrribute)),
-		},
-
-		{
-			(void*)indicesList,
-			sizeof(indicesList)
-		}
-	);
-
-	m_uniform = m_graphicEngine->getRenderSystem()->createUniformBuffer(
-		{
-			sizeof(UniformData)
-		}
-	);
-
-	m_shader = m_graphicEngine->getRenderSystem()->createShaderProgram({ L"shaders/basicVertShader.glsl", L"shaders/basicFragShader.glsl" });
-	m_shader->setUniformBufferSlot("UniformData", 0);
+	//
+	//std::vector<VertexMesh> verticesList =
+	//{
+	//	//front
+	//	{ positionsList[0], texCoordsList[1] },
+	//	{ positionsList[1], texCoordsList[0] },
+	//	{ positionsList[2], texCoordsList[2] },
+	//	{ positionsList[3], texCoordsList[3] },
+	//
+	//	//back
+	//	{ positionsList[4], texCoordsList[1] },
+	//	{ positionsList[5], texCoordsList[0] },
+	//	{ positionsList[6], texCoordsList[2] },
+	//	{ positionsList[7], texCoordsList[3] },
+	//
+	//	//top
+	//	{ positionsList[1], texCoordsList[1] },
+	//	{ positionsList[6], texCoordsList[0] },
+	//	{ positionsList[5], texCoordsList[2] },
+	//	{ positionsList[2], texCoordsList[3] },
+	//	
+	//	// bottom
+	//	{ positionsList[7], texCoordsList[1] },
+	//	{ positionsList[0], texCoordsList[0] },
+	//	{ positionsList[3], texCoordsList[2] },
+	//	{ positionsList[4], texCoordsList[3] },
+	//
+	//	// right
+	//	{ positionsList[3], texCoordsList[1] },
+	//	{ positionsList[2], texCoordsList[0] },
+	//	{ positionsList[5], texCoordsList[2] },
+	//	{ positionsList[4], texCoordsList[3] },
+	//
+	//	// left
+	//	{ positionsList[7], texCoordsList[1] },
+	//	{ positionsList[6], texCoordsList[0] },
+	//	{ positionsList[1], texCoordsList[2] },
+	//	{ positionsList[0], texCoordsList[3] }
+	//};
+	//
+	//ui32 indicesList[] = {
+	//	0, 1, 2,
+	//	2, 3, 0,
+	//
+	//	4, 5, 6,
+	//	6, 7, 4,
+	//
+	//	8, 9, 10,
+	//	10, 11, 8,
+	//
+	//	12, 13, 14,
+	//	14, 15, 12,
+	//
+	//	16, 17, 18,
+	//	18, 19, 16,
+	//
+	//	20, 21, 22,
+	//	22, 23, 20
+	//};
+	//
+	//MVertexAtrribute attributeList[] =
+	//{
+	//	sizeof(glm::vec3) / sizeof(f32), // pos
+	//	sizeof(glm::vec2) / sizeof(f32) // text coord
+	//};
+	//
+	//m_vertexArrayObject = m_graphicEngine->getRenderSystem()->createVextexArrayObject(
+	//	{(void*)(&verticesList[0]),
+	//	sizeof(VertexMesh),
+	//	(ui32)verticesList.size(),
+	//
+	//	attributeList,
+	//	sizeof(attributeList) / (sizeof(MVertexAtrribute)),
+	//	},
+	//
+	//	{
+	//		(void*)indicesList,
+	//		sizeof(indicesList)
+	//	}
+	//);
+	//
+	//m_uniform = m_graphicEngine->getRenderSystem()->createUniformBuffer(
+	//	{
+	//		sizeof(UniformData)
+	//	}
+	//);
+	//
+	//m_shader = m_graphicEngine->getRenderSystem()->createShaderProgram({ L"shaders/basicVertShader.glsl", L"shaders/basicFragShader.glsl" });
+	//m_shader->setUniformBufferSlot("UniformData", 0);
 }
 
 void MGame::updateInternal()
@@ -193,26 +179,28 @@ void MGame::updateInternal()
 		DeltaTime deltaTime(m_lastTime);
 		float dt = deltaTime.calculate();
 		dt = 0.016;
-
+		//
 		update(dt);
 		m_entitySystem->update(dt);
 
-		m_theta += 1.0 * dt;
-		
-		auto R = glm::rotate(glm::mat4(1.0f), m_theta, glm::normalize(glm::vec3(1.0f, 1.0f, 1.0f)));
-		glm::mat4 mat = glm::mat4(R);
-		UniformData data = { mat };
-		m_uniform->setData(&data);
-		
-		m_graphicEngine->getRenderSystem()->getDeviceContext()->clear();
-		m_graphicEngine->getRenderSystem()->getDeviceContext()->setFaceCulling(MCullType::BackFace);
-		m_graphicEngine->getRenderSystem()->getDeviceContext()->setWindingOrder(MWindingOrder::ClockWise);
-
-		m_graphicEngine->getRenderSystem()->getDeviceContext()->setVextexArrayObject(m_vertexArrayObject);
-		m_graphicEngine->getRenderSystem()->getDeviceContext()->setUniformBuffer(m_uniform, 0);
-		m_graphicEngine->getRenderSystem()->getDeviceContext()->setShaderProgram(m_shader);
-		m_graphicEngine->getRenderSystem()->getDeviceContext()->drawIndexedTriangles(MTriangleType::TriangleList, m_vertexArrayObject.get()->getElementBufferSize() / sizeof(int));
-		m_graphicEngine->getRenderSystem()->getDeviceContext()->swapBuffer();
+		m_isRunning = m_graphicEngine->update({ m_mesh, m_material});
+		//
+		//m_theta += 1.0 * dt;
+		//
+		//auto R = glm::rotate(glm::mat4(1.0f), m_theta, glm::normalize(glm::vec3(1.0f, 1.0f, 1.0f)));
+		//glm::mat4 mat = glm::mat4(R);
+		//UniformData data = { mat };
+		//m_uniform->setData(&data);
+		//
+		//m_graphicEngine->getRenderSystem()->getDeviceContext()->clear();
+		//m_graphicEngine->getRenderSystem()->getDeviceContext()->setFaceCulling(MCullType::BackFace);
+		//m_graphicEngine->getRenderSystem()->getDeviceContext()->setWindingOrder(MWindingOrder::ClockWise);
+		//
+		//m_graphicEngine->getRenderSystem()->getDeviceContext()->setVextexArrayObject(m_vertexArrayObject);
+		//m_graphicEngine->getRenderSystem()->getDeviceContext()->setUniformBuffer(m_uniform, 0);
+		//m_graphicEngine->getRenderSystem()->getDeviceContext()->setShaderProgram(m_shader);
+		//m_graphicEngine->getRenderSystem()->getDeviceContext()->drawIndexedTriangles(MTriangleType::TriangleList, m_vertexArrayObject.get()->getElementBufferSize() / sizeof(int));
+		//m_graphicEngine->getRenderSystem()->getDeviceContext()->swapBuffer();
 	}
 }
 

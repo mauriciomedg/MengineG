@@ -4,6 +4,12 @@
 
 namespace MG
 {
+	struct MeshData
+	{
+		MMeshSharedPtr mesh;
+		MMaterialSharedPtr material;
+	};
+
 	class MGraphicsEngine
 	{
 	public:
@@ -13,6 +19,7 @@ namespace MG
 
 		MRenderSystem* getRenderSystem();
 
+		bool update(const MeshData& meshData);
 	private:
 		
 		std::unique_ptr<MRenderSystem> m_renderSystem;

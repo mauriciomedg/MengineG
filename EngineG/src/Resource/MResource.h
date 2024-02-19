@@ -8,11 +8,11 @@ namespace MG
 	class MResource
 	{
 	public:
-		MResource(const wchar_t* file_path, MResourceManager* resourceManager);
+		MResource(const char* file_path, MResourceManager* resourceManager);
 		virtual ~MResource();
 
 	private:
 		MResourceManager* m_resourceManager = nullptr;
-		std::wstring m_full_path;
+		std::string m_full_path;
 	};
 }

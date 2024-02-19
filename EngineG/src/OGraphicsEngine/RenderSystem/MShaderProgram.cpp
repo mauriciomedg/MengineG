@@ -14,7 +14,7 @@ MShaderProgram::MShaderProgram(const MShaderProgramDesc& desc)
 	link();
 }
 
-void MShaderProgram::attach(const wchar_t* shaderFilePath, const MShaderType& type)
+void MShaderProgram::attach(const char* shaderFilePath, const MShaderType& type)
 {
 	std::string shaderCode = Utils::readShaderSource(shaderFilePath);
 

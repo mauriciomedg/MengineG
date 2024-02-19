@@ -16,13 +16,22 @@ namespace MG
 	class MRenderSystem;
 	class MResource;
 	class MResourceManager;
+	class MTexture2D;
+	
+	class MTexture;
+	class MMaterial;
+	class MMesh;
 
 	typedef std::shared_ptr<MVertexArrayObject> MVAOSharedPtr;
 	typedef std::shared_ptr<MUniformBuffer> MUniformBufferSharedPtr;
 	typedef std::shared_ptr<MShaderProgram> MShaderProgSharedPtr;
 	typedef std::shared_ptr<MDeviceContext> MDeviceContextSharedPtr;
-	typedef std::shared_ptr<MResource> MResourceSharedPtr;
+	typedef std::shared_ptr<MTexture2D> MTexture2DSharedPtr;
 	
+	typedef std::shared_ptr<MResource> MResourceSharedPtr;
+	typedef std::shared_ptr<MResource> MTextureSharedPtr;
+	typedef std::shared_ptr<MMaterial> MMaterialSharedPtr;
+	typedef std::shared_ptr<MMesh> MMeshSharedPtr;
 
 	struct MVertexAtrribute
 	{
@@ -47,8 +56,8 @@ namespace MG
 
 	struct MShaderProgramDesc
 	{
-		const wchar_t* vertexShaderFilePath;
-		const wchar_t* fragmentShaderFilePath;
+		const char* vertexShaderFilePath;
+		const char* fragmentShaderFilePath;
 	};
 
 	struct MUniformBufferDesc

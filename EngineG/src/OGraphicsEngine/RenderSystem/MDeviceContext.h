@@ -19,6 +19,7 @@ namespace MG
 		void setVextexArrayObject(const MVAOSharedPtr& vao);
 		void setShaderProgram(const MShaderProgSharedPtr& shader);
 		void setUniformBuffer(const MUniformBufferSharedPtr& uniform, ui32 slot);
+		void setTexture2D(const MTexture2DSharedPtr& texture);
 
 		void setFaceCulling(const MCullType& type);
 		void setWindingOrder(const MWindingOrder& order);

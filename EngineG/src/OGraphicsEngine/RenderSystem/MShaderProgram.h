@@ -14,7 +14,7 @@ namespace MG
 		void setUniformBufferSlot(const char* name, ui32 slot);
 	private:
 
-		void attach(const wchar_t* shaderFilePath, const MShaderType& type);
+		void attach(const char* shaderFilePath, const MShaderType& type);
 		void link();
 
 	private:

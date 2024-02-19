@@ -159,6 +159,7 @@
     <ClCompile Include="src\OGraphicsEngine\RenderSystem\MDeviceContext.cpp" />
     <ClCompile Include="src\OGraphicsEngine\RenderSystem\MRenderSystem.cpp" />
     <ClCompile Include="src\OGraphicsEngine\RenderSystem\MShaderProgram.cpp" />
+    <ClCompile Include="src\OGraphicsEngine\RenderSystem\MTexture2D.cpp" />
     <ClCompile Include="src\OGraphicsEngine\RenderSystem\MUniformBuffer.cpp" />
     <ClCompile Include="src\OGraphicsEngine\RenderSystem\MVertexArrayObject.cpp" />
     <ClCompile Include="src\physicsEngine\CollisionDetection.cpp" />
@@ -172,9 +173,11 @@
     <ClCompile Include="src\physicsEngine\PhysicsWorld.cpp" />
     <ClCompile Include="src\physicsEngine\RigidBody.cpp" />
     <ClCompile Include="src\Pyramid.cpp" />
+    <ClCompile Include="src\Resource\MMaterial.cpp" />
     <ClCompile Include="src\Resource\MMesh.cpp" />
     <ClCompile Include="src\Resource\MResource.cpp" />
     <ClCompile Include="src\Resource\MResourceManager.cpp" />
+    <ClCompile Include="src\Resource\MTexture.cpp" />
     <ClCompile Include="src\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +197,7 @@
     <ClInclude Include="src\OGraphicsEngine\RenderSystem\MDeviceContext.h" />
     <ClInclude Include="src\OGraphicsEngine\RenderSystem\MRenderSystem.h" />
     <ClInclude Include="src\OGraphicsEngine\RenderSystem\MShaderProgram.h" />
+    <ClInclude Include="src\OGraphicsEngine\RenderSystem\MTexture2D.h" />
     <ClInclude Include="src\OGraphicsEngine\RenderSystem\MUniformBuffer.h" />
     <ClInclude Include="src\OGraphicsEngine\RenderSystem\MVertexArrayObject.h" />
     <ClInclude Include="src\physicsEngine\CollisionDetection.h" />
@@ -209,9 +213,11 @@
     <ClInclude Include="src\physicsEngine\PhysicsWorld.h" />
     <ClInclude Include="src\physicsEngine\RigidBody.h" />
     <ClInclude Include="src\Pyramid.h" />
+    <ClInclude Include="src\Resource\MMaterial.h" />
     <ClInclude Include="src\Resource\MMesh.h" />
     <ClInclude Include="src\Resource\MResource.h" />
     <ClInclude Include="src\Resource\MResourceManager.h" />
+    <ClInclude Include="src\Resource\MTexture.h" />
     <ClInclude Include="src\Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -29,7 +29,7 @@ GLuint Utils::loadTexture(const char* texImagePath)
 	return textureID;
 }
 
-string Utils::readShaderSource(const wchar_t* filePath) {
+string Utils::readShaderSource(const char* filePath) {
 	string content;
 	ifstream fileStream(filePath, ios::in);
 	string line = "";

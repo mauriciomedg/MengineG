@@ -4,6 +4,7 @@
 #include "MVertexArrayObject.h"
 #include "MShaderProgram.h"
 #include "MUniformBuffer.h"
+#include "MTexture2D.h"
 
 using namespace MG;
 
@@ -80,7 +81,7 @@ bool MDeviceContext::shouldCloseWindow()
 void MDeviceContext::clear()
 {
 	glClear(GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glClearColor(1.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT); // clear the background to black, each time
 }
 
@@ -103,6 +104,12 @@ void MDeviceContext::setShaderProgram(const MShaderProgSharedPtr& shader)
 void MDeviceContext::setUniformBuffer(const MUniformBufferSharedPtr& uniform, ui32 slot)
 {
 	glBindBufferBase(GL_UNIFORM_BUFFER, slot, uniform->getId());
+}
+
+void MG::MDeviceContext::setTexture2D(const MTexture2DSharedPtr& texture)
+{
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->getId());
 }
 
 void MDeviceContext::setFaceCulling(const MCullType& type)
