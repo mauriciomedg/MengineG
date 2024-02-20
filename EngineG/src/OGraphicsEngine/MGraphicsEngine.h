@@ -8,6 +8,13 @@ namespace MG
 	{
 		MMeshSharedPtr mesh;
 		MMaterialSharedPtr material;
+		float m_theta;
+	};
+
+	struct UniformData
+	{
+		glm::mat4 mat;
+		//f32 scale;
 	};
 
 	class MGraphicsEngine

@@ -20,12 +20,6 @@ using namespace MG;
 
 namespace MG
 {
-	struct UniformData
-	{
-		glm::mat4 mat;
-		//f32 scale;
-	};
-
 	class DeltaTime
 	{
 	public:
@@ -162,11 +156,13 @@ void MGame::create()
 	//	}
 	//);
 	//
-	//m_uniform = m_graphicEngine->getRenderSystem()->createUniformBuffer(
-	//	{
-	//		sizeof(UniformData)
-	//	}
-	//);
+	auto uniform = m_graphicEngine->getRenderSystem()->createUniformBuffer(
+		{
+			sizeof(UniformData)
+		}
+	);
+	m_material->addUniform(uniform);
+	m_material->setUniformSlot("UniformData", 0);
 	//
 	//m_shader = m_graphicEngine->getRenderSystem()->createShaderProgram({ L"shaders/basicVertShader.glsl", L"shaders/basicFragShader.glsl" });
 	//m_shader->setUniformBufferSlot("UniformData", 0);
@@ -183,7 +179,9 @@ void MGame::updateInternal()
 		update(dt);
 		m_entitySystem->update(dt);
 
-		m_isRunning = m_graphicEngine->update({ m_mesh, m_material});
+		m_theta += 1.0 * dt;
+		
+		m_isRunning = m_graphicEngine->update({ m_mesh, m_material, m_theta});
 		//
 		//m_theta += 1.0 * dt;
 		//
