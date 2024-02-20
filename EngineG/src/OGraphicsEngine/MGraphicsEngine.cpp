@@ -41,6 +41,7 @@ bool MGraphicsEngine::update(const MeshData& meshData)
 	
 
 	getRenderSystem()->getDeviceContext()->drawIndexedTriangles(MTriangleType::TriangleList, meshData.mesh.get()->getVertexArrayObject()->getElementBufferSize() / sizeof(int));
+	//getRenderSystem()->getDeviceContext()->drawTriangles(MTriangleType::TriangleList, meshData.mesh.get()->getVertexArrayObject()->getVertexBufferSize(), 0);
 
 	getRenderSystem()->getDeviceContext()->swapBuffer();
 
