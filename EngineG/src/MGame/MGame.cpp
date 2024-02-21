@@ -10,6 +10,7 @@
 // to remove
 #include "../Resource/MMesh.h"
 #include "../Resource/MMaterial.h"
+#include "../Resource/MTexture.h"
 
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -55,7 +56,9 @@ MGame::MGame()
 void MGame::create()
 {
 	m_mesh = m_resourceManager->createResourceFromFile<MMesh>("models/BlockModel3.obj");
+	auto texture = m_resourceManager->createResourceFromFile<MTexture>("textures/block.png");
 	m_material = m_resourceManager->createResourceFromFile<MMaterial>("shaders/basicVertShader.glsl", "shaders/basicFragShader.glsl");
+	m_material->addTexture(texture);
 	//const glm::vec3 positionsList[] = {
 	//	glm::vec3(-0.5f, -0.5f, -0.5f),
 	//	glm::vec3(-0.5f, 0.5f, -0.5f),
@@ -163,9 +166,7 @@ void MGame::create()
 	);
 	m_material->addUniform(uniform);
 	m_material->setUniformSlot("UniformData", 0);
-	//
-	//m_shader = m_graphicEngine->getRenderSystem()->createShaderProgram({ L"shaders/basicVertShader.glsl", L"shaders/basicFragShader.glsl" });
-	//m_shader->setUniformBufferSlot("UniformData", 0);
+
 }
 
 void MGame::updateInternal()

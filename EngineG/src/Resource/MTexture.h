@@ -8,7 +8,7 @@ namespace MG
 	{
 	public:
 		MTexture(const char* file_path, MResourceManager* resourceManager);
-	
+		MTexture2DSharedPtr& getTexture();
 	private:
 		MTexture2DSharedPtr m_texture;
 	};

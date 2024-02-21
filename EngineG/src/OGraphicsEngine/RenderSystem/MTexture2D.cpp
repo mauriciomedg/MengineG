@@ -7,7 +7,7 @@ using namespace MG;
 
 MTexture2D::MTexture2D(const char* file_path)
 {
-	m_textureID = SOIL_load_OGL_texture((const char*)file_path,
+	m_textureID = SOIL_load_OGL_texture(file_path,
 		SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 	if (m_textureID == 0) std::cout << "could not find texture file" << file_path << std::endl;
 

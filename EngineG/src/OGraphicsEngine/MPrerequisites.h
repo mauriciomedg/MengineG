@@ -29,7 +29,7 @@ namespace MG
 	typedef std::shared_ptr<MTexture2D> MTexture2DSharedPtr;
 	
 	typedef std::shared_ptr<MResource> MResourceSharedPtr;
-	typedef std::shared_ptr<MResource> MTextureSharedPtr;
+	typedef std::shared_ptr<MTexture> MTextureSharedPtr;
 	typedef std::shared_ptr<MMaterial> MMaterialSharedPtr;
 	typedef std::shared_ptr<MMesh> MMeshSharedPtr;
 

@@ -26,11 +26,11 @@ bool MGraphicsEngine::update(const MeshData& meshData)
 
 	getRenderSystem()->getDeviceContext()->clear();
 	getRenderSystem()->getDeviceContext()->setFaceCulling(MCullType::BackFace);
-	getRenderSystem()->getDeviceContext()->setWindingOrder(MWindingOrder::ClockWise);
+	getRenderSystem()->getDeviceContext()->setWindingOrder(MWindingOrder::CounterClockWise);
 	
 	////
 
-	glm::vec3 Pos = glm::vec3(0.0f, 0.0f, 10.0f);
+	glm::vec3 Pos = glm::vec3(0.0f, 0.0f, 30.0f);
 	auto mMat = glm::translate(glm::mat4(1.0f), Pos);
 
 	glm::vec3 cameraPos = mMat[3];
@@ -55,13 +55,12 @@ bool MGraphicsEngine::update(const MeshData& meshData)
 	meshData.material.get()->setUniformData(&data);
 
 	getRenderSystem()->getDeviceContext()->setVextexArrayObject(meshData.mesh.get()->getVertexArrayObject());
+	getRenderSystem()->getDeviceContext()->setTexture2D(meshData.material.get()->getTexture());
 	getRenderSystem()->getDeviceContext()->setUniformBuffer(meshData.material.get()->getUniform(), 0);
 	getRenderSystem()->getDeviceContext()->setShaderProgram(meshData.material.get()->getShaderProgram());
-
 	
-
-	getRenderSystem()->getDeviceContext()->drawIndexedTriangles(MTriangleType::TriangleList, meshData.mesh.get()->getVertexArrayObject()->getElementBufferSize() / sizeof(int));
-	//getRenderSystem()->getDeviceContext()->drawTriangles(MTriangleType::TriangleList, meshData.mesh.get()->getVertexArrayObject()->getVertexBufferSize(), 0);
+	//getRenderSystem()->getDeviceContext()->drawIndexedTriangles(MTriangleType::TriangleList, meshData.mesh.get()->getVertexArrayObject()->getElementBufferSize() / sizeof(int));
+	getRenderSystem()->getDeviceContext()->drawTriangles(MTriangleType::TriangleList, meshData.mesh.get()->getVertexArrayObject()->getVertexBufferSize(), 0);
 
 	getRenderSystem()->getDeviceContext()->swapBuffer();
 

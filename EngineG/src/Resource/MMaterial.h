@@ -12,12 +12,15 @@ namespace MG
 		MShaderProgSharedPtr& getShaderProgram();
 
 		void addUniform(const MUniformBufferSharedPtr& uniform);
+		void addTexture(const MTextureSharedPtr& texture);
 		void setUniformSlot(const char* name, ui32 slot);
 		void setUniformData(void* data);
 		const MUniformBufferSharedPtr& getUniform() const;
+		const MTexture2DSharedPtr& getTexture() const;
 
 	private:
 		MShaderProgSharedPtr m_shader;
 		MUniformBufferSharedPtr m_uniform;
+		MTextureSharedPtr m_texture;
 	};
 }
