@@ -13,8 +13,9 @@ namespace MG
 
 	struct UniformData
 	{
-		glm::mat4 mat;
-		//f32 scale;
+		glm::mat4 world;
+		glm::mat4 vMat;
+		glm::mat4 pMat;
 	};
 
 	class MGraphicsEngine

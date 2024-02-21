@@ -24,6 +24,7 @@ namespace MG
 		void setFaceCulling(const MCullType& type);
 		void setWindingOrder(const MWindingOrder& order);
 
+		GLFWwindow* getWindow() const;
 	private:
 		MRenderSystem* m_renderSystem;
 		GLFWwindow* m_window;

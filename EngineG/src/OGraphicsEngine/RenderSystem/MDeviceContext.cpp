@@ -134,6 +134,11 @@ void MDeviceContext::setWindingOrder(const MWindingOrder& order)
 	glFrontFace(orderType);
 }
 
+GLFWwindow* MG::MDeviceContext::getWindow() const
+{
+	return m_window;
+}
+
 MDeviceContext::~MDeviceContext()
 {
 	if (m_window)

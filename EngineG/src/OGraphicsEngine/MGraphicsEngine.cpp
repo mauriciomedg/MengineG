@@ -27,10 +27,30 @@ bool MGraphicsEngine::update(const MeshData& meshData)
 	getRenderSystem()->getDeviceContext()->clear();
 	getRenderSystem()->getDeviceContext()->setFaceCulling(MCullType::BackFace);
 	getRenderSystem()->getDeviceContext()->setWindingOrder(MWindingOrder::ClockWise);
+	
+	////
+
+	glm::vec3 Pos = glm::vec3(0.0f, 0.0f, 10.0f);
+	auto mMat = glm::translate(glm::mat4(1.0f), Pos);
+
+	glm::vec3 cameraPos = mMat[3];
+	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+	auto vMat = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+
+	int width = 0;
+	int height = 0;
+	glfwGetFramebufferSize(getRenderSystem()->getDeviceContext()->getWindow(), &width, &height);
+	auto aspect = (float)width / (float)height; // new width&height provided by the callback
+	auto pMat = glm::perspective(1.0472f, aspect, 0.1f, 1000.0f);
+	
+	////
+
 
 	auto R = glm::rotate(glm::mat4(1.0f), meshData.m_theta, glm::normalize(glm::vec3(1.0f, 1.0f, 1.0f)));
-	glm::mat4 mat = glm::mat4(R);
-	UniformData data = { mat };
+	glm::mat4 world = glm::mat4(R);
+	UniformData data = { world, vMat, pMat };
 
 	meshData.material.get()->setUniformData(&data);
 
