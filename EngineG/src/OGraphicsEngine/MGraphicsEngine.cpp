@@ -43,7 +43,7 @@ bool MGraphicsEngine::update(const MeshData& meshData)
 	int height = 0;
 	glfwGetFramebufferSize(getRenderSystem()->getDeviceContext()->getWindow(), &width, &height);
 	auto aspect = (float)width / (float)height; // new width&height provided by the callback
-	auto pMat = glm::perspective(1.0472f, aspect, 0.1f, 1000.0f);
+	auto pMat = glm::perspective(1.3f, aspect, 0.1f, 1000.0f);
 	
 	////
 
