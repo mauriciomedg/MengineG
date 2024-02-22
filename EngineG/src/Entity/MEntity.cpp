@@ -1,5 +1,6 @@
 #include "MEntity.h"
 #include "MEntitySystem.h"
+#include "../Components/MComponent.h"
 
 using namespace MG;
 
@@ -19,4 +20,25 @@ void MEntity::release()
 MEntitySystem* MG::MEntity::getEntitySystem()
 {
 	return m_entitySystem;
+}
+
+void MEntity::createComponentInternal(MComponent* component, size_t id)
+{
+	auto ptr = std::unique_ptr<MComponent>(component);
+	m_components.emplace(id, std::move(ptr));
+
+	component->m_id = id;
+	component->m_entity = this;
+}
+
+MComponent* MEntity::getComponentInternal(size_t id)
+{
+	auto it = m_components.find(id);
+	if (it == m_components.end()) return nullptr;
+	return it->second.get();
+}
+
+void MEntity::removeComponent(size_t id)
+{
+	m_components.erase(id);
 }

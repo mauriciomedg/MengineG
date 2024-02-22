@@ -1,4 +1,5 @@
 #include "MyPlayer.h"
+#include "../AllMHeaders.h"
 
 using namespace MG;
 
@@ -13,6 +14,7 @@ MyPlayer::~MyPlayer()
 void MyPlayer::create()
 {
 	m_entity = getEntitySystem()->createEntity<MEntity>();
+	m_entity->createComponent<MComponent>();
 }
 
 void MyPlayer::update(f32 dt)
@@ -21,6 +23,7 @@ void MyPlayer::update(f32 dt)
 
 	if (m_entity && m_timeSec > 3.0f)
 	{
+		m_entity->getComponent<MComponent>()->release();
 		m_entity->release();
 		m_entity = nullptr;
 	}

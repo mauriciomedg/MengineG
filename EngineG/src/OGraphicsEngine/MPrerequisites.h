@@ -22,6 +22,9 @@ namespace MG
 	class MMaterial;
 	class MMesh;
 
+	class MComponent;
+	class MEntity;
+
 	typedef std::shared_ptr<MVertexArrayObject> MVAOSharedPtr;
 	typedef std::shared_ptr<MUniformBuffer> MUniformBufferSharedPtr;
 	typedef std::shared_ptr<MShaderProgram> MShaderProgSharedPtr;
