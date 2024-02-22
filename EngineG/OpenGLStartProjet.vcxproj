@@ -153,6 +153,7 @@
     <ClCompile Include="src\Game\MyPlayer.cpp" />
     <ClCompile Include="src\GEntity.cpp" />
     <ClCompile Include="src\Inputs.cpp" />
+    <ClCompile Include="src\Inputs\InputSystem.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MGame\MGame.cpp" />
     <ClCompile Include="src\OGraphicsEngine\MGraphicsEngine.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="src\Game\MyPlayer.h" />
     <ClInclude Include="src\GEntity.h" />
     <ClInclude Include="src\Inputs.h" />
+    <ClInclude Include="src\Inputs\InputSystem.h" />
     <ClInclude Include="src\MGame\MGame.h" />
     <ClInclude Include="src\OGraphicsEngine\MGraphicsEngine.h" />
     <ClInclude Include="src\OGraphicsEngine\MPrerequisites.h" />
