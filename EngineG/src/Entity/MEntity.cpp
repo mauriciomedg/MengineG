@@ -1,11 +1,13 @@
 #include "MEntity.h"
 #include "MEntitySystem.h"
 #include "../Components/MComponent.h"
+#include "../Components/MTransformComponent.h"
 
 using namespace MG;
 
 MEntity::MEntity()
 {
+	m_transformComponent = createComponent<MTransformComponent>();
 }
 
 MEntity::~MEntity()
@@ -20,6 +22,11 @@ void MEntity::release()
 MEntitySystem* MG::MEntity::getEntitySystem()
 {
 	return m_entitySystem;
+}
+
+MTransformComponent* MG::MEntity::getTransform()
+{
+	return m_transformComponent;
 }
 
 void MEntity::createComponentInternal(MComponent* component, size_t id)

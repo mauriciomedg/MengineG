@@ -18,6 +18,7 @@ namespace MG
 		void release();
 
 		MEntitySystem* getEntitySystem();
+		MTransformComponent* getTransform();
 
 		template<typename T>
 		T* createComponent()
@@ -39,7 +40,7 @@ namespace MG
 		{
 			static_assert(std::is_base_of<MComponent, T>::value, "T must be derived from MComponent");
 			auto id = typeid(T).hash_code();
-			return getComponentInternal(id);
+			return (T*)getComponentInternal(id);
 		}
 	private:
 		void createComponentInternal(MComponent* entity, size_t id);
@@ -48,6 +49,8 @@ namespace MG
 	protected:
 		size_t m_id = 0;
 		MEntitySystem* m_entitySystem = nullptr;
+
+		MTransformComponent* m_transformComponent = nullptr;
 
 		std::map<size_t, std::unique_ptr<MComponent>> m_components;
 		friend class MEntitySystem;

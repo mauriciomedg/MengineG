@@ -23,6 +23,7 @@ namespace MG
 	class MMesh;
 
 	class MComponent;
+	class MTransformComponent;
 	class MEntity;
 
 	typedef std::shared_ptr<MVertexArrayObject> MVAOSharedPtr;
