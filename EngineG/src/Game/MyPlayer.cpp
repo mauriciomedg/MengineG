@@ -13,19 +13,12 @@ MyPlayer::~MyPlayer()
 
 void MyPlayer::create()
 {
-	m_entity = getEntitySystem()->createEntity<MEntity>();
-	m_entity->createComponent<MComponent>();
+	MEntity::create();
+	createComponent<MCameraComponent>();
+	getTransform()->setPosition(glm::vec3(0.0f, 0.0f, 30.0f));
 }
 
 void MyPlayer::update(f32 dt)
 {
-	m_timeSec += dt;
-
-	//m_entity->getTransform()->setRotation(glm::vec3(m_timeSec, 0, 0));
-	//if (m_entity && m_timeSec > 3.0f)
-	//{
-	//	m_entity->getComponent<MComponent>()->release();
-	//	m_entity->release();
-	//	m_entity = nullptr;
-	//}
+	MEntity::update(dt);
 }

@@ -25,6 +25,7 @@ namespace MG
 	class MComponent;
 	class MTransformComponent;
 	class MMeshComponent;
+	class MCameraComponent;
 	class MEntity;
 
 	class MGame;
@@ -102,6 +103,12 @@ namespace MG
 	{
 		VertexShader = 0,
 		FragmentShader
+	};
+
+	enum class MCameraType
+	{
+		Orthogonal = 0,
+		Perspective
 	};
 }
 

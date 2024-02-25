@@ -24,5 +24,6 @@ namespace MG
 		std::unique_ptr<MRenderSystem> m_renderSystem;
 
 		std::set<MMeshComponent*> m_meshes;
+		std::set<MCameraComponent*> m_cameras;
 	};
 }

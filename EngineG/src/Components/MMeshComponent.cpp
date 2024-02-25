@@ -1,4 +1,5 @@
 #include "MMeshComponent.h"
+#include "../OGraphicsEngine/MGraphicsEngine.h"
 
 using namespace MG;
 

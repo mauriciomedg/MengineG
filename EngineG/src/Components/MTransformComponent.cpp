@@ -19,7 +19,6 @@ void MTransformComponent::setPosition(const glm::vec3& position)
 void MTransformComponent::setRotation(float angle, const glm::vec3& axis)
 {
 	m_rotation = glm::angleAxis(angle, axis);
-	m_rotation = glm::normalize(m_rotation);
 	updateWorldMat();
 }
 

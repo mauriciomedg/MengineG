@@ -125,12 +125,14 @@ void MyGame::create()
 	
 
 	//material->addUniform("UniformData", sizeof(UniformData), 0);
-
-	m_player = getEntitySystem()->createEntity<MyPlayer>();
-
-	auto meshComponent = m_player->createComponent<MMeshComponent>();
+	
+	m_entity = getEntitySystem()->createEntity<MEntity>();
+	
+	auto meshComponent = m_entity->createComponent<MMeshComponent>();
 	meshComponent->setMesh(mesh);
 	meshComponent->addMaterial(material);
+
+	m_player = getEntitySystem()->createEntity<MyPlayer>();
 }
 
 void MyGame::update(f32 dt)
@@ -138,7 +140,7 @@ void MyGame::update(f32 dt)
 	MGame::update(dt);
 
 	m_theta += 1.0 * dt;
-	m_player->getTransform()->setRotation(m_theta, glm::normalize(glm::vec3(1.0f, 1.0f, 1.0f)));
+	m_entity->getTransform()->setRotation(m_theta, glm::normalize(glm::vec3(1.0f, 1.0f, 1.0f)));
 }
 
 void MyGame::quit()

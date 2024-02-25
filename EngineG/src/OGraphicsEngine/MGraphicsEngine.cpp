@@ -14,7 +14,7 @@
 #include "RenderSystem/MVertexArrayObject.h"
 
 #include "../Components/MMeshComponent.h"
-#include "../Components/MMeshComponent.h"
+#include "../Components/MCameraComponent.h"
 #include "../Entity/MEntity.h"
 
 using namespace MG;
@@ -32,26 +32,18 @@ bool MGraphicsEngine::update()
 	getRenderSystem()->getDeviceContext()->setFaceCulling(MCullType::BackFace);
 	getRenderSystem()->getDeviceContext()->setWindingOrder(MWindingOrder::CounterClockWise);
 	
-	////
-
-	glm::vec3 Pos = glm::vec3(0.0f, 0.0f, 30.0f);
-	auto mMat = glm::translate(glm::mat4(1.0f), Pos);
-
-	glm::vec3 cameraPos = mMat[3];
-	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-
-	auto vMat = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-
+	UniformData data = {};
+	
 	int width = 0;
 	int height = 0;
 	glfwGetFramebufferSize(getRenderSystem()->getDeviceContext()->getWindow(), &width, &height);
-	auto aspect = (float)width / (float)height;
-	auto pMat = glm::perspective(1.3f, aspect, 0.1f, 1000.0f);
 	
-	//
-	UniformData data = { glm::mat4(), vMat, pMat };
-	//
+	for (auto c : m_cameras)
+	{
+		c->setScreenArea({(float)width, (float)height});
+		c->getView(data.vMat);
+		c->getProjection(data.pMat);
+	}
 
 	for (auto m : m_meshes)
 	{
@@ -83,13 +75,17 @@ bool MGraphicsEngine::update()
 void MGraphicsEngine::addComponent(MComponent* component)
 {
 	if (auto c = dynamic_cast<MMeshComponent*>(component))
-		m_meshes.emplace(c);	
+		m_meshes.emplace(c);
+	else if (auto c = dynamic_cast<MCameraComponent*>(component))
+		m_cameras.emplace(c);
 }
 
 void MGraphicsEngine::removeComponent(MComponent* component)
 {
 	if (auto c = dynamic_cast<MMeshComponent*>(component))
 		m_meshes.erase(c);
+	else if (auto c = dynamic_cast<MCameraComponent*>(component))
+		m_cameras.erase(c);
 }
 
 MGraphicsEngine::~MGraphicsEngine()

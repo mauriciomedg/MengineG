@@ -17,6 +17,7 @@ namespace MG
 
 	private:
 		MyPlayer* m_player = nullptr;
+		MEntity* m_entity = nullptr;
 		f32 m_theta = 0.0f;
 	};
 }
