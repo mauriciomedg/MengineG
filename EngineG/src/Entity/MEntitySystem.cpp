@@ -1,9 +1,11 @@
 #include "MEntitySystem.h"
 #include "MEntity.h"
+#include "../MGame/MGame.h"
 
 using namespace MG;
 
-MEntitySystem::MEntitySystem()
+MEntitySystem::MEntitySystem(MGame* game)
+	: m_game(game)
 {
 	
 }
@@ -11,6 +13,11 @@ MEntitySystem::MEntitySystem()
 MEntitySystem::~MEntitySystem()
 {
 
+}
+
+MGame* MEntitySystem::getGame()
+{
+	return m_game;
 }
 
 bool MEntitySystem::createEntityInternal(MEntity* entity, size_t id)

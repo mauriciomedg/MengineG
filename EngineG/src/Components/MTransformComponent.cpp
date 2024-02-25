@@ -16,9 +16,10 @@ void MTransformComponent::setPosition(const glm::vec3& position)
 	updateWorldMat();
 }
 
-void MTransformComponent::setRotation(const glm::vec3& rotation)
+void MTransformComponent::setRotation(float angle, const glm::vec3& axis)
 {
-	m_rotation = rotation;
+	m_rotation = glm::angleAxis(angle, axis);
+	m_rotation = glm::normalize(m_rotation);
 	updateWorldMat();
 }
 
@@ -33,7 +34,7 @@ const glm::vec3& MTransformComponent::getPosition() const
 	return m_position;
 }
 
-const glm::vec3& MTransformComponent::getRotation() const
+const glm::quat& MTransformComponent::getRotation() const
 {
 	return m_rotation;
 }
@@ -55,11 +56,8 @@ const glm::mat4& MTransformComponent::getWorldMat() const
 
 void MTransformComponent::updateWorldMat()
 {
-	auto Rx = glm::rotate(glm::mat4(1.0f), m_rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-	auto Ry = glm::rotate(glm::mat4(1.0f), m_rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-	auto Rz = glm::rotate(glm::mat4(1.0f), m_rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-
+	auto R = glm::mat4(m_rotation);
 	m_worldMat = glm::translate(glm::mat4(1.0f), m_position)
-		* glm::mat4(Rz) * glm::mat4(Ry) * glm::mat4(Rx)
+		* R
 		* glm::scale(glm::mat4(1.0f), m_scale);
 }

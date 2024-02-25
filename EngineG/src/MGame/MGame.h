@@ -8,7 +8,6 @@ namespace MG
 {
 	class MGraphicsEngine;
 	class MEntitySystem;
-	class UniformData;
 	class MGame
 	{
 	public:
@@ -19,6 +18,7 @@ namespace MG
 
 		MEntitySystem* getEntitySystem();
 		MGraphicsEngine* getGraphicEngine();
+		MResourceManager* getResourceManager();
 	protected:
 		virtual void create();
 		virtual void update(f32 dt) {};
@@ -36,15 +36,11 @@ namespace MG
 		std::unique_ptr<MResourceManager> m_resourceManager;
 
 		//for testing		
-		f32 m_theta = 0.0f;
+		
 		//
-		MVAOSharedPtr m_vertexArrayObject;
-		MShaderProgSharedPtr m_shader;
-		MUniformBufferSharedPtr m_uniform;
-
-
-		MMeshSharedPtr m_mesh;
-		MMaterialSharedPtr m_material;
+		//MVAOSharedPtr m_vertexArrayObject;
+		//MShaderProgSharedPtr m_shader;
+		//MUniformBufferSharedPtr m_uniform;
 
 	};
 }

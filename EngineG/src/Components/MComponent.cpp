@@ -15,3 +15,13 @@ void MComponent::release()
 {
 	m_entity->removeComponent(m_id);
 }
+
+MEntity* MComponent::getEntity()
+{
+	return m_entity;
+}
+
+void MComponent::onCreateInternal()
+{
+
+}

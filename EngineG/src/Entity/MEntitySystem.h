@@ -11,7 +11,7 @@ namespace MG
 	class MEntitySystem
 	{
 	public:
-		MEntitySystem();
+		MEntitySystem(MGame* game);
 		~MEntitySystem();
 
 		template<typename T>
@@ -26,6 +26,7 @@ namespace MG
 			return nullptr;
 		}
 
+		MGame* getGame();
 	private:
 		bool createEntityInternal(MEntity* entity, size_t id);
 		void removeEntity(MEntity* entity);
@@ -34,6 +35,7 @@ namespace MG
 	private:
 		std::map<size_t, std::map<MEntity*, std::unique_ptr<MEntity>>> m_entities;
 		std::set<MEntity*> m_entitiesToDestroy;
+		MGame* m_game = nullptr;
 
 		friend class MEntity;
 		friend class MGame;

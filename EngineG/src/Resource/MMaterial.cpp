@@ -19,6 +19,7 @@ MMaterial::MMaterial(const char* file_path1, const char* file_path2, MResourceMa
 {
 	auto renderSystem = resourceManager->getMGame()->getGraphicEngine()->getRenderSystem();
 	m_shader = renderSystem->createShaderProgram({ file_path1, file_path2 });
+	addUniform("UniformData", sizeof(UniformData), 0);
 }
 
 MShaderProgSharedPtr& MG::MMaterial::getShaderProgram()
@@ -26,32 +27,41 @@ MShaderProgSharedPtr& MG::MMaterial::getShaderProgram()
 	return m_shader;
 }
 
-void MMaterial::addUniform(const MUniformBufferSharedPtr& uniform)
+void MMaterial::addUniform(const std::string& name, ui32 size, ui32 slot)
 {
-	m_uniform = uniform;
+	auto renderSystem = m_resourceManager->getMGame()->getGraphicEngine()->getRenderSystem();
+
+	auto uniform = renderSystem->createUniformBuffer(
+		{
+			size
+		}
+	);
+
+	m_uniforms.insert(std::make_pair(name, uniform));
+	setUniformSlot(name.c_str(), slot);
 }
 
 void MG::MMaterial::addTexture(const MTextureSharedPtr& texture)
 {
-	m_texture = texture;
+	m_textures.push_back(texture);
 }
 
 void MMaterial::setUniformSlot(const char* name, ui32 slot)
 {
-	m_shader.get()->setUniformBufferSlot("UniformData", 0);
+	m_shader.get()->setUniformBufferSlot(name, slot);
 }
 
-void MMaterial::setUniformData(void* data)
+void MMaterial::setUniformData(const std::string& name, void* data)
 {
-	m_uniform.get()->setData(data);
+	m_uniforms[name].get()->setData(data);
 }
 
-const MUniformBufferSharedPtr& MMaterial::getUniform() const
+const MUniformBufferSharedPtr& MMaterial::getUniform(const std::string& name)
 {
-	return m_uniform;
+	return m_uniforms[name];
 }
 
 const MTexture2DSharedPtr& MMaterial::getTexture() const
 {
-	return m_texture.get()->getTexture();
+	return m_textures[0].get()->getTexture();
 }

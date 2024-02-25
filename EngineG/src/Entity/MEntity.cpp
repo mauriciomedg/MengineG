@@ -36,6 +36,8 @@ void MEntity::createComponentInternal(MComponent* component, size_t id)
 
 	component->m_id = id;
 	component->m_entity = this;
+
+	component->onCreateInternal();
 }
 
 MComponent* MEntity::getComponentInternal(size_t id)

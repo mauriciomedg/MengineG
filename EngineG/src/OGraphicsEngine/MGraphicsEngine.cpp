@@ -13,6 +13,10 @@
 
 #include "RenderSystem/MVertexArrayObject.h"
 
+#include "../Components/MMeshComponent.h"
+#include "../Components/MMeshComponent.h"
+#include "../Entity/MEntity.h"
+
 using namespace MG;
 
 MGraphicsEngine::MGraphicsEngine()
@@ -20,7 +24,7 @@ MGraphicsEngine::MGraphicsEngine()
 	m_renderSystem = std::make_unique<MRenderSystem>();
 }
 
-bool MGraphicsEngine::update(const MeshData& meshData)
+bool MGraphicsEngine::update()
 {
 	if (getRenderSystem()->getDeviceContext()->shouldCloseWindow()) return false;
 
@@ -42,29 +46,50 @@ bool MGraphicsEngine::update(const MeshData& meshData)
 	int width = 0;
 	int height = 0;
 	glfwGetFramebufferSize(getRenderSystem()->getDeviceContext()->getWindow(), &width, &height);
-	auto aspect = (float)width / (float)height; // new width&height provided by the callback
+	auto aspect = (float)width / (float)height;
 	auto pMat = glm::perspective(1.3f, aspect, 0.1f, 1000.0f);
 	
-	////
+	//
+	UniformData data = { glm::mat4(), vMat, pMat };
+	//
 
+	for (auto m : m_meshes)
+	{
+		auto transform = m->getEntity()->getTransform();
+		data.world = transform->getWorldMat();
 
-	auto R = glm::rotate(glm::mat4(1.0f), meshData.m_theta, glm::normalize(glm::vec3(1.0f, 1.0f, 1.0f)));
-	glm::mat4 world = glm::mat4(R);
-	UniformData data = { world, vMat, pMat };
+		auto mesh = m->getMesh().get();
+		const auto materials = m->getMaterials();
 
-	meshData.material.get()->setUniformData(&data);
+		getRenderSystem()->getDeviceContext()->setVextexArrayObject(mesh->getVertexArrayObject());
 
-	getRenderSystem()->getDeviceContext()->setVextexArrayObject(meshData.mesh.get()->getVertexArrayObject());
-	getRenderSystem()->getDeviceContext()->setTexture2D(meshData.material.get()->getTexture());
-	getRenderSystem()->getDeviceContext()->setUniformBuffer(meshData.material.get()->getUniform(), 0);
-	getRenderSystem()->getDeviceContext()->setShaderProgram(meshData.material.get()->getShaderProgram());
-	
-	//getRenderSystem()->getDeviceContext()->drawIndexedTriangles(MTriangleType::TriangleList, meshData.mesh.get()->getVertexArrayObject()->getElementBufferSize() / sizeof(int));
-	getRenderSystem()->getDeviceContext()->drawTriangles(MTriangleType::TriangleList, meshData.mesh.get()->getVertexArrayObject()->getVertexBufferSize(), 0);
+		for (auto materialPtr : materials)
+		{
+			auto material = materialPtr.get();
+			getRenderSystem()->getDeviceContext()->setTexture2D(material->getTexture());
+			getRenderSystem()->getDeviceContext()->setUniformBuffer(material->getUniform("UniformData"), 0);
+			getRenderSystem()->getDeviceContext()->setShaderProgram(material->getShaderProgram());
+			material->setUniformData("UniformData", &data);
+
+			getRenderSystem()->getDeviceContext()->drawTriangles(MTriangleType::TriangleList, mesh->getVertexArrayObject()->getVertexBufferSize(), 0);
+		}
+	}
 
 	getRenderSystem()->getDeviceContext()->swapBuffer();
 
 	return true;
+}
+
+void MGraphicsEngine::addComponent(MComponent* component)
+{
+	if (auto c = dynamic_cast<MMeshComponent*>(component))
+		m_meshes.emplace(c);	
+}
+
+void MGraphicsEngine::removeComponent(MComponent* component)
+{
+	if (auto c = dynamic_cast<MMeshComponent*>(component))
+		m_meshes.erase(c);
 }
 
 MGraphicsEngine::~MGraphicsEngine()

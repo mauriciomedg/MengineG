@@ -11,7 +11,7 @@ namespace MG
 		MResource(const char* file_path, MResourceManager* resourceManager);
 		virtual ~MResource();
 
-	private:
+	protected:
 		MResourceManager* m_resourceManager = nullptr;
 		std::string m_full_path;
 	};

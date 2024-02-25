@@ -24,7 +24,10 @@ namespace MG
 
 	class MComponent;
 	class MTransformComponent;
+	class MMeshComponent;
 	class MEntity;
+
+	class MGame;
 
 	typedef std::shared_ptr<MVertexArrayObject> MVAOSharedPtr;
 	typedef std::shared_ptr<MUniformBuffer> MUniformBufferSharedPtr;
@@ -32,6 +35,7 @@ namespace MG
 	typedef std::shared_ptr<MDeviceContext> MDeviceContextSharedPtr;
 	typedef std::shared_ptr<MTexture2D> MTexture2DSharedPtr;
 	
+	// resources
 	typedef std::shared_ptr<MResource> MResourceSharedPtr;
 	typedef std::shared_ptr<MTexture> MTextureSharedPtr;
 	typedef std::shared_ptr<MMaterial> MMaterialSharedPtr;

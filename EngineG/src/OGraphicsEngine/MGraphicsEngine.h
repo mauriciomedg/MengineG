@@ -1,23 +1,10 @@
 #pragma once
 #include "MPrerequisites.h"
 #include "RenderSystem/MRenderSystem.h"
+#include <set>
 
 namespace MG
 {
-	struct MeshData
-	{
-		MMeshSharedPtr mesh;
-		MMaterialSharedPtr material;
-		float m_theta;
-	};
-
-	struct UniformData
-	{
-		glm::mat4 world;
-		glm::mat4 vMat;
-		glm::mat4 pMat;
-	};
-
 	class MGraphicsEngine
 	{
 	public:
@@ -27,9 +14,15 @@ namespace MG
 
 		MRenderSystem* getRenderSystem();
 
-		bool update(const MeshData& meshData);
+		bool update();
+
+		void addComponent(MComponent* component);
+		void removeComponent(MComponent* component);
+
 	private:
 		
 		std::unique_ptr<MRenderSystem> m_renderSystem;
+
+		std::set<MMeshComponent*> m_meshes;
 	};
 }
