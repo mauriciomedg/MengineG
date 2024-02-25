@@ -1,16 +1,10 @@
 #include "MGame.h"
 #include "../OGraphicsEngine/MGraphicsEngine.h"
 #include "../Entity/MEntitySystem.h"
-#include "../OGraphicsEngine/RenderSystem/MVertexArrayObject.h"
-#include "../OGraphicsEngine/RenderSystem/MShaderProgram.h"
-#include "../OGraphicsEngine/RenderSystem/MUniformBuffer.h"
 #include "../OGraphicsEngine/RenderSystem/MDeviceContext.h"
-#include "../Resource/MResourceManager.h"
 
-// to remove
-#include "../Resource/MMesh.h"
-#include "../Resource/MMaterial.h"
-#include "../Resource/MTexture.h"
+#include "../Inputs/InputSystem.h"
+#include "../Resource/MResourceManager.h"
 
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -65,6 +59,8 @@ void MGame::updateInternal()
 		float dt = deltaTime.calculate();
 		dt = 0.016;
 		//
+		InputSystem::get().update(m_graphicEngine->getRenderSystem()->getDeviceContext()->getWindow());
+		
 		update(dt);
 		m_entitySystem->update(dt);
 		m_isRunning = m_graphicEngine->update();

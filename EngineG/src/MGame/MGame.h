@@ -21,7 +21,7 @@ namespace MG
 		MResourceManager* getResourceManager();
 	protected:
 		virtual void create();
-		virtual void update(f32 dt) {};
+		virtual void update(f32 dt) = 0;
 		virtual void quit();
 
 	private:

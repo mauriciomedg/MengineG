@@ -3,6 +3,7 @@
 #include "Entity/MEntity.h"
 #include "Entity/MEntitySystem.h"
 #include "MGame/MGame.h"
+#include "Inputs/InputSystem.h"
 #include "Components/MComponent.h"
 #include "Components/MTransformComponent.h"
 #include "Components/MMeshComponent.h"

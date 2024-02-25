@@ -9,17 +9,17 @@ struct GLFWwindow;
 namespace MG
 {
 
-	class Inputs
+	class InputSystem
 	{
 	public:
 
-		static Inputs& get() {
-			static Inputs instance;
+		static InputSystem& get() {
+			static InputSystem instance;
 			bindConversion();
 			return instance;
 		}
 
-		~Inputs() {};
+		~InputSystem() {};
 
 		//template <class T, typename s = void (T::*)(float)>
 		//void addBinding(std::string axisName, s a, T* obj)
@@ -40,19 +40,29 @@ namespace MG
 			m_InputsMapped[m_conversion[key]] = std::make_tuple(axisName, value);
 		}
 
+		void mapMouseInput(std::string axisName, std::string key, float value)
+		{
+			m_MouseInputsMapped[m_mouse_conversion[key]] = std::make_tuple(axisName, value);
+		}
+
 	private:
 
-		Inputs();
-		Inputs(const Inputs&) {};
+		InputSystem();
+		InputSystem(const InputSystem&) {};
 
 	public:
 		void init() {};
 		void update(GLFWwindow* window);
 	private:
 		static std::map<std::string, int> m_conversion;
+		static std::map<std::string, std::string> m_mouse_conversion;
 		static void bindConversion();
 		std::map<std::string, delegate> m_bindings;
 		std::map<int, std::tuple<std::string, float>> m_InputsMapped;
+		std::map<std::string, std::tuple<std::string, float>> m_MouseInputsMapped;
+
+		double m_mouseX = 0.0; 
+		double m_mouseY = 0.0;
 	};
 }
 

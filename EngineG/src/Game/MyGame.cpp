@@ -1,5 +1,6 @@
 #include "MyGame.h"
 #include "MyPlayer.h"
+#include "../Inputs/InputSystem.h"
 #include <iostream>
 
 using namespace MG;
@@ -133,12 +134,17 @@ void MyGame::create()
 	meshComponent->addMaterial(material);
 
 	m_player = getEntitySystem()->createEntity<MyPlayer>();
+
+	InputSystem::get().mapInput("MoveForwardCamera", "w", 1.0f);
+	InputSystem::get().mapInput("MoveBackwardCamera", "s", -1.0f);
+	InputSystem::get().mapInput("MoveLeftCamera", "a", -1.0f);
+	InputSystem::get().mapInput("MoveRightCamera", "d", 1.0f);
+	InputSystem::get().mapMouseInput("MouseX", "mX", 1.0f);
+	InputSystem::get().mapMouseInput("MouseY", "mY", 1.0f);
 }
 
 void MyGame::update(f32 dt)
 {
-	MGame::update(dt);
-
 	m_theta += 1.0 * dt;
 	m_entity->getTransform()->setRotation(m_theta, glm::normalize(glm::vec3(1.0f, 1.0f, 1.0f)));
 }

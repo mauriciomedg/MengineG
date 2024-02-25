@@ -16,9 +16,10 @@ MCameraComponent::~MCameraComponent()
 
 void MCameraComponent::getView(glm::mat4& view) const
 {
-	glm::vec3 cameraPos = m_entity->getTransform()->getWorldMat()[3];
-	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+	auto matWorld = m_entity->getTransform()->getWorldMat();
+	glm::vec3 cameraPos = glm::vec3(matWorld[3]);
+	glm::vec3 cameraFront = -glm::vec3(matWorld[2]);
+	glm::vec3 cameraUp = glm::vec3(matWorld[1]);
 
 	view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 }
