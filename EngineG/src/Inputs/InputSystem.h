@@ -61,8 +61,7 @@ namespace MG
 		std::map<int, std::tuple<std::string, float>> m_InputsMapped;
 		std::map<std::string, std::tuple<std::string, float>> m_MouseInputsMapped;
 
-		double m_mouseX = 0.0; 
-		double m_mouseY = 0.0;
+		std::map<std::string, std::tuple<double, double>> m_mouseCoordScale;
 	};
 }
 

@@ -25,6 +25,8 @@ void InputSystem::bindConversion()
 
 InputSystem::InputSystem()
 {
+	m_mouseCoordScale["mX"] = std::make_tuple(0.0, 0.0);
+	m_mouseCoordScale["mY"] = std::make_tuple(0.0, 0.0);
 }
 
 struct MousePosAxis
@@ -68,6 +70,27 @@ void isMouseMove(GLFWwindow* window, MousePosAxis& mpa, double& mouseX, double& 
 	}
 }
 
+void isMouseMove(GLFWwindow* window, std::map<std::string, std::tuple<double, double>>& mouseCoordScale)
+{
+	std::string axis[] = { "mX", "mY" };
+	double pos[2];
+	glfwGetCursorPos(window, &pos[0], &pos[1]);
+
+	for (int i = 0; i < 2; ++i)
+	{
+		if (pos[i] > std::get<0>(mouseCoordScale[axis[i]]))
+		{
+			std::get<0>(mouseCoordScale[axis[i]]) = pos[i];
+			std::get<1>(mouseCoordScale[axis[i]]) = 1.0;
+		}
+		else if (pos[i] < std::get<0>(mouseCoordScale[axis[i]]))
+		{
+			std::get<0>(mouseCoordScale[axis[i]]) = pos[i];
+			std::get<1>(mouseCoordScale[axis[i]]) = -1.0;
+		}
+	}
+}
+
 void InputSystem::update(GLFWwindow* window)
 {
 	//https://www.glfw.org/docs/3.3/input_guide.html
@@ -87,32 +110,21 @@ void InputSystem::update(GLFWwindow* window)
 		}
 	}
 
-
-	std::map<std::string, std::tuple<std::string, float>>::iterator ittMouse;
+	isMouseMove(window, m_mouseCoordScale);
 	
-	MousePosAxis mpa = {};
-	isMouseMove(window, mpa, m_mouseX, m_mouseY);//glfwGetKey(window, itt->first);
-
-
+	std::map<std::string, std::tuple<std::string, float>>::iterator ittMouse;
 	for (ittMouse = m_MouseInputsMapped.begin(); ittMouse != m_MouseInputsMapped.end(); ++ittMouse)
 	{
-		if (mpa.x == ittMouse->first)
-		{
-			auto& axisNameVal = ittMouse->second;
-			auto itt_binding = m_bindings.find(std::get<0>(axisNameVal));
-			if (itt_binding != m_bindings.end())
-			{
-				itt_binding->second(std::get<1>(axisNameVal) * mpa.scaleX);
-			}
-		}
+		auto ittCoord = m_mouseCoordScale.find(ittMouse->first);
 
-		if (mpa.y == ittMouse->first)
+		if (ittCoord != m_mouseCoordScale.end() && std::get<1>(ittCoord->second) != 0.0)
 		{
 			auto& axisNameVal = ittMouse->second;
 			auto itt_binding = m_bindings.find(std::get<0>(axisNameVal));
 			if (itt_binding != m_bindings.end())
 			{
-				itt_binding->second(std::get<1>(axisNameVal) * mpa.scaleY);
+				itt_binding->second(std::get<1>(axisNameVal) * std::get<1>(ittCoord->second));
+				std::get<1>(ittCoord->second) = 0.0;
 			}
 		}
 	}
