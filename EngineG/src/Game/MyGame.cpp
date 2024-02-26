@@ -3,6 +3,10 @@
 #include "../Inputs/InputSystem.h"
 #include <iostream>
 
+#include <GLFW/glfw3.h>
+#include "../OGraphicsEngine/MGraphicsEngine.h"
+#include "../OGraphicsEngine/RenderSystem/MDeviceContext.h"
+
 using namespace MG;
 
 MyGame::MyGame()
@@ -141,12 +145,16 @@ void MyGame::create()
 	InputSystem::get().mapInput("MoveRightCamera", "d", 1.0f);
 	InputSystem::get().mapMouseInput("MouseX", "mX", 1.0f);
 	InputSystem::get().mapMouseInput("MouseY", "mY", 1.0f);
+
+	auto window = m_graphicEngine->getRenderSystem()->getDeviceContext()->getWindow();
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 }
 
 void MyGame::update(f32 dt)
 {
 	m_theta += 1.0 * dt;
-	m_entity->getTransform()->setRotation(m_theta, glm::normalize(glm::vec3(1.0f, 1.0f, 1.0f)));
+	//m_entity->getTransform()->setRotation(m_theta, glm::normalize(glm::vec3(1.0f, 1.0f, 1.0f)));
 }
 
 void MyGame::quit()

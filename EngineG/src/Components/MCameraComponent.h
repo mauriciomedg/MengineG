@@ -40,6 +40,7 @@ namespace MG
 		const glm::vec3& getLookAt() const;
 		const glm::vec3& getSide() const;
 
+		void setReadInput(bool readInput);
 	protected:
 		virtual void onCreateInternal() override;
 
@@ -59,6 +60,7 @@ namespace MG
 		glm::vec3 m_cameraUp;
 		glm::vec3 m_cameraFront;
 
+		bool m_readInput = false;
 		
 	};
 }

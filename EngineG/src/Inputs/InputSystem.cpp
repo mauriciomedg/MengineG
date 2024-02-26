@@ -29,47 +29,6 @@ InputSystem::InputSystem()
 	m_mouseCoordScale["mY"] = std::make_tuple(0.0, 0.0);
 }
 
-struct MousePosAxis
-{
-	std::string x;
-	std::string y;
-	double scaleX;
-	double scaleY;
-};
-
-void isMouseMove(GLFWwindow* window, MousePosAxis& mpa, double& mouseX, double& mouseY)
-{
-
-	double xpos, ypos;
-	glfwGetCursorPos(window, &xpos, &ypos);
-
-	if (xpos > mouseX)
-	{
-		mouseX = xpos;
-		mpa.scaleX = 1.0;
-		mpa.x = std::string("mX");
-	}
-	else if (xpos < mouseX)
-	{
-		mouseX = xpos;
-		mpa.scaleX = -1.0;
-		mpa.x = std::string("mX");
-	}
-
-	if (ypos > mouseY)
-	{
-		mouseY = ypos;
-		mpa.scaleY = 1.0;
-		mpa.y = std::string("mY");
-	}
-	else if (ypos < mouseY)
-	{
-		mouseY = ypos;
-		mpa.scaleY = -1.0;
-		mpa.y = std::string("mY");
-	}
-}
-
 void isMouseMove(GLFWwindow* window, std::map<std::string, std::tuple<double, double>>& mouseCoordScale)
 {
 	std::string axis[] = { "mX", "mY" };

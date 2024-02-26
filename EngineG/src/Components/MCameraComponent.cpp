@@ -91,15 +91,27 @@ void MCameraComponent::computeProjection()
 
 void MCameraComponent::rotateCameraPitch(float delta)
 {
-	auto R = glm::rotate(glm::mat4(1.0f), delta, glm::normalize(m_cameraSide));
-	m_cameraFront = glm::mat3(R) * m_cameraFront;
+	if (!m_readInput) return;
 
-	m_cameraSide = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), -m_cameraFront));
-	m_cameraUp = glm::normalize(glm::cross(-m_cameraFront, m_cameraSide));
+	auto R = glm::rotate(glm::mat4(1.0f), delta, glm::normalize(m_cameraSide));
+	
+	auto cameraFront = glm::mat3(R) * m_cameraFront;
+
+	auto frontDotUp = glm::dot(-cameraFront, glm::vec3(0.0f, 1.0f, 0.0f));
+
+	if (frontDotUp > -0.7071 && frontDotUp < 0.7071)
+	{
+		m_cameraFront = glm::mat3(R) * m_cameraFront;
+
+		m_cameraSide = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), -m_cameraFront));
+		m_cameraUp = glm::normalize(glm::cross(-m_cameraFront, m_cameraSide));
+	}
 }
 
 void MCameraComponent::rotateCameraYaw(float delta)
 {
+	if (!m_readInput) return;
+
 	auto R = glm::rotate(glm::mat4(1.0f), delta, glm::vec3(0.0f, 1.0f, 0.0f));
 	m_cameraFront = glm::mat3(R) * m_cameraFront;
 
@@ -115,6 +127,11 @@ void MCameraComponent::onCreateInternal()
 const glm::vec3& MCameraComponent::getLookAt() const
 {
 	return m_cameraFront;
+}
+
+void MG::MCameraComponent::setReadInput(bool readInput)
+{
+	m_readInput = readInput;
 }
 
 const glm::vec3& MCameraComponent::getSide() const

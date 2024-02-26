@@ -25,6 +25,8 @@ void MyPlayer::create()
 void MyPlayer::update(f32 dt)
 {
 	MEntity::update(dt);
+	m_camera->setReadInput(true);
+
 }
 
 void MyPlayer::bindAxis()
@@ -51,16 +53,18 @@ void MyPlayer::moveSide(float val)
 	const auto& side = m_camera->getSide();
 
 	auto worldMat = getTransform()->getWorldMat();
-	worldMat = glm::translate(worldMat, glm::normalize(side) * -1.0f * val);
+	worldMat = glm::translate(worldMat, glm::normalize(side) * 1.0f * val);
 	getTransform()->setWorldMat(worldMat);
 }
 
 void MyPlayer::mouseX(float delta)
 {
+	//std::cout << "X " << delta << std::endl;
 	m_camera->rotateCameraYaw(delta * 0.005f);
 }
 
 void MyPlayer::mouseY(float delta)
 {
+	//std::cout << "Y " << delta << std::endl;
 	m_camera->rotateCameraPitch(delta * 0.005f);
 }
