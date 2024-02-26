@@ -2,11 +2,15 @@
 #include "MTransformComponent.h"
 #include "../Entity/MEntity.h"
 
+#include <iostream>
+
 using namespace MG;
 
 MCameraComponent::MCameraComponent()
 {
-
+	m_cameraSide = glm::vec3(1.0f, 0.0f, 0.0f);
+	m_cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+	m_cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 }
 
 MCameraComponent::~MCameraComponent()
@@ -17,11 +21,8 @@ MCameraComponent::~MCameraComponent()
 void MCameraComponent::getView(glm::mat4& view) const
 {
 	auto matWorld = m_entity->getTransform()->getWorldMat();
-	glm::vec3 cameraPos = glm::vec3(matWorld[3]);
-	glm::vec3 cameraFront = -glm::vec3(matWorld[2]);
-	glm::vec3 cameraUp = glm::vec3(matWorld[1]);
-
-	view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+	glm::vec3 cameraPos = glm::vec3(matWorld[3]);	
+	view = glm::lookAt(cameraPos, cameraPos + m_cameraFront, m_cameraUp);
 }
 
 void MCameraComponent::getProjection(glm::mat4& projection) const
@@ -88,7 +89,35 @@ void MCameraComponent::computeProjection()
 	}
 }
 
+void MCameraComponent::rotateCameraPitch(float delta)
+{
+	auto R = glm::rotate(glm::mat4(1.0f), delta, glm::normalize(m_cameraSide));
+	m_cameraFront = glm::mat3(R) * m_cameraFront;
+
+	m_cameraSide = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), -m_cameraFront));
+	m_cameraUp = glm::normalize(glm::cross(-m_cameraFront, m_cameraSide));
+}
+
+void MCameraComponent::rotateCameraYaw(float delta)
+{
+	auto R = glm::rotate(glm::mat4(1.0f), delta, glm::vec3(0.0f, 1.0f, 0.0f));
+	m_cameraFront = glm::mat3(R) * m_cameraFront;
+
+	m_cameraSide = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), -m_cameraFront));
+	m_cameraUp = glm::normalize(glm::cross(-m_cameraFront, m_cameraSide));
+}
+
 void MCameraComponent::onCreateInternal()
 {
 	m_entity->getEntitySystem()->getGame()->getGraphicEngine()->addComponent(this);
+}
+
+const glm::vec3& MCameraComponent::getLookAt() const
+{
+	return m_cameraFront;
+}
+
+const glm::vec3& MCameraComponent::getSide() const
+{
+	return m_cameraSide;
 }

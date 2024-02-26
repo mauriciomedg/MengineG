@@ -30,7 +30,7 @@ void MTransformComponent::setScale(const glm::vec3& scale)
 
 const glm::vec3& MTransformComponent::getPosition() const
 {
-	return m_position;
+	return m_worldMat[3];
 }
 
 const glm::quat& MTransformComponent::getRotation() const
@@ -46,6 +46,13 @@ const glm::vec3& MTransformComponent::getScale() const
 void MTransformComponent::setWorldMat(const glm::mat4& worldMat)
 {
 	m_worldMat = worldMat;
+
+	m_position = m_worldMat[3];
+	m_rotation = glm::quat(m_worldMat);
+	m_scale = glm::vec3(
+		glm::length(m_worldMat[0]),
+		glm::length(m_worldMat[1]),
+		glm::length(m_worldMat[2]));
 }
 
 const glm::mat4& MTransformComponent::getWorldMat() const

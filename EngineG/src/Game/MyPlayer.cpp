@@ -16,7 +16,7 @@ MyPlayer::~MyPlayer()
 void MyPlayer::create()
 {
 	MEntity::create();
-	createComponent<MCameraComponent>();
+	m_camera = createComponent<MCameraComponent>();
 	getTransform()->setPosition(glm::vec3(0.0f, 0.0f, 30.0f));
 
 	bindAxis();
@@ -25,8 +25,6 @@ void MyPlayer::create()
 void MyPlayer::update(f32 dt)
 {
 	MEntity::update(dt);
-
-
 }
 
 void MyPlayer::bindAxis()
@@ -41,26 +39,28 @@ void MyPlayer::bindAxis()
 
 void MyPlayer::moveForward(float val)
 {
+	const auto& cameraFront = m_camera->getLookAt();
+
 	auto worldMat = getTransform()->getWorldMat();
-	auto pos = glm::vec3(worldMat[3]);
-	pos += -glm::vec3(worldMat[2]) * 1.0f * val;
-	getTransform()->setPosition(pos);
+	worldMat = glm::translate(worldMat, glm::normalize(cameraFront) * 1.0f * val);
+	getTransform()->setWorldMat(worldMat);
 }
 
 void MyPlayer::moveSide(float val)
 {
+	const auto& side = m_camera->getSide();
+
 	auto worldMat = getTransform()->getWorldMat();
-	auto pos = glm::vec3(worldMat[3]);
-	pos += glm::vec3(worldMat[0]) * 1.0f * val;
-	getTransform()->setPosition(pos);
+	worldMat = glm::translate(worldMat, glm::normalize(side) * -1.0f * val);
+	getTransform()->setWorldMat(worldMat);
 }
 
-void MyPlayer::mouseX(float val)
+void MyPlayer::mouseX(float delta)
 {
-	std::cout << "x " << val << std::endl;
+	m_camera->rotateCameraYaw(delta * 0.005f);
 }
 
-void MyPlayer::mouseY(float val)
+void MyPlayer::mouseY(float delta)
 {
-	std::cout << "y " << val << std::endl;
+	m_camera->rotateCameraPitch(delta * 0.005f);
 }

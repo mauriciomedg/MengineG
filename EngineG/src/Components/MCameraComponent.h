@@ -4,6 +4,7 @@
 #include "../AllMHeaders.h"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace MG
 {
@@ -33,20 +34,31 @@ namespace MG
 		f32 getFieldOfView() const;
 		MCameraType getType();
 
+		void rotateCameraPitch(float delta);
+		void rotateCameraYaw(float delta);
+
+		const glm::vec3& getLookAt() const;
+		const glm::vec3& getSide() const;
+
 	protected:
 		virtual void onCreateInternal() override;
-		//virtual void update(f32 dt) {}
 
 	private:
 		void computeProjection();
 	private:
 
 		glm::mat4 m_projection;
-
+		
 		f32 m_nearPlane = 0.01f;
-		f32 m_farPlane = 100.0f;
+		f32 m_farPlane = 1000.0f;
 		f32 m_fieldOfView = 1.3f;
 		MRect m_screenArea = {};
 		MCameraType m_type = MCameraType::Perspective;
+
+		glm::vec3 m_cameraSide;
+		glm::vec3 m_cameraUp;
+		glm::vec3 m_cameraFront;
+
+		
 	};
 }

@@ -78,15 +78,10 @@ void isMouseMove(GLFWwindow* window, std::map<std::string, std::tuple<double, do
 
 	for (int i = 0; i < 2; ++i)
 	{
-		if (pos[i] > std::get<0>(mouseCoordScale[axis[i]]))
+		if (pos[i] != std::get<0>(mouseCoordScale[axis[i]]))
 		{
+			std::get<1>(mouseCoordScale[axis[i]]) = pos[i] - std::get<0>(mouseCoordScale[axis[i]]);
 			std::get<0>(mouseCoordScale[axis[i]]) = pos[i];
-			std::get<1>(mouseCoordScale[axis[i]]) = 1.0;
-		}
-		else if (pos[i] < std::get<0>(mouseCoordScale[axis[i]]))
-		{
-			std::get<0>(mouseCoordScale[axis[i]]) = pos[i];
-			std::get<1>(mouseCoordScale[axis[i]]) = -1.0;
 		}
 	}
 }
