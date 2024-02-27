@@ -45,6 +45,7 @@ namespace MG
 			m_MouseInputsMapped[m_mouse_conversion[key]] = std::make_tuple(axisName, value);
 		}
 
+		void disableCursor(GLFWwindow* window, bool disableCursor);
 	private:
 
 		InputSystem();

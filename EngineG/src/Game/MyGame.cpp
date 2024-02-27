@@ -147,7 +147,7 @@ void MyGame::create()
 	InputSystem::get().mapMouseInput("MouseY", "mY", 1.0f);
 
 	auto window = m_graphicEngine->getRenderSystem()->getDeviceContext()->getWindow();
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	InputSystem::get().disableCursor(window, true);
 
 }
 

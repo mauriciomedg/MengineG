@@ -23,6 +23,12 @@ void InputSystem::bindConversion()
 	m_mouse_conversion["mY"] = "mY";
 }
 
+void MG::InputSystem::disableCursor(GLFWwindow* window, bool disableCursor)
+{
+	if (disableCursor)
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+}
+
 InputSystem::InputSystem()
 {
 	m_mouseCoordScale["mX"] = std::make_tuple(0.0, 0.0);
