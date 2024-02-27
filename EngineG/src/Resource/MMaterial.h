@@ -27,6 +27,12 @@ namespace MG
 		const MUniformBufferSharedPtr& getUniform(const std::string& name);
 		const MTexture2DSharedPtr& getTexture() const;
 
+		void setCullType(const MCullType cullType);
+		void setWindingOrder(const MWindingOrder windingOrder);
+
+		MCullType getCullType() const;
+		MWindingOrder getWindingOrder() const;
+
 	private:
 		void setUniformSlot(const char* name, ui32 slot);
 
@@ -34,5 +40,7 @@ namespace MG
 		MShaderProgSharedPtr m_shader;
 		std::map<std::string, MUniformBufferSharedPtr> m_uniforms;
 		std::vector<MTextureSharedPtr> m_textures;
+		MCullType m_cullType = MCullType::BackFace;
+		MWindingOrder m_windingOrder = MWindingOrder::CounterClockWise;
 	};
 }

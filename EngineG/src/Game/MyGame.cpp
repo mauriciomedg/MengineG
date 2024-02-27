@@ -24,120 +24,34 @@ void MyGame::create()
 	MGame::create();
 
 	auto mesh = getResourceManager()->createResourceFromFile<MMesh>("models/BlockModel3.obj");
-	auto texture = getResourceManager()->createResourceFromFile<MTexture>("textures/block.png");
+	auto terrain = getResourceManager()->createResourceFromFile<MMesh>("models/floor.obj");
+
+	auto texture = getResourceManager()->createResourceFromFile<MTexture>("textures/wood.png");
+	auto terrainTexture = getResourceManager()->createResourceFromFile<MTexture>("textures/terrain.png");
+	
 	auto material = getResourceManager()->createResourceFromFile<MMaterial>("shaders/basicVertShader.glsl", "shaders/basicFragShader.glsl");
 	material->addTexture(texture);
-	//const glm::vec3 positionsList[] = {
-	//	glm::vec3(-0.5f, -0.5f, -0.5f),
-	//	glm::vec3(-0.5f, 0.5f, -0.5f),
-	//	glm::vec3(0.5f, 0.5f, -0.5f),
-	//	glm::vec3(0.5f, -0.5f, -0.5f),
-	//
-	//	glm::vec3(0.5f, -0.5f, 0.5f),
-	//	glm::vec3(0.5f, 0.5f, 0.5f),
-	//	glm::vec3(-0.5f, 0.5f, 0.5f),
-	//	glm::vec3(-0.5f, -0.5f, 0.5f)
-	//};
-	//
-	//glm::vec2 texCoordsList[]
-	//{
-	//	glm::vec2(0, 0),
-	//	glm::vec2(0, 1),
-	//	glm::vec2(1, 0),
-	//	glm::vec2(1, 1)
-	//};
-	//
-	//std::vector<VertexMesh> verticesList =
-	//{
-	//	//front
-	//	{ positionsList[0], texCoordsList[1] },
-	//	{ positionsList[1], texCoordsList[0] },
-	//	{ positionsList[2], texCoordsList[2] },
-	//	{ positionsList[3], texCoordsList[3] },
-	//
-	//	//back
-	//	{ positionsList[4], texCoordsList[1] },
-	//	{ positionsList[5], texCoordsList[0] },
-	//	{ positionsList[6], texCoordsList[2] },
-	//	{ positionsList[7], texCoordsList[3] },
-	//
-	//	//top
-	//	{ positionsList[1], texCoordsList[1] },
-	//	{ positionsList[6], texCoordsList[0] },
-	//	{ positionsList[5], texCoordsList[2] },
-	//	{ positionsList[2], texCoordsList[3] },
-	//	
-	//	// bottom
-	//	{ positionsList[7], texCoordsList[1] },
-	//	{ positionsList[0], texCoordsList[0] },
-	//	{ positionsList[3], texCoordsList[2] },
-	//	{ positionsList[4], texCoordsList[3] },
-	//
-	//	// right
-	//	{ positionsList[3], texCoordsList[1] },
-	//	{ positionsList[2], texCoordsList[0] },
-	//	{ positionsList[5], texCoordsList[2] },
-	//	{ positionsList[4], texCoordsList[3] },
-	//
-	//	// left
-	//	{ positionsList[7], texCoordsList[1] },
-	//	{ positionsList[6], texCoordsList[0] },
-	//	{ positionsList[1], texCoordsList[2] },
-	//	{ positionsList[0], texCoordsList[3] }
-	//};
-	//
-	//ui32 indicesList[] = {
-	//	0, 1, 2,
-	//	2, 3, 0,
-	//
-	//	4, 5, 6,
-	//	6, 7, 4,
-	//
-	//	8, 9, 10,
-	//	10, 11, 8,
-	//
-	//	12, 13, 14,
-	//	14, 15, 12,
-	//
-	//	16, 17, 18,
-	//	18, 19, 16,
-	//
-	//	20, 21, 22,
-	//	22, 23, 20
-	//};
-	//
-	//MVertexAtrribute attributeList[] =
-	//{
-	//	sizeof(glm::vec3) / sizeof(f32), // pos
-	//	sizeof(glm::vec2) / sizeof(f32) // text coord
-	//};
-	//
-	//m_vertexArrayObject = m_graphicEngine->getRenderSystem()->createVextexArrayObject(
-	//	{(void*)(&verticesList[0]),
-	//	sizeof(VertexMesh),
-	//	(ui32)verticesList.size(),
-	//
-	//	attributeList,
-	//	sizeof(attributeList) / (sizeof(MVertexAtrribute)),
-	//	},
-	//
-	//	{
-	//		(void*)indicesList,
-	//		sizeof(indicesList)
-	//	}
-	//);
-	//
 	
+	auto terrainMaterial = getResourceManager()->createResourceFromFile<MMaterial>("shaders/basicVertShader.glsl", "shaders/basicFragShader.glsl");
+	terrainMaterial->addTexture(terrainTexture);
 
-	//material->addUniform("UniformData", sizeof(UniformData), 0);
+	{
+		m_entity = getEntitySystem()->createEntity<MEntity>();
+		m_entity->getTransform()->setPosition(glm::vec3(0.0f, 6.0f, 0.0f));
+		auto meshComponent = m_entity->createComponent<MMeshComponent>();
+		meshComponent->setMesh(mesh);
+		meshComponent->addMaterial(material);
+	}
 	
-	m_entity = getEntitySystem()->createEntity<MEntity>();
-	
-	auto meshComponent = m_entity->createComponent<MMeshComponent>();
-	meshComponent->setMesh(mesh);
-	meshComponent->addMaterial(material);
+	{
+		auto terrainEntity = getEntitySystem()->createEntity<MEntity>();
+		auto meshComponentTerrain = terrainEntity->createComponent<MMeshComponent>();
+		meshComponentTerrain->setMesh(terrain);
+		meshComponentTerrain->addMaterial(terrainMaterial);
+	}
 
 	m_player = getEntitySystem()->createEntity<MyPlayer>();
+	m_player->getTransform()->setPosition(glm::vec3(0.0f, 20.0f, 30.0f));
 
 	InputSystem::get().mapInput("MoveForwardCamera", "w", 1.0f);
 	InputSystem::get().mapInput("MoveBackwardCamera", "s", -1.0f);

@@ -65,3 +65,23 @@ const MTexture2DSharedPtr& MMaterial::getTexture() const
 {
 	return m_textures[0].get()->getTexture();
 }
+
+void MG::MMaterial::setCullType(const MCullType cullType)
+{
+	m_cullType = cullType;
+}
+
+void MG::MMaterial::setWindingOrder(const MWindingOrder windingOrder)
+{
+	m_windingOrder = windingOrder;
+}
+
+MCullType MG::MMaterial::getCullType() const
+{
+	return m_cullType;
+}
+
+MWindingOrder MG::MMaterial::getWindingOrder() const
+{
+	return m_windingOrder;
+}
