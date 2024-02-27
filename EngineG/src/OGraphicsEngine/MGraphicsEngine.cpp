@@ -29,8 +29,6 @@ bool MGraphicsEngine::update()
 	if (getRenderSystem()->getDeviceContext()->shouldCloseWindow()) return false;
 
 	getRenderSystem()->getDeviceContext()->clear();
-	getRenderSystem()->getDeviceContext()->setFaceCulling(MCullType::BackFace);
-	getRenderSystem()->getDeviceContext()->setWindingOrder(MWindingOrder::CounterClockWise);
 	
 	UniformData data = {};
 	
@@ -62,6 +60,12 @@ bool MGraphicsEngine::update()
 			getRenderSystem()->getDeviceContext()->setUniformBuffer(material->getUniform("UniformData"), 0);
 			getRenderSystem()->getDeviceContext()->setShaderProgram(material->getShaderProgram());
 			material->setUniformData("UniformData", &data);
+
+			getRenderSystem()->getDeviceContext()->setFaceCulling(material->getCullType());
+			getRenderSystem()->getDeviceContext()->setWindingOrder(material->getWindingOrder());
+
+			glEnable(GL_DEPTH_TEST);
+			glDepthFunc(GL_LEQUAL);
 
 			getRenderSystem()->getDeviceContext()->drawTriangles(MTriangleType::TriangleList, mesh->getVertexArrayObject()->getVertexBufferSize(), 0);
 		}
