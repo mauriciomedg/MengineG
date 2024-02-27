@@ -112,7 +112,7 @@ void MCameraComponent::rotateCameraYaw(float delta)
 {
 	if (!m_readInput) return;
 
-	auto R = glm::rotate(glm::mat4(1.0f), delta, glm::vec3(0.0f, 1.0f, 0.0f));
+	auto R = glm::rotate(glm::mat4(1.0f), -delta, glm::vec3(0.0f, 1.0f, 0.0f));
 	m_cameraFront = glm::mat3(R) * m_cameraFront;
 
 	m_cameraSide = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), -m_cameraFront));
