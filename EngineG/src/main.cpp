@@ -16,6 +16,10 @@
 
 #include "Game/MyGame.h"
 
+#include "pybind11/pybind11.h"
+#include <pybind11/embed.h>
+namespace py = pybind11;
+
 #define numVAOs 1
 #define numVBOs 7
 GLuint renderingProgram;
@@ -186,10 +190,48 @@ void window_reshape_callback(GLFWwindow* window, int newWidth, int newHeight)
 	camera->reshapeWindow(window, newWidth, newHeight);
 }
 
+int add(int i, int j) {
+	return i + j;
+}
 
+PYBIND11_EMBEDDED_MODULE(example, m) {
+	m.doc() = "pybind11 example plugin"; // optional module docstring
+	m.def("add", &add, "A function that adds two numbers");
+}
+
+void say()
+{
+	std::cout << "dsaasfda" << std::endl;
+}
+
+PYBIND11_EMBEDDED_MODULE(embeddedmold, m)
+{
+	m.doc() = "Embb mod";
+	m.def("say", &say);
+}
 
 int main(void) 
 {
+	//Embedding Python in C++ with pybind11 - SCRIPTING [3/4]
+	py::scoped_interpreter guard{};
+	
+	//py::exec("import embeddedmold\nembeddedmold.say()");
+
+	auto sys = py::module::import("sys"); // sys bp::module
+	py::print(sys.attr("path"));
+	auto hellowModule = py::module::import("TetsPython");
+	
+	//Py_Initialize();
+	////PyRun_SimpleString("from time import time,ctime\n"
+	////	"print 'Today is',ctime(time())\n");
+	////FILE* f;
+	//
+	//PyObject* obj = Py_BuildValue("s", "TetsPython.py");
+	//FILE* file = _Py_fopen_obj(obj, "r+");
+	//if (file)
+	//	PyRun_SimpleFile(file, "TetsPython.py");
+	//Py_Finalize();
+
 	MG::MyGame game;
 	
 	game.create();
