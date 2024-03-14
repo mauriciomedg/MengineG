@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{1c268e9d-f5f6-4517-9357-97d62c073674}</ProjectGuid>
+    <RootNamespace>MGameEngine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)\MGameEngine\include;C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python39_64\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;MGAMEENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;MGAMEENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;MGAMEENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalLibraryDirectories>$(SolutionDir)MGameEngine\lib;C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python39_64\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;glew32.lib;soil2.lib;opengl32.lib;python39.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(TargetPath)" "$(SolutionDir)EngineG\$(IntDir)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;MGAMEENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="MGameEngine.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="src\AllMHeaders.h" />
+    <ClInclude Include="src\Components\MCameraComponent.h" />
+    <ClInclude Include="src\Components\MComponent.h" />
+    <ClInclude Include="src\Components\MMeshComponent.h" />
+    <ClInclude Include="src\Components\MTransformComponent.h" />
+    <ClInclude Include="src\Delegate.h" />
+    <ClInclude Include="src\Entity\MEntity.h" />
+    <ClInclude Include="src\Entity\MEntitySystem.h" />
+    <ClInclude Include="src\Game\MyGame.h" />
+    <ClInclude Include="src\Game\MyPlayer.h" />
+    <ClInclude Include="src\Inputs\InputSystem.h" />
+    <ClInclude Include="src\MGame\MGame.h" />
+    <ClInclude Include="src\OGraphicsEngine\MGraphicsEngine.h" />
+    <ClInclude Include="src\OGraphicsEngine\MPrerequisites.h" />
+    <ClInclude Include="src\OGraphicsEngine\RenderSystem\MDeviceContext.h" />
+    <ClInclude Include="src\OGraphicsEngine\RenderSystem\MRenderSystem.h" />
+    <ClInclude Include="src\OGraphicsEngine\RenderSystem\MShaderProgram.h" />
+    <ClInclude Include="src\OGraphicsEngine\RenderSystem\MTexture2D.h" />
+    <ClInclude Include="src\OGraphicsEngine\RenderSystem\MUniformBuffer.h" />
+    <ClInclude Include="src\OGraphicsEngine\RenderSystem\MVertexArrayObject.h" />
+    <ClInclude Include="src\physicsEngine\CollisionDetection.h" />
+    <ClInclude Include="src\physicsEngine\CollisionResponse.h" />
+    <ClInclude Include="src\physicsEngine\Constraints\Constraint.h" />
+    <ClInclude Include="src\physicsEngine\Constraints\ContactConstraint.h" />
+    <ClInclude Include="src\physicsEngine\Constraints\RigidPointConstraint.h" />
+    <ClInclude Include="src\physicsEngine\Constraints\RigidPointRigidPointConstraint.h" />
+    <ClInclude Include="src\physicsEngine\Contact.h" />
+    <ClInclude Include="src\physicsEngine\MathUtils.h" />
+    <ClInclude Include="src\physicsEngine\ParticlesSimulation.h" />
+    <ClInclude Include="src\physicsEngine\PhysicsWorld.h" />
+    <ClInclude Include="src\physicsEngine\RigidBody.h" />
+    <ClInclude Include="src\Resource\MMaterial.h" />
+    <ClInclude Include="src\Resource\MMesh.h" />
+    <ClInclude Include="src\Resource\MResource.h" />
+    <ClInclude Include="src\Resource\MResourceManager.h" />
+    <ClInclude Include="src\Resource\MTexture.h" />
+    <ClInclude Include="src\Utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="MGameEngine.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\Components\MCameraComponent.cpp" />
+    <ClCompile Include="src\Components\MComponent.cpp" />
+    <ClCompile Include="src\Components\MMeshComponent.cpp" />
+    <ClCompile Include="src\Components\MTransformComponent.cpp" />
+    <ClCompile Include="src\Entity\MEntity.cpp" />
+    <ClCompile Include="src\Entity\MEntitySystem.cpp" />
+    <ClCompile Include="src\Game\MyGame.cpp" />
+    <ClCompile Include="src\Game\MyPlayer.cpp" />
+    <ClCompile Include="src\Inputs\InputSystem.cpp" />
+    <ClCompile Include="src\MGame\MGame.cpp" />
+    <ClCompile Include="src\OGraphicsEngine\MGraphicsEngine.cpp" />
+    <ClCompile Include="src\OGraphicsEngine\RenderSystem\MDeviceContext.cpp" />
+    <ClCompile Include="src\OGraphicsEngine\RenderSystem\MRenderSystem.cpp" />
+    <ClCompile Include="src\OGraphicsEngine\RenderSystem\MShaderProgram.cpp" />
+    <ClCompile Include="src\OGraphicsEngine\RenderSystem\MTexture2D.cpp" />
+    <ClCompile Include="src\OGraphicsEngine\RenderSystem\MUniformBuffer.cpp" />
+    <ClCompile Include="src\OGraphicsEngine\RenderSystem\MVertexArrayObject.cpp" />
+    <ClCompile Include="src\physicsEngine\CollisionDetection.cpp" />
+    <ClCompile Include="src\physicsEngine\CollisionResponse.cpp" />
+    <ClCompile Include="src\physicsEngine\Constraints\ContactConstraint.cpp" />
+    <ClCompile Include="src\physicsEngine\Constraints\RigidPointConstraint.cpp" />
+    <ClCompile Include="src\physicsEngine\Constraints\RigidPointRigidPointConstraint.cpp" />
+    <ClCompile Include="src\physicsEngine\Contact.cpp" />
+    <ClCompile Include="src\physicsEngine\MathUtils.cpp" />
+    <ClCompile Include="src\physicsEngine\ParticlesSimulation.cpp" />
+    <ClCompile Include="src\physicsEngine\PhysicsWorld.cpp" />
+    <ClCompile Include="src\physicsEngine\RigidBody.cpp" />
+    <ClCompile Include="src\Resource\MMaterial.cpp" />
+    <ClCompile Include="src\Resource\MMesh.cpp" />
+    <ClCompile Include="src\Resource\MResource.cpp" />
+    <ClCompile Include="src\Resource\MResourceManager.cpp" />
+    <ClCompile Include="src\Resource\MTexture.cpp" />
+    <ClCompile Include="src\Utils.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
