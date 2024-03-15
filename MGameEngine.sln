@@ -10,6 +10,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGLStartProjet", "Engine
 		{1C268E9D-F5F6-4517-9357-97D62C073674} = {1C268E9D-F5F6-4517-9357-97D62C073674}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BlenderPlugin", "BlenderPlugin\BlenderPlugin.vcxproj", "{7EEA3E90-BA47-4798-B04C-6F720B1D9236}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1C268E9D-F5F6-4517-9357-97D62C073674} = {1C268E9D-F5F6-4517-9357-97D62C073674}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -34,6 +39,14 @@ Global
 		{842186BA-B6D3-4F46-BED2-6DCA4E33D3C4}.Release|x64.Build.0 = Release|x64
 		{842186BA-B6D3-4F46-BED2-6DCA4E33D3C4}.Release|x86.ActiveCfg = Release|Win32
 		{842186BA-B6D3-4F46-BED2-6DCA4E33D3C4}.Release|x86.Build.0 = Release|Win32
+		{7EEA3E90-BA47-4798-B04C-6F720B1D9236}.Debug|x64.ActiveCfg = Debug|x64
+		{7EEA3E90-BA47-4798-B04C-6F720B1D9236}.Debug|x64.Build.0 = Debug|x64
+		{7EEA3E90-BA47-4798-B04C-6F720B1D9236}.Debug|x86.ActiveCfg = Debug|Win32
+		{7EEA3E90-BA47-4798-B04C-6F720B1D9236}.Debug|x86.Build.0 = Debug|Win32
+		{7EEA3E90-BA47-4798-B04C-6F720B1D9236}.Release|x64.ActiveCfg = Release|x64
+		{7EEA3E90-BA47-4798-B04C-6F720B1D9236}.Release|x64.Build.0 = Release|x64
+		{7EEA3E90-BA47-4798-B04C-6F720B1D9236}.Release|x86.ActiveCfg = Release|Win32
+		{7EEA3E90-BA47-4798-B04C-6F720B1D9236}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
