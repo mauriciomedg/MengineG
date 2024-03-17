@@ -1,5 +1,6 @@
 #pragma once
 
+template<class M>
 class delegate
 {
 public:
@@ -8,7 +9,7 @@ public:
         , stub_ptr(0)
     {}
 
-    template <class T, void (T::* TMethod)(float)>
+    template <class T, void (T::* TMethod)(M)>
     static delegate from_method(T* object_ptr)
     {
         delegate d;
@@ -17,19 +18,19 @@ public:
         return d;
     }
 
-    void operator()(float a1) const
+    void operator()(M a1) const
     {
         return (*stub_ptr)(object_ptr, a1);
     }
 
 private:
-    typedef void (*stub_type)(void* object_ptr, float);
+    typedef void (*stub_type)(void* object_ptr, M);
 
     void* object_ptr;
     stub_type stub_ptr;
 
-    template <class T, void (T::* TMethod)(float)>
-    static void method_stub(void* object_ptr, float a1)
+    template <class T, void (T::* TMethod)(M)>
+    static void method_stub(void* object_ptr, M a1)
     {
         T* p = static_cast<T*>(object_ptr);
         return (p->*TMethod)(a1); // #2

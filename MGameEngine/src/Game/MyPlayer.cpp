@@ -31,12 +31,12 @@ void MyPlayer::update(f32 dt)
 
 void MyPlayer::bindAxis()
 {
-	InputSystem::get().addBinding("MoveForwardCamera", delegate::from_method<MyPlayer, &MyPlayer::moveForward>(this));
-	InputSystem::get().addBinding("MoveBackwardCamera", delegate::from_method<MyPlayer, &MyPlayer::moveForward>(this));
-	InputSystem::get().addBinding("MoveLeftCamera", delegate::from_method<MyPlayer, &MyPlayer::moveSide>(this));
-	InputSystem::get().addBinding("MoveRightCamera", delegate::from_method<MyPlayer, &MyPlayer::moveSide>(this));
-	InputSystem::get().addBinding("MouseX", delegate::from_method<MyPlayer, &MyPlayer::mouseX>(this));
-	InputSystem::get().addBinding("MouseY", delegate::from_method<MyPlayer, &MyPlayer::mouseY>(this));
+	InputSystem::get().addBinding("MoveForwardCamera", delegate<float>::from_method<MyPlayer, &MyPlayer::moveForward>(this));
+	InputSystem::get().addBinding("MoveBackwardCamera", delegate<float>::from_method<MyPlayer, &MyPlayer::moveForward>(this));
+	InputSystem::get().addBinding("MoveLeftCamera", delegate<float>::from_method<MyPlayer, &MyPlayer::moveSide>(this));
+	InputSystem::get().addBinding("MoveRightCamera", delegate<float>::from_method<MyPlayer, &MyPlayer::moveSide>(this));
+	InputSystem::get().addBinding("MouseX", delegate<float>::from_method<MyPlayer, &MyPlayer::mouseX>(this));
+	InputSystem::get().addBinding("MouseY", delegate<float>::from_method<MyPlayer, &MyPlayer::mouseY>(this));
 }
 
 void MyPlayer::moveForward(float val)

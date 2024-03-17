@@ -30,7 +30,7 @@ namespace MG
 		//	//m_bindings[axisName] = std::make_tuple(ActionAxis, obj);
 		//}
 
-		void addBinding(std::string axisName, delegate d)
+		void addBinding(std::string axisName, delegate<float> d)
 		{
 			m_bindings[axisName] = d;
 		}
@@ -58,7 +58,7 @@ namespace MG
 		static std::map<std::string, int> m_conversion;
 		static std::map<std::string, std::string> m_mouse_conversion;
 		static void bindConversion();
-		std::map<std::string, delegate> m_bindings;
+		std::map<std::string, delegate<float>> m_bindings;
 		std::map<int, std::tuple<std::string, float>> m_InputsMapped;
 		std::map<std::string, std::tuple<std::string, float>> m_MouseInputsMapped;
 
