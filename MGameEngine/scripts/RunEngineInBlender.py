@@ -12,8 +12,8 @@ class WM_OT_RunGameEngine(bpy.types.Operator):
     bl_label = "Start MGameEngine"
     
     def execute(self, context):
-        spam = testlib.getInstance()
-        testlib.execute(spam)
+        testlib.getInstance()
+        testlib.execute()
 
         print("Game Engine Start")
         return {'FINISHED'}
