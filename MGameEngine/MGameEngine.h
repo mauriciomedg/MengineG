@@ -20,7 +20,7 @@ public:
 	~MGameEngine();
 
 	void run();
-
+	void createEntity(float x, float y, float z);
 private:
 	MG::MyGame* mGame;
 

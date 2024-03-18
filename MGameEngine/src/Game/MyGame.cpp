@@ -19,9 +19,22 @@ MyGame::~MyGame()
 
 }
 
+void MyGame::requestCreate(float x, float y, float z)
+{
+	m_delegate_create({ x, y, z });
+}
+
+void MyGame::commandCreateEntity(data p)
+{
+	std::lock_guard<std::mutex> guard(m_mutex);
+	m_list_data.push_back(p);
+}
+
 void MyGame::create()
 {
 	MGame::create();
+
+	m_delegate_create = delegate<data>::from_method<MyGame, &MyGame::commandCreateEntity>(this);
 
 	auto mesh = getResourceManager()->createResourceFromFile<MMesh>("models/BlockModel3.obj");
 	auto terrain = getResourceManager()->createResourceFromFile<MMesh>("models/floor.obj");
@@ -65,9 +78,35 @@ void MyGame::create()
 
 }
 
+void MyGame::createEntity(data p)
+{
+	auto mesh = getResourceManager()->createResourceFromFile<MMesh>("models/BlockModel3.obj");
+	auto texture = getResourceManager()->createResourceFromFile<MTexture>("textures/wood.png");
+
+	auto material = getResourceManager()->createResourceFromFile<MMaterial>("shaders/basicVertShader.glsl", "shaders/basicFragShader.glsl");
+	material->addTexture(texture);
+
+	auto entity = getEntitySystem()->createEntity<MEntity>();
+	entity->getTransform()->setPosition(glm::vec3(p.m_px, p.m_py, p.m_pz));
+	auto meshComponent = entity->createComponent<MMeshComponent>();
+	meshComponent->setMesh(mesh);
+	meshComponent->addMaterial(material);
+}
+
 void MyGame::update(f32 dt)
 {
 	m_theta += 1.0 * dt;
+
+	{
+		std::lock_guard<std::mutex> guard(m_mutex);
+		if (!m_list_data.empty())
+		{
+			data p = m_list_data.back();
+			m_list_data.pop_back();
+
+			createEntity(p);
+		}
+	}
 	//m_entity->getTransform()->setRotation(m_theta, glm::normalize(glm::vec3(1.0f, 1.0f, 1.0f)));
 }
 

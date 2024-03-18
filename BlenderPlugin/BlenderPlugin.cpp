@@ -1,5 +1,6 @@
 #include "BlenderPlugin.h"
 #include "MGameEngine.h"
+#include <mutex>
 
 class RunEngine
 {
@@ -12,8 +13,11 @@ private:
 public:
 
 	~RunEngine();
-
 	void run();
+	void createEntity(float pX, float pY, float pZ)
+	{
+		game->createEntity(pX, pY, pZ);
+	}
 
 	static RunEngine& getInstace();
 
@@ -57,4 +61,9 @@ void getInstance()
 void execute()
 {
 	RunEngine::getInstace().run();
+}
+
+void createEntity(float pX, float pY, float pZ)
+{
+	RunEngine::getInstace().createEntity(pX, pY, pZ);
 }
