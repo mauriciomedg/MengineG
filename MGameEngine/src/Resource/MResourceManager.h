@@ -1,6 +1,7 @@
 #pragma once
 #include "../OGraphicsEngine/MPrerequisites.h"
 #include <unordered_map>
+#include <string>
 
 namespace MG
 {
