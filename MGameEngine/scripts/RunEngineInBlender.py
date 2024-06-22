@@ -1,7 +1,12 @@
 import bpy
 import ctypes
+import os
 
-testlib = ctypes.CDLL("C:\\MengineG\\x64\\Debug\\BlenderPlugin.dll");
+blend_dir = os.path.dirname(bpy.data.filepath)
+lib_path = os.path.join(blend_dir, 'BlenderPlugin.dll') 
+print("Load dll from: ", lib_path)
+testlib = ctypes.CDLL(lib_path);
+
 testlib.createEntity.argtypes = [ctypes.c_float, ctypes.c_float, ctypes.c_float]
 
 #Blender Python scripting: Creating custom operators from scratch
