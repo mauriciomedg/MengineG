@@ -23,6 +23,21 @@ namespace Twister
             elements = { e0, e1, e2, e3, e4, e5, e6, e7, e8 };
         }
 
+        void setDiagonal(float e0, float e4, float e8)
+        {
+            elements[0] = e0;
+            elements[4] = e4;
+            elements[8] = e8;
+        }
+
+        void operator*=(const float value)
+        {
+            for(int i = 0; elements.size(); ++i)
+            {
+                elements[i] *= value;
+            }
+        }
+
         // Matrix addition
         TwMat3 operator+(const TwMat3& other) const {
             return TwMat3(
