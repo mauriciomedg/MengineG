@@ -197,6 +197,7 @@
     <ClInclude Include="src\Resource\MResourceManager.h" />
     <ClInclude Include="src\Resource\MTexture.h" />
     <ClInclude Include="src\Twister\MathLibrary\TwMat3.h" />
+    <ClInclude Include="src\Twister\MathLibrary\TwMat4.h" />
     <ClInclude Include="src\Twister\MathLibrary\TwQuat.h" />
     <ClInclude Include="src\Twister\MathLibrary\TwVec3.h" />
     <ClInclude Include="src\Utils.h" />
@@ -242,6 +243,8 @@
     <ClCompile Include="src\Resource\MResource.cpp" />
     <ClCompile Include="src\Resource\MResourceManager.cpp" />
     <ClCompile Include="src\Resource\MTexture.cpp" />
+    <ClCompile Include="src\Twister\TwRigidBody.cpp" />
+    <ClCompile Include="src\Twister\TwRigidBody.h" />
     <ClCompile Include="src\Utils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

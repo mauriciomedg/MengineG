@@ -144,6 +144,9 @@
     <ClInclude Include="src\Twister\MathLibrary\TwVec3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Twister\MathLibrary\TwMat4.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -252,6 +255,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MGameEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Twister\TwRigidBody.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Twister\TwRigidBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
