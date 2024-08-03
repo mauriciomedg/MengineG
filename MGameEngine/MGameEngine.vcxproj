@@ -196,6 +196,9 @@
     <ClInclude Include="src\Resource\MResource.h" />
     <ClInclude Include="src\Resource\MResourceManager.h" />
     <ClInclude Include="src\Resource\MTexture.h" />
+    <ClInclude Include="src\Twister\MathLibrary\TwMat3.h" />
+    <ClInclude Include="src\Twister\MathLibrary\TwQuat.h" />
+    <ClInclude Include="src\Twister\MathLibrary\TwVec3.h" />
     <ClInclude Include="src\Utils.h" />
   </ItemGroup>
   <ItemGroup>
