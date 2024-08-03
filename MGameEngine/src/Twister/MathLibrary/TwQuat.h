@@ -5,7 +5,7 @@
 #include <array>
 #include "TwVec3.h"
 
-namespace
+namespace Twister
 {
     class TwQuat {
     public:
@@ -80,7 +80,7 @@ namespace
         }
 
         // Rotate a vector by this TwQuat
-        std::array<float, 3> rotate(const TwVec3& v) const {
+        TwVec3 rotate(const TwVec3& v) const {
             TwQuat qv(0, v.x, v.y, v.z);
             TwQuat result = (*this) * qv * inverse();
             return { result.x, result.y, result.z };
