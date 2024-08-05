@@ -25,6 +25,7 @@ namespace MG
 	class MComponent;
 	class MTransformComponent;
 	class MMeshComponent;
+	class MRigidBodyComponent;
 	class MCameraComponent;
 	class MEntity;
 

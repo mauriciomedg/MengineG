@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include "../OGraphicsEngine/MPrerequisites.h"
+#include "../EventSystem.h"
 
 namespace MG
 {
@@ -21,7 +22,7 @@ namespace MG
 		MGraphicsEngine* getGraphicEngine();
 		MResourceManager* getResourceManager();
 		TwPhysicsEngine* getPhysicsEngine();
-
+		EventSystem& getEventSystem() { return m_eventSystem; };
 	protected:
 		virtual void create();
 		virtual void update(f32 dt) = 0;
@@ -38,6 +39,8 @@ namespace MG
 		std::unique_ptr<MGraphicsEngine> m_graphicEngine;
 		std::unique_ptr<MResourceManager> m_resourceManager;
 		std::unique_ptr<TwPhysicsEngine> m_physicsEngine;
+
+		EventSystem m_eventSystem;
 
 		//for testing		
 		

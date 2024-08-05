@@ -169,6 +169,7 @@
     <ClInclude Include="src\Delegate.h" />
     <ClInclude Include="src\Entity\MEntity.h" />
     <ClInclude Include="src\Entity\MEntitySystem.h" />
+    <ClInclude Include="src\EventSystem.h" />
     <ClInclude Include="src\Game\MyGame.h" />
     <ClInclude Include="src\Game\MyPlayer.h" />
     <ClInclude Include="src\Inputs\InputSystem.h" />

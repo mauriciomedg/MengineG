@@ -16,6 +16,14 @@ MMeshComponent::~MMeshComponent()
 void MMeshComponent::setMesh(const MMeshSharedPtr& mesh)
 {
 	m_mesh = mesh;
+
+	auto& events = m_entity->getEntitySystem()->getGame()->getEventSystem().m_events;
+
+	auto eventItt = events.find(m_entity->getId());
+	if (eventItt != events.end())
+	{
+		eventItt->second(dataSphape({ m_entity->getId(), m_entity->getId() }));
+	}
 }
 
 const MMeshSharedPtr& MMeshComponent::getMesh()

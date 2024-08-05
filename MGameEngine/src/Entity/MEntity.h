@@ -35,6 +35,8 @@ namespace MG
 			return nullptr;
 		}
 
+		size_t getId() const { return m_id; }
+
 		template<typename T>
 		T* getComponent()
 		{

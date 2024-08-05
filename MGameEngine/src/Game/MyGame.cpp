@@ -50,8 +50,10 @@ void MyGame::create()
 
 	{
 		m_entity = getEntitySystem()->createEntity<MEntity>();
-		m_entity->getTransform()->setPosition(glm::vec3(0.0f, 6.0f, 0.0f));
 		auto meshComponent = m_entity->createComponent<MMeshComponent>();
+		m_entity->createComponent<MRigidBodyComponent>();
+
+		m_entity->getTransform()->setPosition(glm::vec3(0.0f, 6.0f, 0.0f));
 		meshComponent->setMesh(mesh);
 		meshComponent->addMaterial(material);
 	}

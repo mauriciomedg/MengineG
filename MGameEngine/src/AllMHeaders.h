@@ -8,6 +8,7 @@
 #include "Components/MTransformComponent.h"
 #include "Components/MMeshComponent.h"
 #include "Components/MCameraComponent.h"
+#include "Components/MRigidBodyComponent.h"
 
 #include "Resource/MResourceManager.h"
 #include "Resource/MMesh.h"
