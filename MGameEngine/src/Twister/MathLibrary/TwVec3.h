@@ -3,7 +3,7 @@
 #include <iostream>
 #include <cmath>
 
-namespace Twister
+namespace MG
 {
     class TwVec3 {
     public:

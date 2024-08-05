@@ -6,6 +6,7 @@
 
 namespace MG
 {
+	class TwPhysicsEngine;
 	class MGraphicsEngine;
 	class MEntitySystem;
 	class MGame
@@ -19,6 +20,8 @@ namespace MG
 		MEntitySystem* getEntitySystem();
 		MGraphicsEngine* getGraphicEngine();
 		MResourceManager* getResourceManager();
+		TwPhysicsEngine* getPhysicsEngine();
+
 	protected:
 		virtual void create();
 		virtual void update(f32 dt) = 0;
@@ -34,6 +37,7 @@ namespace MG
 		std::unique_ptr<MEntitySystem> m_entitySystem;
 		std::unique_ptr<MGraphicsEngine> m_graphicEngine;
 		std::unique_ptr<MResourceManager> m_resourceManager;
+		std::unique_ptr<TwPhysicsEngine> m_physicsEngine;
 
 		//for testing		
 		

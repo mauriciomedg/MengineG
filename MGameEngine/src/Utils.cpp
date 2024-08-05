@@ -131,6 +131,16 @@ bool Utils::checkOpenGLError() {
 	return foundError;
 }
 
+glm::mat4 Utils::convertToglmmat4(const MG::TwMat4& mat)
+{
+	auto elem = mat.elements;
+
+	return glm::mat4(elem[0], elem[1], elem[2], elem[3],
+		elem[4], elem[5], elem[6], elem[7],
+		elem[8], elem[9], elem[10], elem[11],
+		elem[12], elem[13], elem[14], elem[15]);
+}
+
 //////////////////
 
 // ------------ Imported Model class

@@ -2,8 +2,11 @@
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <string>
 #include <vector>
+
+#include "Twister/MathLibrary/TwMat4.h"
 
 class Utils
 {
@@ -20,7 +23,8 @@ public:
 	static void printProgramLog(int prog);
 
 	static bool checkOpenGLError();
-		
+
+	static glm::mat4 convertToglmmat4(const MG::TwMat4& mat);
 };
 
 class ImportedModel

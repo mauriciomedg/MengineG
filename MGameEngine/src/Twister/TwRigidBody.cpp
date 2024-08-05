@@ -1,7 +1,7 @@
 #include "TwRigidBody.h"
 #include <math.h>
 
-namespace Twister
+namespace MG
 {
 	class TwDynamicBox : public TwDynamicShape
 	{

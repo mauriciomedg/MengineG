@@ -5,7 +5,7 @@
 #include "MathLibrary/TwMat3.h"
 #include "MathLibrary/TwMat4.h"
 
-namespace Twister
+namespace MG
 {
 	class TwDynamicShape
 	{

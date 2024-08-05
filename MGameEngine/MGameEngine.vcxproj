@@ -164,6 +164,7 @@
     <ClInclude Include="src\Components\MCameraComponent.h" />
     <ClInclude Include="src\Components\MComponent.h" />
     <ClInclude Include="src\Components\MMeshComponent.h" />
+    <ClInclude Include="src\Components\MRigidBodyComponent.h" />
     <ClInclude Include="src\Components\MTransformComponent.h" />
     <ClInclude Include="src\Delegate.h" />
     <ClInclude Include="src\Entity\MEntity.h" />
@@ -200,6 +201,7 @@
     <ClInclude Include="src\Twister\MathLibrary\TwMat4.h" />
     <ClInclude Include="src\Twister\MathLibrary\TwQuat.h" />
     <ClInclude Include="src\Twister\MathLibrary\TwVec3.h" />
+    <ClInclude Include="src\Twister\TwPhysicsEngine.h" />
     <ClInclude Include="src\Utils.h" />
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +216,7 @@
     <ClCompile Include="src\Components\MCameraComponent.cpp" />
     <ClCompile Include="src\Components\MComponent.cpp" />
     <ClCompile Include="src\Components\MMeshComponent.cpp" />
+    <ClCompile Include="src\Components\MRigidBodyComponent.cpp" />
     <ClCompile Include="src\Components\MTransformComponent.cpp" />
     <ClCompile Include="src\Entity\MEntity.cpp" />
     <ClCompile Include="src\Entity\MEntitySystem.cpp" />
@@ -243,6 +246,7 @@
     <ClCompile Include="src\Resource\MResource.cpp" />
     <ClCompile Include="src\Resource\MResourceManager.cpp" />
     <ClCompile Include="src\Resource\MTexture.cpp" />
+    <ClCompile Include="src\Twister\TwPhysicsEngine.cpp" />
     <ClCompile Include="src\Twister\TwRigidBody.cpp" />
     <ClCompile Include="src\Twister\TwRigidBody.h" />
     <ClCompile Include="src\Utils.cpp" />

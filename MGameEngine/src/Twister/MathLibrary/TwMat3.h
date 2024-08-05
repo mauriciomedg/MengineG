@@ -5,7 +5,7 @@
 #include <array>
 #include "TwVec3.h"
 
-namespace Twister
+namespace MG
 {
     class TwMat3 {
     public:
