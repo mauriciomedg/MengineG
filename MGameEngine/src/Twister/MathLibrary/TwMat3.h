@@ -32,9 +32,9 @@ namespace MG
 
         void operator*=(const float value)
         {
-            for(int i = 0; elements.size(); ++i)
+            for (float& c : elements)
             {
-                elements[i] *= value;
+                c *= value;
             }
         }
 
