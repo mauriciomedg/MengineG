@@ -15,7 +15,8 @@ MRigidBodyComponent::~MRigidBodyComponent()
 
 void MRigidBodyComponent::updateShape(dataSphape data)
 {
-	data.extend.print();
+	m_halfSize = data.extend;
+	m_entity->getEntitySystem()->getGame()->getPhysicsEngine()->createRigidBody(this);
 }
 
 void MRigidBodyComponent::onCreateInternal()

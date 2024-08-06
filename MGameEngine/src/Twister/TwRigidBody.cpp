@@ -3,18 +3,12 @@
 
 namespace MG
 {
-	class TwDynamicBox : public TwDynamicShape
-	{
-	public:
-		TwDynamicBox(TwVec3& halfSize, float mass);
-	};
-
-	TwDynamicShape* TwDynamicShape::createBox(TwVec3& halfSize, float mass)
+	TwDynamicBox* TwDynamicBox::create(const TwVec3& halfSize, float mass)
 	{
 		return new TwDynamicBox(halfSize, mass);
 	}
 
-	TwDynamicBox::TwDynamicBox(TwVec3& halfSize, float mass)
+	TwDynamicBox::TwDynamicBox(const TwVec3& halfSize, float mass)
 	{
 		mMass = mass;
 
@@ -33,9 +27,14 @@ namespace MG
 		mIbodyInv = mIbody.inverse();
 	}
 
-	TwRigidBody::TwRigidBody(TwDynamicShape* shape)
+	TwRigidBody::TwRigidBody(TwDynamicShape* shape, const TwMat4& transform, bool isStatic)
 		: mShape(shape)
 	{
+	}
+
+	TwRigidBody* TwRigidBody::create(TwDynamicShape* shape, const TwMat4& transform, bool isStatic)
+	{
+		return new TwRigidBody(shape, transform, isStatic);
 	}
 }
 

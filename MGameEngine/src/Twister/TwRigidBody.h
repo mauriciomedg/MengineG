@@ -16,7 +16,7 @@ namespace MG
 		const TwMat3& getIbody() const { return mIbody; };
 		const TwMat3& getIbodyInv() const { return mIbodyInv; };
 
-		static TwDynamicShape* createBox(TwVec3& halfSize, float mass);
+		//static TwDynamicShape* createBox(const TwVec3& halfSize, float mass);
 
 		enum class Shape { Box = 0, Sphere = 1 };
 
@@ -27,12 +27,20 @@ namespace MG
 		TwMat3 mIbodyInv;
 	};
 
+	class TwDynamicBox : public TwDynamicShape
+	{
+	public:
+		TwDynamicBox(const TwVec3& halfSize, float mass);
+		static TwDynamicBox* create(const TwVec3& halfSize, float mass);
+	};
+
 	class TwRigidBody
 	{
 
 	public:
+		TwRigidBody(TwDynamicShape* shape, const TwMat4& transform, bool isStatic);
 
-		TwRigidBody(TwDynamicShape* shape);
+		~TwRigidBody() {};
 
 		TwVec3 mX;
 		TwQuat mQ;
@@ -47,6 +55,6 @@ namespace MG
 		
 		bool mIsStatic = false;
 
-		static TwRigidBody* Create(TwDynamicShape* shape, const TwMat4& transform, bool isStatic);
+		static TwRigidBody* create(TwDynamicShape* shape, const TwMat4& transform, bool isStatic);
 	};
 }
