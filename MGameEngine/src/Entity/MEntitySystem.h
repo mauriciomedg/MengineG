@@ -18,7 +18,8 @@ namespace MG
 		T* createEntity()
 		{
 			static_assert(std::is_base_of<MEntity, T>::value, "T must be derived from MEntity");
-			auto id = typeid(T).hash_code();
+			//auto id = typeid(T).hash_code();
+			size_t id = mEntityCounter++;
 			auto e = new T();
 
 			if (createEntityInternal(e, id))
@@ -36,6 +37,8 @@ namespace MG
 		std::map<size_t, std::map<MEntity*, std::unique_ptr<MEntity>>> m_entities;
 		std::set<MEntity*> m_entitiesToDestroy;
 		MGame* m_game = nullptr;
+
+		size_t mEntityCounter = 0;
 
 		friend class MEntity;
 		friend class MGame;

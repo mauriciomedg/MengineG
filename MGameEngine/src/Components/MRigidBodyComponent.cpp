@@ -15,7 +15,7 @@ MRigidBodyComponent::~MRigidBodyComponent()
 
 void MRigidBodyComponent::updateShape(dataSphape data)
 {
-	std::cout << data.a << " " << data.b << std::endl;
+	data.extend.print();
 }
 
 void MRigidBodyComponent::onCreateInternal()

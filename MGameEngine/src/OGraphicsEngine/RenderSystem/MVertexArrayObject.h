@@ -14,6 +14,10 @@ namespace MG
 		ui32 getId();
 		ui32 getVertexBufferSize();
 		ui32 getElementBufferSize();
+		ui32 getVertexBufferObject() {
+			return m_vertexBufferObjectId;
+		};
+
 		ui32 getVertexSize();
 
 	private:

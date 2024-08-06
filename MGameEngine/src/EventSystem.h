@@ -3,13 +3,13 @@
 #include <map>
 #include <string>
 #include "Delegate.h"
+#include "Twister/MathLibrary/TwVec3.h"
 
 namespace MG
 {
 	struct dataSphape
 	{
-		size_t a = 1;
-		size_t b = 2;
+		TwVec3 extend;
 	};
 
 	class EventSystem

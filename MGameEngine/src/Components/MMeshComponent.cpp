@@ -1,7 +1,53 @@
 #include "MMeshComponent.h"
 #include "../OGraphicsEngine/MGraphicsEngine.h"
+#include "../OGraphicsEngine/RenderSystem/MVertexArrayObject.h"
+#include "../Twister/MathLibrary/TwVec3.h"
+
+#include <GL/glew.h>
 
 using namespace MG;
+
+namespace 
+{
+	struct BoundingBox {
+		TwVec3 min;
+		TwVec3 max;
+	};
+
+	struct BoxShape
+	{
+		static void calculateExtend(const MMeshSharedPtr& mesh, TwVec3& extend)
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->getVertexArrayObject()->getVertexBufferObject());
+
+			TwVec3* vertices = (TwVec3*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_ONLY);
+			if (!vertices) {
+				throw std::runtime_error("Failed to map VBO");
+			}
+
+			TwVec3 min = vertices[0];
+			TwVec3 max = vertices[0];
+
+			for (size_t i = 1; i < mesh->getVertexArrayObject()->getVertexBufferSize() / 3; ++i)
+			{
+				if (vertices[i].x < min.x) min.x = vertices[i].x;
+				if (vertices[i].y < min.y) min.y = vertices[i].y;
+				if (vertices[i].z < min.z) min.z = vertices[i].z;
+
+				if (vertices[i].x > max.x) max.x = vertices[i].x;
+				if (vertices[i].y > max.y) max.y = vertices[i].y;
+				if (vertices[i].z > max.z) max.z = vertices[i].z;
+			}
+
+			glUnmapBuffer(GL_ARRAY_BUFFER);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+			extend.x = max.x - min.x;
+			extend.y = max.y - min.y;
+			extend.z = max.z - min.z;
+		}
+	};
+}
 
 MMeshComponent::MMeshComponent()
 {
@@ -22,7 +68,10 @@ void MMeshComponent::setMesh(const MMeshSharedPtr& mesh)
 	auto eventItt = events.find(m_entity->getId());
 	if (eventItt != events.end())
 	{
-		eventItt->second(dataSphape({ m_entity->getId(), m_entity->getId() }));
+		TwVec3 extend;
+		BoxShape::calculateExtend(mesh, extend);
+
+		eventItt->second(dataSphape({ extend }));
 	}
 }
 
