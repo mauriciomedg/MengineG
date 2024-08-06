@@ -1,7 +1,7 @@
 #include "MMeshComponent.h"
 #include "../OGraphicsEngine/MGraphicsEngine.h"
 #include "../OGraphicsEngine/RenderSystem/MVertexArrayObject.h"
-#include "../Twister/MathLibrary/TwVec3.h"
+#include "../MathLibrary/TwVec3.h"
 
 #include <GL/glew.h>
 

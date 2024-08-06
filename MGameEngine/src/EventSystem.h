@@ -3,7 +3,7 @@
 #include <map>
 #include <string>
 #include "Delegate.h"
-#include "Twister/MathLibrary/TwVec3.h"
+#include "MathLibrary/TwVec3.h"
 
 namespace MG
 {

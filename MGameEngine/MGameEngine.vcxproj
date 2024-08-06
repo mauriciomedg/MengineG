@@ -173,6 +173,10 @@
     <ClInclude Include="src\Game\MyGame.h" />
     <ClInclude Include="src\Game\MyPlayer.h" />
     <ClInclude Include="src\Inputs\InputSystem.h" />
+    <ClInclude Include="src\MathLibrary\TwMat3.h" />
+    <ClInclude Include="src\MathLibrary\TwMat4.h" />
+    <ClInclude Include="src\MathLibrary\TwQuat.h" />
+    <ClInclude Include="src\MathLibrary\TwVec3.h" />
     <ClInclude Include="src\MGame\MGame.h" />
     <ClInclude Include="src\OGraphicsEngine\MGraphicsEngine.h" />
     <ClInclude Include="src\OGraphicsEngine\MPrerequisites.h" />
@@ -198,10 +202,6 @@
     <ClInclude Include="src\Resource\MResource.h" />
     <ClInclude Include="src\Resource\MResourceManager.h" />
     <ClInclude Include="src\Resource\MTexture.h" />
-    <ClInclude Include="src\Twister\MathLibrary\TwMat3.h" />
-    <ClInclude Include="src\Twister\MathLibrary\TwMat4.h" />
-    <ClInclude Include="src\Twister\MathLibrary\TwQuat.h" />
-    <ClInclude Include="src\Twister\MathLibrary\TwVec3.h" />
     <ClInclude Include="src\Twister\TwPhysicsEngine.h" />
     <ClInclude Include="src\Utils.h" />
   </ItemGroup>

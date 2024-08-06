@@ -1,7 +1,7 @@
 #include "TwPhysicsEngine.h"
+#include "../MathLibrary/TwMat4.h"
 #include "../Components/MRigidBodyComponent.h"
 #include "../Twister/TwRigidBody.h"
-#include "../Twister/MathLibrary/TwMat4.h"
 
 using namespace MG;
 

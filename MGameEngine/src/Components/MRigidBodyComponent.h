@@ -1,8 +1,8 @@
 #pragma once
 
 #include "../AllMHeaders.h"
-#include "../Twister/MathLibrary/TwMat4.h"
-#include "../Twister/MathLibrary/TwVec3.h"
+#include "../MathLibrary/TwMat4.h"
+#include "../MathLibrary/TwVec3.h"
 
 #include "../EventSystem.h" // temporal, we need it because of the dataShape
 

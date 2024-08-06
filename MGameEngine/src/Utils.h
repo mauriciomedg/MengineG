@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#include "Twister/MathLibrary/TwMat4.h"
+#include "MathLibrary/TwMat4.h"
 
 class Utils
 {
