@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef TWQUAT_H
+#define TWQUAT_H
+
 #include <iostream>
 #include <cmath>
 #include <array>
@@ -106,3 +109,5 @@ namespace MG
         }
     };
 }
+
+#endif // TWQUAT_H

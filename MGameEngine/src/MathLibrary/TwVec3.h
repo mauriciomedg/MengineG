@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef TWVEC3_H
+#define TWVEC3_H
+
 #include <iostream>
 #include <cmath>
 
@@ -74,3 +77,5 @@ namespace MG
         }
     };
 }
+
+#endif //TWVEC3_H

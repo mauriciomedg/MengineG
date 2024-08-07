@@ -1,4 +1,8 @@
 #pragma once
+
+#ifndef TWPHYSICSENGINE_H
+#define TWPHYSICSENGINE_H
+
 #include <set>
 #include <map>
 
@@ -29,3 +33,5 @@ namespace MG
 		std::set<MRigidBodyComponent*> m_rigidBodieComponents;
 	};
 }
+
+#endif // TWPHYSICSENGINE_H

@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef MRIGIDBODYCOMPONENT_H
+#define MRIGIDBODYCOMPONENT_H
+
 #include "../AllMHeaders.h"
 #include "../MathLibrary/TwMat4.h"
 #include "../MathLibrary/TwVec3.h"
@@ -30,3 +33,5 @@ namespace MG
 		unsigned int m_rigidId = 0;
 	};
 }
+
+#endif // MRIGIDBODYCOMPONENT_H

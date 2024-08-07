@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef UTILS_H
+#define UTILS_H
+
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -61,3 +64,5 @@ public:
 	std::vector<float> getTextureCoordinates();
 	std::vector<float> getNormals();
 };
+
+#endif // UTILS_H

@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef TWRIGIDBODY_H
+#define TWRIGIDBODY_H
+
 #include "../MathLibrary/TwVec3.h"
 #include "../MathLibrary/TwQuat.h"
 #include "../MathLibrary/TwMat3.h"
@@ -58,3 +61,5 @@ namespace MG
 		static TwRigidBody* create(TwDynamicShape* shape, const TwMat4& transform, bool isStatic);
 	};
 }
+
+#endif // TWRIGIDBODY_H

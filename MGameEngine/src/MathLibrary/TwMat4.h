@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef TWMAT4_H
+#define TWMAT4_H
+
 #include <iostream>
 #include <cmath>
 #include <array>
@@ -216,3 +219,5 @@ namespace MG
         }
     };
 }
+
+#endif // TWMAT4_H

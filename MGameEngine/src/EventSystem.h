@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef EVENTSYSTEM_H
+#define EVENTSYSTEM_H
+
 #include <map>
 #include <string>
 #include "Delegate.h"
@@ -18,3 +21,5 @@ namespace MG
 		std::map<size_t, delegate<dataSphape>> m_events;
 	};
 }
+
+#endif // EVENTSYSTEM_H

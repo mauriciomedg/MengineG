@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef DELEGATE_H
+#define DELEGATE_H
+
 template<class M>
 class delegate
 {
@@ -36,3 +39,5 @@ private:
         return (p->*TMethod)(a1); // #2
     }
 };
+
+#endif //DELEGATE_H
