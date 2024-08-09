@@ -1,8 +1,10 @@
 #include "MRigidBodyComponent.h"
 #include "../Entity/MEntity.h"
 
-#include "../Twister/TwPhysicsEngine.h"
 #include "../Utils.h"
+#include "../Factory.h"
+#include "../Twister/Primitive/TwShape.h"
+#include "../Twister/TwPhysicsEngine.h"
 
 #include <iostream>
 
@@ -16,6 +18,8 @@ MRigidBodyComponent::~MRigidBodyComponent()
 void MRigidBodyComponent::updateShape(dataSphape data)
 {
 	m_halfSize = data.extend;
+	m_shape = Factory<TwShape, TwShape::IDENTIFIER_TYPE>::getInstance().createObject(TwShape::TW_CUBE);
+	m_shape->draw();
 	m_entity->getEntitySystem()->getGame()->getPhysicsEngine()->createRigidBody(this);
 }
 

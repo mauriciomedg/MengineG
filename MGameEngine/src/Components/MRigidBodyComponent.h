@@ -11,6 +11,8 @@
 
 namespace MG
 {
+	class TwShape;
+
 	class MRigidBodyComponent : public MComponent
 	{
 		
@@ -31,6 +33,7 @@ namespace MG
 		float m_mass = 1.0f;
 		TwVec3 m_halfSize;
 		unsigned int m_rigidId = 0;
+		TwShape* m_shape = nullptr;
 	};
 }
 

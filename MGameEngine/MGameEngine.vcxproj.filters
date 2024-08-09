@@ -135,9 +135,6 @@
     <ClInclude Include="MGameEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Components\MRigidBodyComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Twister\TwPhysicsEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -154,6 +151,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\MathLibrary\TwVec3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Twister\Primitive\TwCube.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Twister\Primitive\TwShape.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\MRigidBodyComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Factory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -272,10 +281,13 @@
     <ClCompile Include="src\Twister\TwRigidBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Components\MRigidBodyComponent.cpp">
+    <ClCompile Include="src\Twister\TwPhysicsEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Twister\TwPhysicsEngine.cpp">
+    <ClCompile Include="src\Twister\Primitive\TwCube.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\MRigidBodyComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -170,6 +170,7 @@
     <ClInclude Include="src\Entity\MEntity.h" />
     <ClInclude Include="src\Entity\MEntitySystem.h" />
     <ClInclude Include="src\EventSystem.h" />
+    <ClInclude Include="src\Factory.h" />
     <ClInclude Include="src\Game\MyGame.h" />
     <ClInclude Include="src\Game\MyPlayer.h" />
     <ClInclude Include="src\Inputs\InputSystem.h" />
@@ -202,6 +203,8 @@
     <ClInclude Include="src\Resource\MResource.h" />
     <ClInclude Include="src\Resource\MResourceManager.h" />
     <ClInclude Include="src\Resource\MTexture.h" />
+    <ClInclude Include="src\Twister\Primitive\TwCube.h" />
+    <ClInclude Include="src\Twister\Primitive\TwShape.h" />
     <ClInclude Include="src\Twister\TwPhysicsEngine.h" />
     <ClInclude Include="src\Utils.h" />
   </ItemGroup>
@@ -247,6 +250,7 @@
     <ClCompile Include="src\Resource\MResource.cpp" />
     <ClCompile Include="src\Resource\MResourceManager.cpp" />
     <ClCompile Include="src\Resource\MTexture.cpp" />
+    <ClCompile Include="src\Twister\Primitive\TwCube.cpp" />
     <ClCompile Include="src\Twister\TwPhysicsEngine.cpp" />
     <ClCompile Include="src\Twister\TwRigidBody.cpp" />
     <ClCompile Include="src\Twister\TwRigidBody.h" />
