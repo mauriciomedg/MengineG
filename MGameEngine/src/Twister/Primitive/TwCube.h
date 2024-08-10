@@ -10,7 +10,7 @@ namespace MG
 	class TwCube : public TwShape
 	{
 	public:
-		
+		virtual void calculateShape(const TwVec3& halfSize, float mass) override;
 		virtual void draw() override;
 	};
 }

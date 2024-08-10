@@ -6,6 +6,7 @@
 #include "../AllMHeaders.h"
 #include "../MathLibrary/TwMat4.h"
 #include "../MathLibrary/TwVec3.h"
+#include "../Twister/Primitive/TwShape.h"
 
 #include "../EventSystem.h" // temporal, we need it because of the dataShape
 
@@ -33,7 +34,7 @@ namespace MG
 		float m_mass = 1.0f;
 		TwVec3 m_halfSize;
 		unsigned int m_rigidId = 0;
-		TwShape* m_shape = nullptr;
+		std::unique_ptr<TwShape> m_shape;
 	};
 }
 

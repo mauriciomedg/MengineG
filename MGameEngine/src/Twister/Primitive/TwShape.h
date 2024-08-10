@@ -3,6 +3,9 @@
 #ifndef TWSHAPE_H
 #define TWSHAPE_H
 
+#include "MathLibrary/TwMat3.h"
+#include "MathLibrary/TwMat4.h"
+
 namespace MG
 {
 	class TwShape
@@ -16,7 +19,16 @@ namespace MG
 			TW_CAPSULE = 5;
 
 		virtual ~TwShape() {};
+		virtual void calculateShape(const TwVec3& halfSize, float mass) = 0;
 		virtual void draw() = 0;
+
+	protected:
+		float m_mass;
+		float m_massInv;
+		TwMat3 m_Ibody;
+		TwMat3 m_IbodyInv;
+
+		TwMat4 m_worldMat;
 	};
 }
 

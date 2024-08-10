@@ -1,5 +1,5 @@
 #include "TwPhysicsEngine.h"
-#include "../MathLibrary/TwMat4.h"
+#include "MathLibrary/TwMat4.h"
 #include "../Components/MRigidBodyComponent.h"
 #include "../Twister/TwRigidBody.h"
 
@@ -44,8 +44,8 @@ TwPhysicsEngine::~TwPhysicsEngine()
 
 void TwPhysicsEngine::createRigidBody(MRigidBodyComponent* rigidBodyComponent)
 {
-	unsigned int id = m_world->addRigidBody(rigidBodyComponent->getMass(), rigidBodyComponent->getHalfSize());
-	rigidBodyComponent->setRigidId(id);
+	//unsigned int id = m_world->addRigidBody(rigidBodyComponent->getMass(), rigidBodyComponent->getHalfSize());
+	//rigidBodyComponent->setRigidId(id);
 }
 
 void TwPhysicsEngine::addComponent(MComponent* component)

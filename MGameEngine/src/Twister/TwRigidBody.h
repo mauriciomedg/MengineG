@@ -3,10 +3,10 @@
 #ifndef TWRIGIDBODY_H
 #define TWRIGIDBODY_H
 
-#include "../MathLibrary/TwVec3.h"
-#include "../MathLibrary/TwQuat.h"
-#include "../MathLibrary/TwMat3.h"
-#include "../MathLibrary/TwMat4.h"
+#include "MathLibrary/TwVec3.h"
+#include "MathLibrary/TwQuat.h"
+#include "MathLibrary/TwMat3.h"
+#include "MathLibrary/TwMat4.h"
 
 namespace MG
 {
