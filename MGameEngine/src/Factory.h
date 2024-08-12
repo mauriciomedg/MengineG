@@ -8,13 +8,43 @@
 
 namespace MG
 {
+	class NullType {};
+	struct EmptyType {};
+	
+	template< class T, class U >
+	struct TypeList
+	{
+		typedef T Head;
+		typedef U Tail;
+	};
+
+#define TYPELIST_1(T1) TypeList<T1, NullType>
+
+	template <class TList, unsigned int index> struct TypeAt;
+
+	template <class Head, class Tail>
+	struct TypeAt< TypeList<Head, Tail>, 0>
+	{
+		typedef Head Result;
+	};
+
+	template <class Head, class Tail, unsigned int i>
+	struct TypeAt< TypeList<Head, Tail>, i>
+	{
+		typedef typename TypeAt<Tail, i - 1>::Result Result;
+	};
+
 	template < 
 		class AbstractProduct,
+		class TList,
 		typename IdentifierType,
-		typename ProductCreator = std::function<AbstractProduct*()>> // AbstractProduct* (*PointerFunction)()
+		typename ProductCreator> // AbstractProduct* (*PointerFunction)()
 
 	class Factory
 	{
+		typedef typename TypeAt<TList, 0>::Result
+			Parm1;
+
 		typedef std::map<IdentifierType, ProductCreator> AssocMap;
 		AssocMap m_association;
 
@@ -39,13 +69,13 @@ namespace MG
 			return m_association.erase(id) == 1; // number of elements erased
 		}
 
-		AbstractProduct* createObject(const IdentifierType& id)
+		AbstractProduct* createObject(const IdentifierType& id, Parm1 p1)
 		{
 			auto itt = m_association.find(id);
 			
 			if (itt != m_association.end())
 			{
-				return (itt->second)();
+				return (itt->second)(p1);
 			}
 
 			return nullptr; // TODO add policy to handle erros out of the Factory

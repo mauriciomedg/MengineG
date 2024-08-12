@@ -4,13 +4,14 @@
 
 namespace MG
 {
-	TwShape* createCube()
+
+	TwCube::TwCube(int a)
 	{
-		return new TwCube();
+		std::cout << "cubo created " << a << std::endl;
 	}
 
 	const bool registerResult =
-		Factory<TwShape, TwShape::IDENTIFIER_TYPE>::getInstance().registerProduct(TwShape::TW_CUBE, [](){ return new TwCube(); });// createCube);
+		Factory<TwShape, TYPELIST_1(int), TwShape::IDENTIFIER_TYPE, std::function<TwShape* (int)>>::getInstance().registerProduct(TwShape::TW_CUBE, [](int a){ return new TwCube(a); });// createCube);
 
 	void TwCube::calculateShape(const TwVec3& halfSize, float mass)
 	{

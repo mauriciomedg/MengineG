@@ -16,7 +16,7 @@ MRigidBodyComponent::~MRigidBodyComponent()
 
 void MRigidBodyComponent::create(dataSphape data)
 {
-	m_shape.reset(Factory<TwShape, TwShape::IDENTIFIER_TYPE>::getInstance().createObject(TwShape::TW_CUBE));
+	m_shape.reset(Factory<TwShape, TYPELIST_1(int), TwShape::IDENTIFIER_TYPE, std::function<TwShape*(int)>>::getInstance().createObject(TwShape::TW_CUBE, 2));
 	m_shape->calculateShape(data.extend, m_mass);
 	m_entity->getEntitySystem()->getGame()->getPhysicsEngine()->createRigidBody(this);
 }
