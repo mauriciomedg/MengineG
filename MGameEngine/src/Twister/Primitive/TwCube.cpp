@@ -10,7 +10,7 @@ namespace MG
 	}
 
 	const bool registerResult =
-		Factory<TwShape, TwShape::IDENTIFIER_TYPE>::getInstance().registerProduct(TwShape::TW_CUBE, createCube);
+		Factory<TwShape, TwShape::IDENTIFIER_TYPE>::getInstance().registerProduct(TwShape::TW_CUBE, [](){ return new TwCube(); });// createCube);
 
 	void TwCube::calculateShape(const TwVec3& halfSize, float mass)
 	{

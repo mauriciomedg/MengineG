@@ -4,13 +4,14 @@
 #define FACTORY_H
 
 #include <map>
+#include <functional>
 
 namespace MG
 {
 	template < 
 		class AbstractProduct,
 		typename IdentifierType,
-		typename ProductCreator = AbstractProduct* (*)()> // AbstractProduct* (*PointerFunction)()
+		typename ProductCreator = std::function<AbstractProduct*()>> // AbstractProduct* (*PointerFunction)()
 
 	class Factory
 	{
