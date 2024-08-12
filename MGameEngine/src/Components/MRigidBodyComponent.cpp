@@ -14,12 +14,11 @@ MRigidBodyComponent::~MRigidBodyComponent()
 	m_entity->getEntitySystem()->getGame()->getPhysicsEngine()->removeComponent(this);
 }
 
-void MRigidBodyComponent::updateShape(dataSphape data)
+void MRigidBodyComponent::create(dataSphape data)
 {
-	m_halfSize = data.extend;
 	m_shape.reset(Factory<TwShape, TwShape::IDENTIFIER_TYPE>::getInstance().createObject(TwShape::TW_CUBE));
-	m_shape->calculateShape(m_halfSize, m_mass);
-	//m_entity->getEntitySystem()->getGame()->getPhysicsEngine()->createRigidBody(this);
+	m_shape->calculateShape(data.extend, m_mass);
+	m_entity->getEntitySystem()->getGame()->getPhysicsEngine()->createRigidBody(this);
 }
 
 void MRigidBodyComponent::onCreateInternal()
@@ -28,7 +27,7 @@ void MRigidBodyComponent::onCreateInternal()
 
 	auto& events = m_entity->getEntitySystem()->getGame()->getEventSystem().m_events;
 
-	events.insert(std::make_pair(m_entity->getId(), delegate<dataSphape>::from_method<MRigidBodyComponent, &MRigidBodyComponent::updateShape>(this)));
+	events.insert(std::make_pair(m_entity->getId(), delegate<dataSphape>::from_method<MRigidBodyComponent, &MRigidBodyComponent::create>(this)));
 }
 
 void MRigidBodyComponent::updateTransform(const TwMat4& transform)

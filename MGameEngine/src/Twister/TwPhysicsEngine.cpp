@@ -14,12 +14,11 @@ namespace MG
 		TwWorld() {}
 		~TwWorld() {}
 
-		unsigned int addRigidBody(float mass, const TwVec3& halfSize)
+		unsigned int addRigidBody(std::shared_ptr<TwShape>& shape, bool isStatic)
 		{
 			unsigned int size = m_rigidBodies.size();
 
-			TwDynamicShape* shape = TwDynamicBox::create(halfSize, mass);
-			TwRigidBody* body = TwRigidBody::create(shape, TwMat4(), false);
+			TwRigidBody* body = new TwRigidBody(shape, isStatic);
 			m_rigidBodies.insert(std::make_pair(size + 1, body));
 
 			return size + 1;
@@ -28,7 +27,7 @@ namespace MG
 		void removeRigidBody() {};
 
 	private:
-		std::map<unsigned int, TwRigidBody*> m_rigidBodies;
+		std::map<unsigned int, std::shared_ptr<TwRigidBody>> m_rigidBodies;
 	};
 }
 
@@ -44,8 +43,8 @@ TwPhysicsEngine::~TwPhysicsEngine()
 
 void TwPhysicsEngine::createRigidBody(MRigidBodyComponent* rigidBodyComponent)
 {
-	//unsigned int id = m_world->addRigidBody(rigidBodyComponent->getMass(), rigidBodyComponent->getHalfSize());
-	//rigidBodyComponent->setRigidId(id);
+	unsigned int id = m_world->addRigidBody(rigidBodyComponent->getShape(), rigidBodyComponent->isStatic());
+	rigidBodyComponent->setRigidId(id);
 }
 
 void TwPhysicsEngine::addComponent(MComponent* component)

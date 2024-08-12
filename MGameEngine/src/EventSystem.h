@@ -13,6 +13,7 @@ namespace MG
 	struct dataSphape
 	{
 		TwVec3 extend;
+		int identifier;
 	};
 
 	class EventSystem

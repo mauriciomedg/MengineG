@@ -19,7 +19,7 @@ namespace MG
 			TW_CAPSULE = 5;
 
 		virtual ~TwShape() {};
-		virtual void calculateShape(const TwVec3& halfSize, float mass) = 0;
+		virtual void calculateShape(const TwVec3& halfSize, float mass) {};
 		virtual void draw() = 0;
 
 	protected:

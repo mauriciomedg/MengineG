@@ -21,20 +21,19 @@ namespace MG
 		virtual void onCreateInternal() override;
 
 	public:
-		void updateShape(dataSphape data);
+		void create(dataSphape data);
 		void updateTransform(const TwMat4& transform);
-
-		float getMass() const { return m_mass; }
-		const TwVec3& getHalfSize() const { return m_halfSize;	}
+		std::shared_ptr<TwShape>& getShape() { return m_shape; };
+		bool isStatic() const { return m_isStatic; }
 		void setRigidId(unsigned int rigidId) { m_rigidId = rigidId; }
 		virtual ~MRigidBodyComponent();
 
 	private: 
 
 		float m_mass = 1.0f;
-		TwVec3 m_halfSize;
+		bool m_isStatic = false;
 		unsigned int m_rigidId = 0;
-		std::unique_ptr<TwShape> m_shape;
+		std::shared_ptr<TwShape> m_shape;
 	};
 }
 

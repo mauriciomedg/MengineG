@@ -10,6 +10,8 @@ namespace MG
 	class TwCube : public TwShape
 	{
 	public:
+		static void registerCube();
+		~TwCube() {}
 		virtual void calculateShape(const TwVec3& halfSize, float mass) override;
 		virtual void draw() override;
 	};
