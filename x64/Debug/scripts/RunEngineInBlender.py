@@ -1,15 +1,14 @@
 import bpy
 import ctypes
 import os
+import gc
 
 blend_dir = os.path.dirname(bpy.data.filepath)
 lib_path = os.path.join(blend_dir, 'BlenderPlugin.dll') 
 print("Load dll from: ", lib_path)
-testlib = ctypes.CDLL(lib_path);
+testlib = None #ctypes.CDLL(lib_path);
 
 #testlib = ctypes.CDLL("D:\\CustomEngine\\MengineG\\x64\\Debug\\BlenderPlugin.dll");
-
-testlib.createEntity.argtypes = [ctypes.c_float, ctypes.c_float, ctypes.c_float]
 
 #Blender Python scripting: Creating custom operators from scratch
 
@@ -19,9 +18,17 @@ class WM_OT_RunGameEngine(bpy.types.Operator):
     bl_label = "Start MGameEngine"
     
     def execute(self, context):
-        testlib.getInstance()
-        testlib.execute()
-
+        global testlib
+        
+        if testlib is None:
+            testlib = ctypes.CDLL(lib_path)
+            testlib.createEntity.argtypes = [ctypes.c_float, ctypes.c_float, ctypes.c_float]
+            testlib.getInstance()
+            testlib.execute()
+            print("BlenderPlugin.dll loaded")
+        else:
+            print("BlenderPlugin.dll already loaded")
+            
         print("Game Engine Start")
         return {'FINISHED'}
     
@@ -35,12 +42,14 @@ class WM_OT_CreateEntity(bpy.types.Operator):
     
     def execute(self, context):
         #obj = bpy.context.active_object
-        obj = bpy.context.view_layer.objects.active
-        loc = obj.location.copy()
-        testlib.createEntity(loc[0], loc[2], loc[1])
-        print("Active object ID/name:", obj.name)
+        global testlib
+        
+        if testlib is not None:
+            obj = bpy.context.view_layer.objects.active
+            loc = obj.location.copy()
+            testlib.createEntity(loc[0], loc[2], loc[1])
+            print("Create Entity", obj.name)
 
-        print("Game Engine Start")
         return {'FINISHED'}
     
 bpy.utils.register_class(WM_OT_CreateEntity)
@@ -51,7 +60,12 @@ class WM_OT_Quit(bpy.types.Operator):
     bl_label = "Quit  Game"
     
     def execute(self, context):
-        testlib.quit()
+        global testlib
+        if testlib is not None:
+            testlib.quit()
+            #del testlib
+            #gc.collect() 
+            
         return {'FINISHED'}
     
 bpy.utils.register_class(WM_OT_Quit)
