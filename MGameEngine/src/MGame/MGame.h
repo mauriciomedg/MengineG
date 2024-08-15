@@ -35,10 +35,10 @@ namespace MG
 		bool m_isRunning = true;
 		f32 m_lastTime = 0.0f;
 				
-		std::unique_ptr<MEntitySystem> m_entitySystem;
 		std::unique_ptr<MGraphicsEngine> m_graphicEngine;
-		std::unique_ptr<MResourceManager> m_resourceManager;
 		std::unique_ptr<TwPhysicsEngine> m_physicsEngine;
+		std::unique_ptr<MResourceManager> m_resourceManager;
+		std::unique_ptr<MEntitySystem> m_entitySystem;
 
 		EventSystem m_eventSystem;
 

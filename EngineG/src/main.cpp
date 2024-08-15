@@ -244,7 +244,6 @@ int main(void)
 		game.run();
 	}
 
-	std::cout << "jjjj" << std::endl;
 	//game.create();
 	//game.run();
 

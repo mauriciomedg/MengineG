@@ -43,8 +43,8 @@ namespace MG
 
 MGame::MGame()
 {
-	m_physicsEngine = std::make_unique<TwPhysicsEngine>();
 	m_graphicEngine = std::make_unique<MGraphicsEngine>();
+	m_physicsEngine = std::make_unique<TwPhysicsEngine>();
 	m_resourceManager = std::make_unique<MResourceManager>(this);
 	m_entitySystem = std::make_unique<MEntitySystem>(this);
 }

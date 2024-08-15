@@ -8,7 +8,7 @@ namespace MG
 	{
 	public:
 		MyPlayer();
-		~MyPlayer();
+		virtual ~MyPlayer();
 
 		virtual void create() override;
 		virtual void update(f32 dt) override;
