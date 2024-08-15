@@ -66,7 +66,7 @@ void MGame::updateInternal()
 		update(dt);
 		m_physicsEngine->update(dt);
 		m_entitySystem->update(dt);
-		m_isRunning = m_graphicEngine->update();
+		m_graphicEngine->update();
 	}
 }
 

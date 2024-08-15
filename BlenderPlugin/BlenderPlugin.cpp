@@ -14,6 +14,11 @@ public:
 
 	~RunEngine();
 	void run();
+	void quit()
+	{
+		game->quit();
+	}
+
 	void createEntity(float pX, float pY, float pZ)
 	{
 		game->createEntity(pX, pY, pZ);
@@ -66,4 +71,9 @@ void execute()
 void createEntity(float pX, float pY, float pZ)
 {
 	RunEngine::getInstace().createEntity(pX, pY, pZ);
+}
+
+void quit()
+{
+	RunEngine::getInstace().quit();
 }

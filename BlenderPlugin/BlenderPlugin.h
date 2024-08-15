@@ -11,6 +11,7 @@
 
 extern "C" BLENDERPLUGIN_API void getInstance();
 extern "C" BLENDERPLUGIN_API void execute();
+extern "C" BLENDERPLUGIN_API void quit();
 
 extern "C" BLENDERPLUGIN_API void createEntity(float pX, float pY, float pZ);
 

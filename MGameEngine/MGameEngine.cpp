@@ -25,6 +25,11 @@ void MGameEngine::run()
 	mGame->run();
 }
 
+void MGameEngine::quit()
+{
+	mGame->quit();
+}
+
 void MGameEngine::createEntity(float x, float y, float z)
 {
 	mGame->requestCreate(x, y, z);

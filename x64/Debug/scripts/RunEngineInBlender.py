@@ -46,6 +46,17 @@ class WM_OT_CreateEntity(bpy.types.Operator):
 bpy.utils.register_class(WM_OT_CreateEntity)
 bpy.utils.unregister_class(WM_OT_CreateEntity)
 
+class WM_OT_Quit(bpy.types.Operator):
+    bl_idname = "wm.quit"
+    bl_label = "Quit  Game"
+    
+    def execute(self, context):
+        testlib.quit()
+        return {'FINISHED'}
+    
+bpy.utils.register_class(WM_OT_Quit)
+bpy.utils.unregister_class(WM_OT_Quit)
+
 # test call the operator
 #bpy.ops.wm.run_game_engine()
 
@@ -70,15 +81,22 @@ class MGAMEENGINE_PT_main_panel(bpy.types.Panel) :
         row = layout.row()
         row.operator("wm.create_entity", icon = 'CUBE')
         
+        self.layout.separator()
+        
+        row = layout.row()
+        row.operator("wm.quit", icon = 'CUBE')
+        
 def register():
     bpy.utils.register_class(WM_OT_RunGameEngine)
     bpy.utils.register_class(MGAMEENGINE_PT_main_panel)
     bpy.utils.register_class(WM_OT_CreateEntity)
+    bpy.utils.register_class(WM_OT_Quit)
 
 def unregister():
     bpy.utils.unregister_class(WM_OT_RunGameEngine)
     bpy.utils.unregister_class(MGAMEENGINE_PT_main_panel)
     bpy.utils.unregister_class(WM_OT_CreateEntity)
+    bpy.utils.unregister_class(WM_OT_Quit)
     
 if __name__ == "__main__":
     register()
