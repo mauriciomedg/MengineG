@@ -145,7 +145,7 @@ MDeviceContext::~MDeviceContext()
 	{
 		glfwDestroyWindow(m_window);
 		glfwTerminate();
-		exit(EXIT_SUCCESS);
+		//exit(EXIT_SUCCESS);
 	}
 }
 
