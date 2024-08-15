@@ -241,7 +241,6 @@ int main(void)
 	//MG::MyGame game;
 	{
 		MGameEngine game;
-		game.quit();
 		game.run();
 	}
 
