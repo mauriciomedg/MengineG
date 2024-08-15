@@ -163,6 +163,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="src\AllMHeaders.h" />
     <ClInclude Include="src\Components\MCameraComponent.h" />
+    <ClInclude Include="src\Components\MCollisionShapeComponent.h" />
     <ClInclude Include="src\Components\MComponent.h" />
     <ClInclude Include="src\Components\MMeshComponent.h" />
     <ClInclude Include="src\Components\MRigidBodyComponent.h" />
@@ -219,6 +220,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\Components\MCameraComponent.cpp" />
+    <ClCompile Include="src\Components\MCollisionShapeComponent.cpp" />
     <ClCompile Include="src\Components\MComponent.cpp" />
     <ClCompile Include="src\Components\MMeshComponent.cpp" />
     <ClCompile Include="src\Components\MRigidBodyComponent.cpp" />

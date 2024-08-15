@@ -1,6 +1,7 @@
 #include "TwPhysicsEngine.h"
 #include "MathLibrary/TwMat4.h"
 #include "../Components/MRigidBodyComponent.h"
+#include "../Components/MCollisionShapeComponent.h"
 #include "../Twister/TwRigidBody.h"
 
 using namespace MG;
@@ -51,12 +52,18 @@ void TwPhysicsEngine::addComponent(MComponent* component)
 {
 	if (auto c = dynamic_cast<MRigidBodyComponent*>(component))
 		m_rigidBodieComponents.emplace(c);
+
+	if (auto c = dynamic_cast<MCollisionShapeComponent*>(component))
+		m_collisionShapeComponent.emplace(c);
 }
 
 void TwPhysicsEngine::removeComponent(MComponent* component)
 {
 	if (auto c = dynamic_cast<MRigidBodyComponent*>(component))
 		m_rigidBodieComponents.erase(c);
+
+	if (auto c = dynamic_cast<MCollisionShapeComponent*>(component))
+		m_collisionShapeComponent.erase(c);
 }
 
 bool TwPhysicsEngine::update(float dt)

@@ -10,6 +10,7 @@ namespace MG
 {
 	class MComponent;
 	class MRigidBodyComponent;
+	class MCollisionShapeComponent;
 	
 	class TwWorld;
 
@@ -31,6 +32,7 @@ namespace MG
 		TwWorld* m_world;
 
 		std::set<MRigidBodyComponent*> m_rigidBodieComponents;
+		std::set<MCollisionShapeComponent*> m_collisionShapeComponent;
 	};
 }
 
