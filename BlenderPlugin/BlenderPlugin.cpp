@@ -82,6 +82,15 @@ void createEntity(float pX, float pY, float pZ)
 	RunEngine::getInstace().createEntity(pX, pY, pZ);
 }
 
+void createEntityMesh(float* vertices, int vertex_count, int* indices, int index_count)
+{
+	for (int i = 0; i < vertex_count; ++i)
+		std::cout << "vertex " << vertices[i] << std::endl;
+
+	for (int i = 0; i < index_count; ++i)
+		std::cout << "indeces " << indices[i] << std::endl;
+}
+
 void quit()
 {
 	RunEngine::getInstace().quit();

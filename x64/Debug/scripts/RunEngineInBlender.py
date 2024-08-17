@@ -2,6 +2,7 @@ import bpy
 import ctypes
 import os
 import gc
+import numpy as np
 
 blend_dir = os.path.dirname(bpy.data.filepath)
 lib_path = os.path.join(blend_dir, 'BlenderPlugin.dll') 
@@ -23,6 +24,14 @@ class WM_OT_RunGameEngine(bpy.types.Operator):
         if testlib is None:
             testlib = ctypes.CDLL(lib_path)
             testlib.createEntity.argtypes = [ctypes.c_float, ctypes.c_float, ctypes.c_float]
+            
+            testlib.createEntityMesh.argtypes = [
+            ctypes.POINTER(ctypes.c_float), # vertices (float array)
+            ctypes.c_int, # vertex_count (int)
+            ctypes.POINTER(ctypes.c_int), # indices (int array)
+            ctypes.c_int # index_count (int)
+            ]
+            
             testlib.getInstance()
             testlib.start()
             print("BlenderPlugin.dll loaded")
@@ -41,15 +50,46 @@ class WM_OT_CreateEntity(bpy.types.Operator):
     bl_idname = "wm.create_entity"
     bl_label = "Create Entity"
     
+    def defaultDataTest(self):
+        obj = bpy.context.view_layer.objects.active
+        loc = obj.location.copy()
+        testlib.createEntity(loc[0], loc[2], loc[1])
+        print("Create Entity getting the vertex data", obj.name)
+        return
+    
+    def getVertexData(self):
+        obj = bpy.context.view_layer.objects.active
+        
+        if obj.type == 'MESH':
+            mesh = obj.data
+
+            # Extract vertex coordinates as a flat list
+            vertex_buffer_mesh = [coord for vertex in mesh.vertices for coord in vertex.co]
+            vertex_buffer_flat = np.array(vertex_buffer_mesh, dtype = np.float32)
+            
+            # Extract face indices as a flat list
+            index_buffer_mesh = [index for poly in mesh.polygons for index in poly.vertices]
+            index_buffer_flat = np.array(index_buffer_mesh, dtype=np.int32)
+            
+            vertex_ptr = vertex_buffer_flat.ctypes.data_as(ctypes.POINTER(ctypes.c_float))
+            index_ptr = index_buffer_flat.ctypes.data_as(ctypes.POINTER(ctypes.c_int))
+
+            testlib.createEntityMesh(vertex_ptr, len(vertex_buffer_mesh), index_ptr, len(index_buffer_mesh))
+            
+            print("Vertex Buffer:", len(index_buffer_mesh))
+            print("Index Buffer:", len(index_buffer_mesh))
+        else:
+            print("The active object is not a mesh.")
+            
+        print("Create Entity getting the vertex data", obj.name)
+        return
+    
     def execute(self, context):
         #obj = bpy.context.active_object
         global testlib
         
         if testlib is not None:
-            obj = bpy.context.view_layer.objects.active
-            loc = obj.location.copy()
-            testlib.createEntity(loc[0], loc[2], loc[1])
-            print("Create Entity", obj.name)
+            self.getVertexData()
 
         return {'FINISHED'}
     
