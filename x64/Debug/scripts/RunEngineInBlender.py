@@ -24,9 +24,10 @@ class WM_OT_RunGameEngine(bpy.types.Operator):
             testlib = ctypes.CDLL(lib_path)
             testlib.createEntity.argtypes = [ctypes.c_float, ctypes.c_float, ctypes.c_float]
             testlib.getInstance()
-            testlib.execute()
+            testlib.start()
             print("BlenderPlugin.dll loaded")
         else:
+            testlib.start()
             print("BlenderPlugin.dll already loaded")
             
         print("Game Engine Start")
@@ -63,8 +64,10 @@ class WM_OT_Quit(bpy.types.Operator):
         global testlib
         if testlib is not None:
             testlib.quit()
-            #del testlib
-            #gc.collect() 
+            del testlib
+            testlib = None
+            gc.collect()
+            print("Quit Game and kill dll") 
             
         return {'FINISHED'}
     

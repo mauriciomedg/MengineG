@@ -5,51 +5,59 @@
 class RunEngine
 {
 private:
-	RunEngine();
+	RunEngine() {};
 	RunEngine(const RunEngine&);
+	RunEngine& operator=(const RunEngine&);
 
 	void runEngine();
 
 public:
 
 	~RunEngine();
-	void run();
+	void start();
 	void quit()
 	{
-		game->quit();
+		if (m_game)
+			m_game->quit();
+
+		if (m_first.joinable())
+			m_first.join();
+
+		m_game = nullptr;
 	}
 
 	void createEntity(float pX, float pY, float pZ)
 	{
-		game->createEntity(pX, pY, pZ);
+		if (m_game)
+			m_game->createEntity(pX, pY, pZ);
 	}
 
 	static RunEngine& getInstace();
 
 private:
-	std::thread first;
-	MGameEngine* game;
+	std::thread m_first;
+	MGameEngine* m_game = nullptr;
 };
-
-RunEngine::RunEngine()
-{
-}
 
 void RunEngine::runEngine()
 {
-	game = new MGameEngine();
-	game->run();
+	m_game = new MGameEngine();
+	m_game->run();
+	delete m_game;
 }
 
 RunEngine::~RunEngine()
 {
-	delete game;
+	quit();
+	std::cout << "Dll killed.." << std::endl;
 }
 
-void RunEngine::run()
+void RunEngine::start()
 {
+	std::cout << "Star Engine from plugin" << std::endl;
+
 	std::thread firstTemp([&]() { this->runEngine(); });
-	first = std::move(firstTemp);
+	m_first.swap(firstTemp);
 }
 
 RunEngine& RunEngine::getInstace()
@@ -58,14 +66,15 @@ RunEngine& RunEngine::getInstace()
 	return instance;
 }
 
+/// //////////////////////////////////////////////
 void getInstance()
 {
 	RunEngine::getInstace();
 }
 
-void execute()
+void start()
 {
-	RunEngine::getInstace().run();
+	RunEngine::getInstace().start();
 }
 
 void createEntity(float pX, float pY, float pZ)
