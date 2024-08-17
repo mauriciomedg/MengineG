@@ -84,6 +84,8 @@ void MCameraComponent::computeProjection()
 {
 	if (m_type == MCameraType::Perspective)
 	{
+		if (m_screenArea.height == 0) m_screenArea.height = 1.0f;
+
 		auto aspect = (float)m_screenArea.width / (float)m_screenArea.height;
 		m_projection = glm::perspective(m_fieldOfView, aspect, m_nearPlane, m_farPlane);
 	}
