@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include "MGameEngine.h"
-
+#include <thread>
 //#include "Inputs.h"
 
 //#include "Utils.h"
@@ -213,6 +213,108 @@
 //	m.doc() = "Embb mod";
 //	m.def("say", &say);
 //}
+
+class RunEngine
+{
+private:
+	RunEngine() {};
+	RunEngine(const RunEngine&);
+	RunEngine& operator=(const RunEngine&);
+
+	void runEngine();
+
+public:
+
+	~RunEngine();
+	void start();
+	void quit()
+	{
+		if (m_game)
+			m_game->quit();
+					
+		if (m_first.joinable())
+			m_first.join();
+
+		m_game = nullptr;
+	}
+
+	void createEntity(float pX, float pY, float pZ)
+	{
+		m_game->createEntity(pX, pY, pZ);
+	}
+
+	static RunEngine& getInstace();
+
+private:
+	std::thread m_first;
+	MGameEngine* m_game = nullptr;
+};
+
+void RunEngine::runEngine()
+{
+	m_game = new MGameEngine();
+	m_game->run();
+	delete m_game;
+}
+
+RunEngine::~RunEngine()
+{
+	quit();
+}
+
+void RunEngine::start()
+{
+	std::thread firstTemp([&]() { this->runEngine(); });
+	m_first.swap(firstTemp);
+}
+
+RunEngine& RunEngine::getInstace()
+{
+	static RunEngine instance;
+	return instance;
+}
+
+/// //////////////////////////////////////////////
+void getInstance()
+{
+	RunEngine::getInstace();
+}
+
+void start()
+{
+	RunEngine::getInstace().start();
+}
+
+void createEntity(float pX, float pY, float pZ)
+{
+	RunEngine::getInstace().createEntity(pX, pY, pZ);
+}
+
+void quit()
+{
+	RunEngine::getInstace().quit();
+}
+
+void RunEngineInAnotherProcess()
+{
+	getInstance();
+
+	int c = 0;
+
+	while (c < 5)
+	{
+		std::cin >> c;
+
+		if (c == 0)
+		{
+			start();
+		}
+		else if (c == 1)
+		{
+			quit();
+		}
+	}
+}
 
 int main(void) 
 {
