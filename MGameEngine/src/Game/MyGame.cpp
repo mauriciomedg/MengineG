@@ -19,9 +19,26 @@ MyGame::~MyGame()
 
 }
 
-void MyGame::requestCreate(float x, float y, float z)
+void MyGame::requestCreateEntity(float x, float y, float z)
 {
 	m_delegate_create({ x, y, z });
+}
+
+void MyGame::requestCreateEntity(float* vertices,
+	int vertex_count,
+	int* indices,
+	int index_count,
+	float* texture_coord,
+	int text_coord_count)
+{
+	std::vector<float> vertexBuffer;
+	std::copy(&vertices[0], &vertices[vertex_count], std::back_inserter(vertexBuffer));
+
+	std::vector<float> indicesBuffer;
+	std::copy(&indices[0], &indices[index_count], std::back_inserter(indicesBuffer));
+
+	std::cout << "text cooord count " << text_coord_count << std::endl;
+	m_delegate_create_mesh({ vertexBuffer, indicesBuffer });
 }
 
 void MyGame::commandCreateEntity(data p)
@@ -30,11 +47,18 @@ void MyGame::commandCreateEntity(data p)
 	m_list_data.push_back(p);
 }
 
-void MyGame::create()
+void MyGame::commandCreateEntityMesh(meshData p)
 {
-	MGame::create();
+	std::lock_guard<std::mutex> guard(m_mutex);
+	m_list_mesh_data.push_back(p);
+}
+
+void MyGame::init()
+{
+	MGame::init();
 
 	m_delegate_create = delegate<data>::from_method<MyGame, &MyGame::commandCreateEntity>(this);
+	m_delegate_create_mesh = delegate<meshData>::from_method<MyGame, &MyGame::commandCreateEntityMesh>(this);
 
 	auto mesh = getResourceManager()->createResourceFromFile<MMesh>("models/BlockModel3.obj");
 	auto terrain = getResourceManager()->createResourceFromFile<MMesh>("models/floor.obj");
@@ -80,7 +104,7 @@ void MyGame::create()
 
 }
 
-void MyGame::createEntity(data p)
+void MyGame::createEntity(data& p)
 {
 	auto mesh = getResourceManager()->createResourceFromFile<MMesh>("models/BlockModel3.obj");
 	auto texture = getResourceManager()->createResourceFromFile<MTexture>("textures/wood.png");
@@ -95,6 +119,13 @@ void MyGame::createEntity(data p)
 	meshComponent->addMaterial(material);
 }
 
+void MyGame::createEntity(meshData& p)
+{
+
+	auto mesh = std::make_shared<MMesh>(p.vertex, p.indices, getResourceManager());
+
+}
+
 void MyGame::update(f32 dt)
 {
 	m_theta += 1.0 * dt;
@@ -105,6 +136,14 @@ void MyGame::update(f32 dt)
 		{
 			data p = m_list_data.back();
 			m_list_data.pop_back();
+
+			createEntity(p);
+		}
+
+		if (!m_list_mesh_data.empty())
+		{
+			meshData p = m_list_mesh_data.back();
+			m_list_mesh_data.pop_back();
 
 			createEntity(p);
 		}

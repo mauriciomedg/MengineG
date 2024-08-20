@@ -148,6 +148,12 @@ MMesh::MMesh(const char* file_path, MResourceManager* resourceManager)
 	
 }
 
+MMesh::MMesh(std::vector<float>& vertex, std::vector<float>& indices, MResourceManager* resourceManager)
+	: MResource("", resourceManager)
+{
+
+}
+
 MMesh::MMesh(const MVertexBufferDesc& vbDes, const MIndexBufferDesc& ibDes, MResourceManager* resourceManager)
 	: MResource("", resourceManager)
 {

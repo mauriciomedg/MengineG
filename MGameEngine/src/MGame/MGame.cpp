@@ -49,7 +49,7 @@ MGame::MGame()
 	m_entitySystem = std::make_unique<MEntitySystem>(this);
 }
 
-void MGame::create()
+void MGame::init()
 {
 }
 

@@ -12,7 +12,7 @@ int runExample(float pos)
 MGameEngine::MGameEngine()
 {
 	mGame = new MG::MyGame();
-	mGame->create();
+	mGame->init();
 }
 
 MGameEngine::~MGameEngine()
@@ -32,5 +32,15 @@ void MGameEngine::quit()
 
 void MGameEngine::createEntity(float x, float y, float z)
 {
-	mGame->requestCreate(x, y, z);
+	mGame->requestCreateEntity(x, y, z);
+}
+
+void MGameEngine::createEntityMesh(float* vertices, 
+	int vertex_count, 
+	int* indices, 
+	int index_count, 
+	float* texture_coord,
+	int text_coord_count)
+{
+	mGame->requestCreateEntity(vertices, vertex_count, indices, index_count, texture_coord, text_coord_count);
 }

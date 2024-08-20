@@ -22,6 +22,13 @@ public:
 	void run();
 	void quit();
 	void createEntity(float x, float y, float z);
+	void createEntityMesh(float* vertices,
+		int vertex_count,
+		int* indices,
+		int index_count,
+		float* texture_coord,
+		int text_coord_count);
+
 private:
 	MG::MyGame* mGame;
 

@@ -29,7 +29,9 @@ class WM_OT_RunGameEngine(bpy.types.Operator):
             ctypes.POINTER(ctypes.c_float), # vertices (float array)
             ctypes.c_int, # vertex_count (int)
             ctypes.POINTER(ctypes.c_int), # indices (int array)
-            ctypes.c_int # index_count (int)
+            ctypes.c_int, # index_count (int)
+            ctypes.POINTER(ctypes.c_float), # texture coordinates (float array)
+            ctypes.c_int # coords_count (int)
             ]
             
             testlib.getInstance()
@@ -71,10 +73,23 @@ class WM_OT_CreateEntity(bpy.types.Operator):
             index_buffer_mesh = [index for poly in mesh.polygons for index in poly.vertices]
             index_buffer_flat = np.array(index_buffer_mesh, dtype=np.int32)
             
+            # Extract texture coordintates as a flat list
+            texture_coords_mesh = []
+            
+            if mesh.uv_layers.active is not None:
+                uv_layer = mesh.uv_layers.active.data
+                # Extract UV coordinates as a flat list
+                texture_coords_mesh = [uv.uv[i] for uv in uv_layer for i in range(2)]
+             
+            texture_coords_flat = np.array(texture_coords_mesh, dtype=np.float32)   
+            
+        
+            # Convert all the numpys array to a ctypes pointer
             vertex_ptr = vertex_buffer_flat.ctypes.data_as(ctypes.POINTER(ctypes.c_float))
             index_ptr = index_buffer_flat.ctypes.data_as(ctypes.POINTER(ctypes.c_int))
+            texture_coords_ptr = texture_coords_flat.ctypes.data_as(ctypes.POINTER(ctypes.c_float))
 
-            testlib.createEntityMesh(vertex_ptr, len(vertex_buffer_mesh), index_ptr, len(index_buffer_mesh))
+            testlib.createEntityMesh(vertex_ptr, len(vertex_buffer_mesh), index_ptr, len(index_buffer_mesh), texture_coords_ptr, len(texture_coords_mesh))
             
             print("Vertex Buffer:", len(index_buffer_mesh))
             print("Index Buffer:", len(index_buffer_mesh))
@@ -90,6 +105,7 @@ class WM_OT_CreateEntity(bpy.types.Operator):
         
         if testlib is not None:
             self.getVertexData()
+            #self.defaultDataTest()
 
         return {'FINISHED'}
     

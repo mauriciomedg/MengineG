@@ -1,6 +1,7 @@
 #pragma once
 #include "../OGraphicsEngine/MPrerequisites.h"
 #include "MResource.h"
+#include <vector>
 
 namespace MG
 {
@@ -8,6 +9,7 @@ namespace MG
 	{
 	public:
 		MMesh(const char* file_path, MResourceManager* resourceManager);
+		MMesh(std::vector<float>& vertex, std::vector<float>& indices, MResourceManager* resourceManager);
 		MMesh(const MVertexBufferDesc& vbDes, const MIndexBufferDesc& ibDes,
 			MResourceManager* resourceManager);
 

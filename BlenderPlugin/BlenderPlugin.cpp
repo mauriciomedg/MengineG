@@ -32,6 +32,18 @@ public:
 			m_game->createEntity(pX, pY, pZ);
 	}
 
+	void createEntityMesh(float* vertices, 
+		int vertex_count, 
+		int* indices, 
+		int index_count, 
+		float* texture_coord, 
+		int text_coord_count)
+	{
+		if (m_game)
+			m_game->createEntityMesh(vertices,
+				vertex_count, indices, index_count, texture_coord, text_coord_count);
+	}
+
 	static RunEngine& getInstace();
 
 private:
@@ -82,13 +94,28 @@ void createEntity(float pX, float pY, float pZ)
 	RunEngine::getInstace().createEntity(pX, pY, pZ);
 }
 
-void createEntityMesh(float* vertices, int vertex_count, int* indices, int index_count)
+void createEntityMesh(float* vertices,
+	int vertex_count,
+	int* indices,
+	int index_count,
+	float* texture_coord,
+	int text_coord_count)
 {
 	for (int i = 0; i < vertex_count; ++i)
 		std::cout << "vertex " << vertices[i] << std::endl;
 
 	for (int i = 0; i < index_count; ++i)
-		std::cout << "indeces " << indices[i] << std::endl;
+		std::cout << "indices " << indices[i] << std::endl;
+
+	for (int i = 0; i < text_coord_count; ++i)
+		std::cout << "texture coord " << texture_coord[i] << std::endl;
+
+	RunEngine::getInstace().createEntityMesh(vertices,
+		vertex_count,
+		indices,
+		index_count,
+		texture_coord,
+		text_coord_count);
 }
 
 void quit()

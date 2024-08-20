@@ -24,7 +24,7 @@ namespace MG
 		TwPhysicsEngine* getPhysicsEngine();
 		EventSystem& getEventSystem() { return m_eventSystem; };
 	protected:
-		virtual void create();
+		virtual void init();
 		virtual void update(f32 dt) = 0;
 		virtual void quit();
 
