@@ -9,7 +9,7 @@ namespace MG
 	{
 	public:
 		MMesh(const char* file_path, MResourceManager* resourceManager);
-		MMesh(std::vector<float>& vertex, std::vector<float>& indices, MResourceManager* resourceManager);
+		MMesh(const MVertexBufferDesc& vbDes, MResourceManager* resourceManager);
 		MMesh(const MVertexBufferDesc& vbDes, const MIndexBufferDesc& ibDes,
 			MResourceManager* resourceManager);
 

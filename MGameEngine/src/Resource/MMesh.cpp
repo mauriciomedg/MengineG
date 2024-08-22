@@ -148,17 +148,18 @@ MMesh::MMesh(const char* file_path, MResourceManager* resourceManager)
 	
 }
 
-MMesh::MMesh(std::vector<float>& vertex, std::vector<float>& indices, MResourceManager* resourceManager)
+MMesh::MMesh(const MVertexBufferDesc& vbDes, MResourceManager* resourceManager)
 	: MResource("", resourceManager)
 {
-
+	auto renderSystem = resourceManager->getMGame()->getGraphicEngine()->getRenderSystem();
+	m_vertexArrayObject = renderSystem->createVextexArrayObject(vbDes);
 }
 
 MMesh::MMesh(const MVertexBufferDesc& vbDes, const MIndexBufferDesc& ibDes, MResourceManager* resourceManager)
 	: MResource("", resourceManager)
 {
 	auto renderSystem = resourceManager->getMGame()->getGraphicEngine()->getRenderSystem();
-	renderSystem->createVextexArrayObject(vbDes, ibDes);
+	m_vertexArrayObject = renderSystem->createVextexArrayObject(vbDes, ibDes);
 }
 
 MMesh::~MMesh()
