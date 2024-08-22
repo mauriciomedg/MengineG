@@ -31,14 +31,117 @@ void MyGame::requestCreateEntity(float* vertices,
 	float* texture_coord,
 	int text_coord_count)
 {
-	std::vector<float> vertexBuffer;
-	std::copy(&vertices[0], &vertices[vertex_count], std::back_inserter(vertexBuffer));
 
-	std::vector<float> indicesBuffer;
-	std::copy(&indices[0], &indices[index_count], std::back_inserter(indicesBuffer));
+	std::vector<ui32> indicesList;
+	for (int i = 0; i < index_count; i++)
+	{
+		indicesList.push_back(ui32(indices[i]));
+		std::cout << indicesList[i] << std::endl;
+	}
 
-	std::cout << "text cooord count " << text_coord_count << std::endl;
-	m_delegate_create_mesh({ vertexBuffer, indicesBuffer });
+	std::vector<glm::vec3> verticesAll;
+	for (int i = 0; i < vertex_count; i = i + 3)
+	{
+		verticesAll.push_back(glm::vec3(f32(vertices[i]), f32(vertices[i + 1]), f32(vertices[i + 2])));
+	}
+
+	std::vector<glm::vec2> textCoordAll;
+	for (int i = 0; i < text_coord_count; i = i + 2)
+	{
+		textCoordAll.push_back(glm::vec2(f32(texture_coord[i]), f32(texture_coord[i + 1])));
+	}
+
+	std::vector<VertexMesh> verticesList;
+	
+	for (int i = 0; i < index_count; i++)
+	{
+		verticesList.push_back({ verticesAll[indicesList[i]],
+								 textCoordAll[indicesList[i]]});
+	}
+	
+std::cout << " nb text_coord_count " << text_coord_count << std::endl;
+
+	/////////////////////////////////////////////////////////////////////////////////
+	//const glm::vec3 positionsList[] = {
+	//	glm::vec3(-0.5f, -0.5f, -0.5f),
+	//	glm::vec3(-0.5f, 0.5f, -0.5f),
+	//	glm::vec3(0.5f, 0.5f, -0.5f),
+	//	glm::vec3(0.5f, -0.5f, -0.5f),
+	//
+	//	glm::vec3(0.5f, -0.5f, 0.5f),
+	//	glm::vec3(0.5f, 0.5f, 0.5f),
+	//	glm::vec3(-0.5f, 0.5f, 0.5f),
+	//	glm::vec3(-0.5f, -0.5f, 0.5f)
+	//};
+	//
+	//glm::vec2 texCoordsList[]
+	//{
+	//	glm::vec2(0, 0),
+	//	glm::vec2(0, 1),
+	//	glm::vec2(1, 0),
+	//	glm::vec2(1, 1)
+	//};
+	//
+	//std::vector<VertexMesh> verticesList =
+	//{
+	//	//front
+	//	{ positionsList[0], texCoordsList[1] },
+	//	{ positionsList[1], texCoordsList[0] },
+	//	{ positionsList[2], texCoordsList[2] },
+	//	{ positionsList[3], texCoordsList[3] },
+	//
+	//	//back
+	//	{ positionsList[4], texCoordsList[1] },
+	//	{ positionsList[5], texCoordsList[0] },
+	//	{ positionsList[6], texCoordsList[2] },
+	//	{ positionsList[7], texCoordsList[3] },
+	//
+	//	//top
+	//	{ positionsList[1], texCoordsList[1] },
+	//	{ positionsList[6], texCoordsList[0] },
+	//	{ positionsList[5], texCoordsList[2] },
+	//	{ positionsList[2], texCoordsList[3] },
+	//	
+	//	// bottom
+	//	{ positionsList[7], texCoordsList[1] },
+	//	{ positionsList[0], texCoordsList[0] },
+	//	{ positionsList[3], texCoordsList[2] },
+	//	{ positionsList[4], texCoordsList[3] },
+	//
+	//	// right
+	//	{ positionsList[3], texCoordsList[1] },
+	//	{ positionsList[2], texCoordsList[0] },
+	//	{ positionsList[5], texCoordsList[2] },
+	//	{ positionsList[4], texCoordsList[3] },
+	//
+	//	// left
+	//	{ positionsList[7], texCoordsList[1] },
+	//	{ positionsList[6], texCoordsList[0] },
+	//	{ positionsList[1], texCoordsList[2] },
+	//	{ positionsList[0], texCoordsList[3] }
+	//};
+	//
+	//std::vector<ui32> indicesList = {
+	//	0, 1, 2,
+	//	2, 3, 0,
+	//
+	//	4, 5, 6,
+	//	6, 7, 4,
+	//
+	//	8, 9, 10,
+	//	10, 11, 8,
+	//
+	//	12, 13, 14,
+	//	14, 15, 12,
+	//
+	//	16, 17, 18,
+	//	18, 19, 16,
+	//
+	//	20, 21, 22,
+	//	22, 23, 20
+	//};
+
+	m_delegate_create_mesh({ verticesList, indicesList });
 }
 
 void MyGame::commandCreateEntity(data p)
@@ -122,7 +225,45 @@ void MyGame::createEntity(data& p)
 void MyGame::createEntity(meshData& p)
 {
 
-	auto mesh = std::make_shared<MMesh>(p.vertex, p.indices, getResourceManager());
+	//for (int i = 0; i < p.verticesList.size(); i++)
+	//{
+	//	std::cout << p.verticesList[i].position[0] << " " << p.verticesList[i].position[1] << " " << p.verticesList[i].position[2] << std::endl;
+	//}
+
+	MVertexAtrribute attributeList[] =
+	{
+		sizeof(glm::vec3) / sizeof(f32), // pos
+		sizeof(glm::vec2) / sizeof(f32) // text coord
+	};
+	
+	auto mesh = std::make_shared<MMesh>(
+		MVertexBufferDesc({ 
+				(void*)(&p.verticesList[0]),
+				sizeof(VertexMesh),
+				(ui32)p.verticesList.size(),
+				attributeList,
+				sizeof(attributeList) / (sizeof(MVertexAtrribute))
+			}),
+		//MIndexBufferDesc({
+		//			(void*)(&p.indices[0]),
+		//			ui32(p.indices.size())
+		//		}), 
+		getResourceManager());
+	
+	//auto mesh = getResourceManager()->createResourceFromFile<MMesh>("models/BlockModel3.obj");
+
+	auto texture = getResourceManager()->createResourceFromFile<MTexture>("textures/wood.png");
+	auto material = getResourceManager()->createResourceFromFile<MMaterial>("shaders/basicVertShader.glsl", "shaders/basicFragShader.glsl");
+	
+	material->addTexture(texture);
+	//material->setCullType(MCullType::FrontFace);
+	material->setWindingOrder(MWindingOrder::ClockWise);
+	auto entity = getEntitySystem()->createEntity<MEntity>();
+	entity->getTransform()->setPosition(glm::vec3(50, 50, 50));
+	
+	auto meshComponent = entity->createComponent<MMeshComponent>();
+	meshComponent->setMesh(mesh);
+	meshComponent->addMaterial(material);
 
 }
 

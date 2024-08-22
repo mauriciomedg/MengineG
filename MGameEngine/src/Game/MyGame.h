@@ -15,9 +15,8 @@ namespace MG
 
 	struct meshData
 	{
-		std::vector<float> vertex;
-		std::vector<float> indices;
-		std::vector<float> textureCoord;
+		std::vector<VertexMesh> verticesList;
+		std::vector<ui32> indices;
 	};
 
 	class MyPlayer;
