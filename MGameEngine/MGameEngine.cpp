@@ -18,6 +18,7 @@ MGameEngine::MGameEngine()
 MGameEngine::~MGameEngine()
 {
 	delete mGame;
+	mGame = nullptr;
 }
 
 void MGameEngine::run()
@@ -27,7 +28,8 @@ void MGameEngine::run()
 
 void MGameEngine::quit()
 {
-	mGame->quit();
+	if (mGame)
+		mGame->quit();
 }
 
 void MGameEngine::createEntity(float x, float y, float z)

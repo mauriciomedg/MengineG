@@ -261,6 +261,7 @@ void RunEngine::runEngine()
 	m_game = new MGameEngine();
 	m_game->run();
 	delete m_game;
+	m_game = nullptr;
 }
 
 RunEngine::~RunEngine()
@@ -311,6 +312,8 @@ void RunEngineInAnotherProcess()
 	getInstance();
 
 	int c = 0;
+
+	std::cout << "0 to start " << std::endl;
 
 	while (c < 5)
 	{

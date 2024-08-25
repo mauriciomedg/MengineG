@@ -58,15 +58,6 @@ void MyGame::requestCreateEntity(float* vertices,
 		verticesList.push_back({ verticesAll[indicesList[i]],
 								 textCoordAll[indicesList[i]]});
 	}
-	
-std::cout << " nb text_coord_count " << text_coord_count << std::endl;
-
-	//for (int i = 0; i < verticesAll.size(); i++)
-	//{
-	//	verticesList.push_back({ verticesAll[i], textCoordAll[i] });
-	//}
-	
-std::cout << "nb vertex_count " << verticesAll.size() << " nb text_coord_count " << textCoordAll.size() << std::endl;
 
 	m_delegate_create_mesh({ verticesList, indicesList });
 }
@@ -151,12 +142,6 @@ void MyGame::createEntity(data& p)
 
 void MyGame::createEntity(meshData& p)
 {
-
-	//for (int i = 0; i < p.verticesList.size(); i++)
-	//{
-	//	std::cout << p.verticesList[i].position[0] << " " << p.verticesList[i].position[1] << " " << p.verticesList[i].position[2] << std::endl;
-	//}
-
 	MVertexAtrribute attributeList[] =
 	{
 		sizeof(glm::vec3) / sizeof(f32), // pos
@@ -177,14 +162,11 @@ void MyGame::createEntity(meshData& p)
 				}), 
 		getResourceManager());
 	
-	//auto mesh = getResourceManager()->createResourceFromFile<MMesh>("models/BlockModel3.obj");
-
 	auto texture = getResourceManager()->createResourceFromFile<MTexture>("textures/wood.png");
 	auto material = getResourceManager()->createResourceFromFile<MMaterial>("shaders/basicVertShader.glsl", "shaders/basicFragShader.glsl");
 	
 	material->addTexture(texture);
-	//material->setCullType(MCullType::FrontFace);
-	//material->setWindingOrder(MWindingOrder::ClockWise);
+
 	auto entity = getEntitySystem()->createEntity<MEntity>();
 	entity->getTransform()->setPosition(glm::vec3(0, 6, 0));
 	
