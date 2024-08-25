@@ -65,12 +65,20 @@ class WM_OT_CreateEntity(bpy.types.Operator):
         if obj.type == 'MESH':
             mesh = obj.data
 
+            # Update the mesh (important if you've done any operations that change the mesh structure)
+            mesh.calc_loop_triangles()
+
             # Extract vertex coordinates as a flat list
             vertex_buffer_mesh = [coord for vertex in mesh.vertices for coord in vertex.co]
             vertex_buffer_flat = np.array(vertex_buffer_mesh, dtype = np.float32)
             
             # Extract face indices as a flat list
-            index_buffer_mesh = [index for poly in mesh.polygons for index in poly.vertices]
+            # Extract index data (triangles)
+            index_buffer_mesh = []
+            for tri in mesh.loop_triangles:
+                index_buffer_mesh.extend(tri.vertices)
+    
+            #index_buffer_mesh = [index for poly in mesh.polygons for index in poly.vertices]
             index_buffer_flat = np.array(index_buffer_mesh, dtype=np.int32)
             
             # Extract texture coordintates as a flat list
@@ -91,8 +99,9 @@ class WM_OT_CreateEntity(bpy.types.Operator):
 
             testlib.createEntityMesh(vertex_ptr, len(vertex_buffer_mesh), index_ptr, len(index_buffer_mesh), texture_coords_ptr, len(texture_coords_mesh))
             
-            print("Vertex Buffer:", len(index_buffer_mesh))
+            print("Vertex Buffer:", len(vertex_buffer_mesh))
             print("Index Buffer:", len(index_buffer_mesh))
+            print("Texture Buffer:", len(texture_coords_mesh))
         else:
             print("The active object is not a mesh.")
             
