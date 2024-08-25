@@ -101,14 +101,14 @@ void createEntityMesh(float* vertices,
 	float* texture_coord,
 	int text_coord_count)
 {
-	for (int i = 0; i < vertex_count; ++i)
-		std::cout << "vertex " << vertices[i] << std::endl;
-
-	for (int i = 0; i < index_count; ++i)
-		std::cout << "indices " << indices[i] << std::endl;
-
-	for (int i = 0; i < text_coord_count; ++i)
-		std::cout << "texture coord " << texture_coord[i] << std::endl;
+	//for (int i = 0; i < vertex_count; ++i)
+	//	std::cout << "vertex " << vertices[i] << std::endl;
+	//
+	//for (int i = 0; i < index_count; ++i)
+	//	std::cout << "indices " << indices[i] << std::endl;
+	//
+	//for (int i = 0; i < text_coord_count; ++i)
+	//	std::cout << "texture coord " << texture_coord[i] << std::endl;
 
 	RunEngine::getInstace().createEntityMesh(vertices,
 		vertex_count,

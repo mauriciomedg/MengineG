@@ -53,7 +53,12 @@ void MDeviceContext::drawTriangles(const MTriangleType& triangleType, ui32 verte
 		break;
 	}
 
+	//wire frame mode
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//
 	glDrawArrays(glTriType, offset, vertexCount);
+
+	//glDrawElements(glTriType, vertexCount, GL_UNSIGNED_INT, 0);
 }
 
 void MDeviceContext::drawIndexedTriangles(const MTriangleType& triangleType, ui32 indexCount)

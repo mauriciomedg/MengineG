@@ -7,6 +7,7 @@
 #include <iostream>
 #include "MGameEngine.h"
 #include <thread>
+#include <vector>
 //#include "Inputs.h"
 
 //#include "Utils.h"
@@ -243,6 +244,11 @@ public:
 		m_game->createEntity(pX, pY, pZ);
 	}
 
+	void createEntityMesh()
+	{
+		m_game->createEntityMesh(nullptr, 0, nullptr, 0, nullptr, 0);
+	}
+
 	static RunEngine& getInstace();
 
 private:
@@ -290,6 +296,11 @@ void createEntity(float pX, float pY, float pZ)
 	RunEngine::getInstace().createEntity(pX, pY, pZ);
 }
 
+void createEntityMesh()
+{
+	RunEngine::getInstace().createEntityMesh();
+}
+
 void quit()
 {
 	RunEngine::getInstace().quit();
@@ -309,7 +320,11 @@ void RunEngineInAnotherProcess()
 		{
 			start();
 		}
-		else if (c == 1)
+		else if (c == 2)
+		{
+			createEntityMesh();
+		}
+		else if (c == 4)
 		{
 			quit();
 		}
@@ -318,6 +333,29 @@ void RunEngineInAnotherProcess()
 
 int main(void) 
 {
+
+	//std::vector<int> dataVec;
+	//
+	//int dataArray[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	//int dataArray2[] = { -1, -2, -3, -4, -5, -6, -7, -8, -9, -10, 100, 200, 300, 400, 500, 600, 700, 800 };
+	//
+	//int textureId = 0;
+	//for (int i = 0; i < 9; i = i + 3)
+	//{
+	//	std::cout << dataArray[i] << " "  << dataArray[i + 1] << " " << dataArray[i + 2] << std::endl;
+	//	std::cout << dataArray2[textureId] << " " << dataArray2[textureId + 1] << std::endl;
+	//	textureId += 2;
+	//}
+	//
+	//
+	//unsigned dataArraySize = sizeof(dataArray) / sizeof(int);
+	//
+	//// Method 1: Copy the array to the vector using back_inserter.
+	//{
+	//	std::copy(&dataArray[0], &dataArray[dataArraySize], back_inserter(dataVec));
+	//}
+
+
 	//std::cout << runExample(0.0) << std::endl;
 
 	//Embedding Python in C++ with pybind11 - SCRIPTING [3/4]
@@ -341,10 +379,12 @@ int main(void)
 	//Py_Finalize();
 
 	//MG::MyGame game;
-	{
-		MGameEngine game;
-		game.run();
-	}
+	//{
+	//	MGameEngine game;
+	//	game.run();
+	//}
+
+	RunEngineInAnotherProcess();
 
 	//game.create();
 	//game.run();

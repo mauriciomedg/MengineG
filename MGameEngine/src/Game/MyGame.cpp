@@ -61,85 +61,12 @@ void MyGame::requestCreateEntity(float* vertices,
 	
 std::cout << " nb text_coord_count " << text_coord_count << std::endl;
 
-	/////////////////////////////////////////////////////////////////////////////////
-	//const glm::vec3 positionsList[] = {
-	//	glm::vec3(-0.5f, -0.5f, -0.5f),
-	//	glm::vec3(-0.5f, 0.5f, -0.5f),
-	//	glm::vec3(0.5f, 0.5f, -0.5f),
-	//	glm::vec3(0.5f, -0.5f, -0.5f),
-	//
-	//	glm::vec3(0.5f, -0.5f, 0.5f),
-	//	glm::vec3(0.5f, 0.5f, 0.5f),
-	//	glm::vec3(-0.5f, 0.5f, 0.5f),
-	//	glm::vec3(-0.5f, -0.5f, 0.5f)
-	//};
-	//
-	//glm::vec2 texCoordsList[]
+	//for (int i = 0; i < verticesAll.size(); i++)
 	//{
-	//	glm::vec2(0, 0),
-	//	glm::vec2(0, 1),
-	//	glm::vec2(1, 0),
-	//	glm::vec2(1, 1)
-	//};
-	//
-	//std::vector<VertexMesh> verticesList =
-	//{
-	//	//front
-	//	{ positionsList[0], texCoordsList[1] },
-	//	{ positionsList[1], texCoordsList[0] },
-	//	{ positionsList[2], texCoordsList[2] },
-	//	{ positionsList[3], texCoordsList[3] },
-	//
-	//	//back
-	//	{ positionsList[4], texCoordsList[1] },
-	//	{ positionsList[5], texCoordsList[0] },
-	//	{ positionsList[6], texCoordsList[2] },
-	//	{ positionsList[7], texCoordsList[3] },
-	//
-	//	//top
-	//	{ positionsList[1], texCoordsList[1] },
-	//	{ positionsList[6], texCoordsList[0] },
-	//	{ positionsList[5], texCoordsList[2] },
-	//	{ positionsList[2], texCoordsList[3] },
-	//	
-	//	// bottom
-	//	{ positionsList[7], texCoordsList[1] },
-	//	{ positionsList[0], texCoordsList[0] },
-	//	{ positionsList[3], texCoordsList[2] },
-	//	{ positionsList[4], texCoordsList[3] },
-	//
-	//	// right
-	//	{ positionsList[3], texCoordsList[1] },
-	//	{ positionsList[2], texCoordsList[0] },
-	//	{ positionsList[5], texCoordsList[2] },
-	//	{ positionsList[4], texCoordsList[3] },
-	//
-	//	// left
-	//	{ positionsList[7], texCoordsList[1] },
-	//	{ positionsList[6], texCoordsList[0] },
-	//	{ positionsList[1], texCoordsList[2] },
-	//	{ positionsList[0], texCoordsList[3] }
-	//};
-	//
-	//std::vector<ui32> indicesList = {
-	//	0, 1, 2,
-	//	2, 3, 0,
-	//
-	//	4, 5, 6,
-	//	6, 7, 4,
-	//
-	//	8, 9, 10,
-	//	10, 11, 8,
-	//
-	//	12, 13, 14,
-	//	14, 15, 12,
-	//
-	//	16, 17, 18,
-	//	18, 19, 16,
-	//
-	//	20, 21, 22,
-	//	22, 23, 20
-	//};
+	//	verticesList.push_back({ verticesAll[i], textCoordAll[i] });
+	//}
+	
+std::cout << "nb vertex_count " << verticesAll.size() << " nb text_coord_count " << textCoordAll.size() << std::endl;
 
 	m_delegate_create_mesh({ verticesList, indicesList });
 }
@@ -180,7 +107,7 @@ void MyGame::init()
 		auto meshComponent = m_entity->createComponent<MMeshComponent>();
 		m_entity->createComponent<MRigidBodyComponent>();
 
-		m_entity->getTransform()->setPosition(glm::vec3(0.0f, 6.0f, 0.0f));
+		m_entity->getTransform()->setPosition(glm::vec3(0.0f, 50.0f, 0.0f));
 		meshComponent->setMesh(mesh);
 		meshComponent->addMaterial(material);
 	}
@@ -244,10 +171,10 @@ void MyGame::createEntity(meshData& p)
 				attributeList,
 				sizeof(attributeList) / (sizeof(MVertexAtrribute))
 			}),
-		//MIndexBufferDesc({
-		//			(void*)(&p.indices[0]),
-		//			ui32(p.indices.size())
-		//		}), 
+		MIndexBufferDesc({
+					(void*)(&p.indices[0]),
+					ui32(p.indices.size())
+				}), 
 		getResourceManager());
 	
 	//auto mesh = getResourceManager()->createResourceFromFile<MMesh>("models/BlockModel3.obj");
@@ -257,9 +184,9 @@ void MyGame::createEntity(meshData& p)
 	
 	material->addTexture(texture);
 	//material->setCullType(MCullType::FrontFace);
-	material->setWindingOrder(MWindingOrder::ClockWise);
+	//material->setWindingOrder(MWindingOrder::ClockWise);
 	auto entity = getEntitySystem()->createEntity<MEntity>();
-	entity->getTransform()->setPosition(glm::vec3(50, 50, 50));
+	entity->getTransform()->setPosition(glm::vec3(0, 6, 0));
 	
 	auto meshComponent = entity->createComponent<MMeshComponent>();
 	meshComponent->setMesh(mesh);

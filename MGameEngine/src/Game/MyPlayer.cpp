@@ -44,7 +44,7 @@ void MyPlayer::moveForward(float val)
 	const auto& cameraFront = m_camera->getLookAt();
 
 	auto worldMat = getTransform()->getWorldMat();
-	worldMat = glm::translate(worldMat, glm::normalize(cameraFront) * 1.0f * val);
+	worldMat = glm::translate(worldMat, glm::normalize(cameraFront) * 0.1f * val);
 	getTransform()->setWorldMat(worldMat);
 }
 
@@ -53,7 +53,7 @@ void MyPlayer::moveSide(float val)
 	const auto& side = m_camera->getSide();
 
 	auto worldMat = getTransform()->getWorldMat();
-	worldMat = glm::translate(worldMat, glm::normalize(side) * 1.0f * val);
+	worldMat = glm::translate(worldMat, glm::normalize(side) * 0.1f * val);
 	getTransform()->setWorldMat(worldMat);
 }
 
