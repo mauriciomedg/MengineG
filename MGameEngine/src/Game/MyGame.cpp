@@ -32,6 +32,8 @@ void MyGame::requestCreateEntity(float* vertices,
 	int text_coord_count,
 	float* transform_matrix)
 {
+	if (!transform_matrix) return;
+
 	glm::mat4 worldMat;
 
 	for (int i = 0; i < 4; ++i)
