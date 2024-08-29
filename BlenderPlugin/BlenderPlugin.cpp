@@ -37,11 +37,12 @@ public:
 		int* indices, 
 		int index_count, 
 		float* texture_coord, 
-		int text_coord_count)
+		int text_coord_count,
+		float*  transform_matrix)
 	{
 		if (m_game)
 			m_game->createEntityMesh(vertices,
-				vertex_count, indices, index_count, texture_coord, text_coord_count);
+				vertex_count, indices, index_count, texture_coord, text_coord_count, transform_matrix);
 	}
 
 	static RunEngine& getInstace();
@@ -99,7 +100,8 @@ void createEntityMesh(float* vertices,
 	int* indices,
 	int index_count,
 	float* texture_coord,
-	int text_coord_count)
+	int text_coord_count,
+	float* transform_matrix)
 {
 	//for (int i = 0; i < vertex_count; ++i)
 	//	std::cout << "vertex " << vertices[i] << std::endl;
@@ -115,7 +117,8 @@ void createEntityMesh(float* vertices,
 		indices,
 		index_count,
 		texture_coord,
-		text_coord_count);
+		text_coord_count,
+		transform_matrix);
 }
 
 void quit()

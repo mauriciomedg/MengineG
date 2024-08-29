@@ -17,6 +17,7 @@ namespace MG
 	{
 		std::vector<VertexMesh> verticesList;
 		std::vector<ui32> indices;
+		glm::mat4 worldMatrix;
 	};
 
 	class MyPlayer;
@@ -35,7 +36,8 @@ namespace MG
 			int* indices, 
 			int index_count,
 			float* texture_coord,
-			int text_coord_count);
+			int text_coord_count,
+			float* transform_matrix);
 
 	private:
 		void createEntity(data& p);

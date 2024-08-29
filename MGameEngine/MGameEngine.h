@@ -27,7 +27,8 @@ public:
 		int* indices,
 		int index_count,
 		float* texture_coord,
-		int text_coord_count);
+		int text_coord_count,
+		float* transform_matrix);
 
 private:
 	MG::MyGame* mGame;

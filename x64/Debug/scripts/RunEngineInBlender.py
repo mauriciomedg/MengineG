@@ -3,6 +3,7 @@ import ctypes
 import os
 import gc
 import numpy as np
+import mathutils
 
 blend_dir = os.path.dirname(bpy.data.filepath)
 lib_path = os.path.join(blend_dir, 'BlenderPlugin.dll') 
@@ -63,8 +64,23 @@ class WM_OT_CreateEntity(bpy.types.Operator):
         obj = bpy.context.view_layer.objects.active
         
         if obj.type == 'MESH':
-            mesh = obj.data
 
+            #Get transform matrix
+            transform_matrix = obj.matrix_world
+            
+            conversion_matrix = mathutils.Matrix((
+                (1, 0,  0, 0),   # X axis remains the same
+                (0, 0,  1, 0),   # Y axis is mapped to Z
+                (0, -1, 0, 0),   # Z axis is mapped to -Y
+                (0, 0,  0, 1),
+            ))
+            
+            blender_to_opengl = conversion_matrix @ transform_matrix
+
+            transform_matrix_buffer = [blender_to_opengl[i][j] for i in range(4) for j in range(4)]
+            transform_matrix_flat = np.array(transform_matrix_buffer, dtype = np.float32)
+            
+            mesh = obj.data
             # Update the mesh (important if you've done any operations that change the mesh structure)
             mesh.calc_loop_triangles()
 
@@ -96,8 +112,9 @@ class WM_OT_CreateEntity(bpy.types.Operator):
             vertex_ptr = vertex_buffer_flat.ctypes.data_as(ctypes.POINTER(ctypes.c_float))
             index_ptr = index_buffer_flat.ctypes.data_as(ctypes.POINTER(ctypes.c_int))
             texture_coords_ptr = texture_coords_flat.ctypes.data_as(ctypes.POINTER(ctypes.c_float))
+            transform_matrix_ptr = transform_matrix_flat.ctypes.data_as(ctypes.POINTER(ctypes.c_float))
 
-            testlib.createEntityMesh(vertex_ptr, len(vertex_buffer_mesh), index_ptr, len(index_buffer_mesh), texture_coords_ptr, len(texture_coords_mesh))
+            testlib.createEntityMesh(vertex_ptr, len(vertex_buffer_mesh), index_ptr, len(index_buffer_mesh), texture_coords_ptr, len(texture_coords_mesh), transform_matrix_ptr)
             
             print("Vertex Buffer:", len(vertex_buffer_mesh))
             print("Index Buffer:", len(index_buffer_mesh))

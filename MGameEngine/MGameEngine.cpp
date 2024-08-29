@@ -42,7 +42,8 @@ void MGameEngine::createEntityMesh(float* vertices,
 	int* indices, 
 	int index_count, 
 	float* texture_coord,
-	int text_coord_count)
+	int text_coord_count,
+	float* transform_matrix)
 {
-	mGame->requestCreateEntity(vertices, vertex_count, indices, index_count, texture_coord, text_coord_count);
+	mGame->requestCreateEntity(vertices, vertex_count, indices, index_count, texture_coord, text_coord_count, transform_matrix);
 }

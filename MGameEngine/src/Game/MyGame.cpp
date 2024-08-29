@@ -29,14 +29,23 @@ void MyGame::requestCreateEntity(float* vertices,
 	int* indices,
 	int index_count,
 	float* texture_coord,
-	int text_coord_count)
+	int text_coord_count,
+	float* transform_matrix)
 {
+	glm::mat4 worldMat;
+
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			worldMat[i][j] = transform_matrix[i + j * 4];
+		}
+	}
 
 	std::vector<ui32> indicesList;
 	for (int i = 0; i < index_count; i++)
 	{
 		indicesList.push_back(ui32(indices[i]));
-		std::cout << indicesList[i] << std::endl;
 	}
 
 	std::vector<glm::vec3> verticesAll;
@@ -59,7 +68,7 @@ void MyGame::requestCreateEntity(float* vertices,
 								 textCoordAll[indicesList[i]]});
 	}
 
-	m_delegate_create_mesh({ verticesList, indicesList });
+	m_delegate_create_mesh({ verticesList, indicesList, worldMat });
 }
 
 void MyGame::commandCreateEntity(data p)
@@ -168,7 +177,7 @@ void MyGame::createEntity(meshData& p)
 	material->addTexture(texture);
 
 	auto entity = getEntitySystem()->createEntity<MEntity>();
-	entity->getTransform()->setPosition(glm::vec3(0, 6, 0));
+	entity->getTransform()->setWorldMat(p.worldMatrix);
 	
 	auto meshComponent = entity->createComponent<MMeshComponent>();
 	meshComponent->setMesh(mesh);
