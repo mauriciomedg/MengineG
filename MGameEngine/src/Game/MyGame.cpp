@@ -62,12 +62,13 @@ void MyGame::requestCreateEntity(float* vertices,
 		textCoordAll.push_back(glm::vec2(f32(texture_coord[i]), f32(texture_coord[i + 1])));
 	}
 
+	std::cout << "vertext count " << verticesAll.size() << " UVs count " << textCoordAll.size() << " index count " << index_count << std::endl;
+
 	std::vector<VertexMesh> verticesList;
-	
 	for (int i = 0; i < index_count; i++)
 	{
 		verticesList.push_back({ verticesAll[indicesList[i]],
-								 textCoordAll[indicesList[i]]});
+								 textCoordAll[i]});
 	}
 
 	m_delegate_create_mesh({ verticesList, indicesList, worldMat });

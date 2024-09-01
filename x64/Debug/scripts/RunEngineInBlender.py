@@ -8,9 +8,7 @@ import mathutils
 blend_dir = os.path.dirname(bpy.data.filepath)
 lib_path = os.path.join(blend_dir, 'BlenderPlugin.dll') 
 print("Load dll from: ", lib_path)
-testlib = None #ctypes.CDLL(lib_path);
-
-#testlib = ctypes.CDLL("D:\\CustomEngine\\MengineG\\x64\\Debug\\BlenderPlugin.dll");
+testlib = None 
 
 #Blender Python scripting: Creating custom operators from scratch
 
@@ -102,9 +100,11 @@ class WM_OT_CreateEntity(bpy.types.Operator):
             
             if mesh.uv_layers.active is not None:
                 uv_layer = mesh.uv_layers.active.data
-                # Extract UV coordinates as a flat list
-                texture_coords_mesh = [uv.uv[i] for uv in uv_layer for i in range(2)]
-             
+                for tri in mesh.loop_triangles:
+                    for loop_index in tri.loops:
+                        uv = uv_layer[loop_index].uv
+                        texture_coords_mesh.extend(uv)
+
             texture_coords_flat = np.array(texture_coords_mesh, dtype=np.float32)   
             
         
