@@ -25,6 +25,7 @@ class WM_OT_RunGameEngine(bpy.types.Operator):
             testlib.createEntity.argtypes = [ctypes.c_float, ctypes.c_float, ctypes.c_float]
             
             testlib.createEntityMesh.argtypes = [
+            ctypes.c_char_p,
             ctypes.POINTER(ctypes.c_float), # vertices (float array)
             ctypes.c_int, # vertex_count (int)
             ctypes.POINTER(ctypes.c_int), # indices (int array)
@@ -107,14 +108,23 @@ class WM_OT_CreateEntity(bpy.types.Operator):
 
             texture_coords_flat = np.array(texture_coords_mesh, dtype=np.float32)   
             
-        
+            # Covert the name to bytes string
+            name_bytes = obj.name.encode('utf-8')
+            
             # Convert all the numpys array to a ctypes pointer
             vertex_ptr = vertex_buffer_flat.ctypes.data_as(ctypes.POINTER(ctypes.c_float))
             index_ptr = index_buffer_flat.ctypes.data_as(ctypes.POINTER(ctypes.c_int))
             texture_coords_ptr = texture_coords_flat.ctypes.data_as(ctypes.POINTER(ctypes.c_float))
             transform_matrix_ptr = transform_matrix_flat.ctypes.data_as(ctypes.POINTER(ctypes.c_float))
 
-            testlib.createEntityMesh(vertex_ptr, len(vertex_buffer_mesh), index_ptr, len(index_buffer_mesh), texture_coords_ptr, len(texture_coords_mesh), transform_matrix_ptr)
+            testlib.createEntityMesh(name_bytes, 
+                vertex_ptr, 
+                len(vertex_buffer_mesh), 
+                index_ptr, 
+                len(index_buffer_mesh), 
+                texture_coords_ptr, 
+                len(texture_coords_mesh), 
+                transform_matrix_ptr)
             
             print("Vertex Buffer:", len(vertex_buffer_mesh))
             print("Index Buffer:", len(index_buffer_mesh))

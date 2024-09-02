@@ -2,6 +2,7 @@
 #include "../OGraphicsEngine/MPrerequisites.h"
 #include <map>
 #include <memory>
+#include <string>
 
 namespace MG
 {
@@ -50,6 +51,7 @@ namespace MG
 		void removeComponent(size_t id);
 	protected:
 		size_t m_id = 0;
+		std::string m_name;
 		MEntitySystem* m_entitySystem = nullptr;
 
 		MTransformComponent* m_transformComponent = nullptr;

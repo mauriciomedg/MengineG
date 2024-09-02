@@ -32,7 +32,8 @@ public:
 			m_game->createEntity(pX, pY, pZ);
 	}
 
-	void createEntityMesh(float* vertices, 
+	void createEntityMesh(const char* modelName,
+		float* vertices,
 		int vertex_count, 
 		int* indices, 
 		int index_count, 
@@ -40,8 +41,9 @@ public:
 		int text_coord_count,
 		float*  transform_matrix)
 	{
+		std::cout << "Model name " << modelName << std::endl;
 		if (m_game)
-			m_game->createEntityMesh(vertices,
+			m_game->createEntityMesh(modelName, vertices,
 				vertex_count, indices, index_count, texture_coord, text_coord_count, transform_matrix);
 	}
 
@@ -95,7 +97,8 @@ void createEntity(float pX, float pY, float pZ)
 	RunEngine::getInstace().createEntity(pX, pY, pZ);
 }
 
-void createEntityMesh(float* vertices,
+void createEntityMesh(const char* modelName,
+	float* vertices,
 	int vertex_count,
 	int* indices,
 	int index_count,
@@ -112,7 +115,8 @@ void createEntityMesh(float* vertices,
 	//for (int i = 0; i < text_coord_count; ++i)
 	//	std::cout << "texture coord " << texture_coord[i] << std::endl;
 
-	RunEngine::getInstace().createEntityMesh(vertices,
+	RunEngine::getInstace().createEntityMesh(modelName,
+		vertices,
 		vertex_count,
 		indices,
 		index_count,

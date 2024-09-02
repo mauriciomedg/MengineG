@@ -246,7 +246,7 @@ public:
 
 	void createEntityMesh()
 	{
-		m_game->createEntityMesh(nullptr, 0, nullptr, 0, nullptr, 0, nullptr);
+		m_game->createEntityMesh("", nullptr, 0, nullptr, 0, nullptr, 0, nullptr);
 	}
 
 	static RunEngine& getInstace();

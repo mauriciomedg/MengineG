@@ -20,12 +20,15 @@ MGame* MEntitySystem::getGame()
 	return m_game;
 }
 
-bool MEntitySystem::createEntityInternal(MEntity* entity, size_t id)
+bool MEntitySystem::createEntityInternal(MEntity* entity, size_t id, const std::string& name)
 {
+	m_names_to_id.emplace(std::make_pair(name, id));
+
 	auto ptr = std::unique_ptr<MEntity>(entity);
 	m_entities[id].emplace(entity, std::move(ptr));
 	
 	entity->m_id = id;
+	entity->m_name = name;
 	entity->m_entitySystem = this;
 	entity->create();
 
@@ -35,6 +38,23 @@ bool MEntitySystem::createEntityInternal(MEntity* entity, size_t id)
 void MG::MEntitySystem::removeEntity(MEntity* entity)
 {
 	m_entitiesToDestroy.emplace(entity);
+}
+
+void MG::MEntitySystem::removeEntity(const std::string& name)
+{
+	auto itt = m_names_to_id.find(name);
+	
+	if (itt != m_names_to_id.end())
+	{
+		auto id = itt->second;
+		auto itt_entity = m_entities[id].begin();
+
+		if (itt_entity != m_entities[id].end())
+		{
+			m_entities[id].erase(itt_entity);
+		}
+		m_names_to_id.erase(itt);
+	}
 }
 
 void MEntitySystem::update(f32 dt)

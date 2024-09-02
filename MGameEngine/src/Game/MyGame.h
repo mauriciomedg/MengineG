@@ -15,6 +15,7 @@ namespace MG
 
 	struct meshData
 	{
+		std::string modelName;
 		std::vector<VertexMesh> verticesList;
 		std::vector<ui32> indices;
 		glm::mat4 worldMatrix;
@@ -31,7 +32,8 @@ namespace MG
 		virtual void update(f32 dt) override;
 		virtual void quit() override;
 		void requestCreateEntity(float x, float y, float z);
-		void requestCreateEntity(float* vertices,
+		void requestCreateEntity(const char* modelName,
+			float* vertices,
 			int vertex_count, 
 			int* indices, 
 			int index_count,

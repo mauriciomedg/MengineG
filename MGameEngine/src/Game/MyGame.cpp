@@ -24,7 +24,8 @@ void MyGame::requestCreateEntity(float x, float y, float z)
 	m_delegate_create({ x, y, z });
 }
 
-void MyGame::requestCreateEntity(float* vertices,
+void MyGame::requestCreateEntity(const char* modelName,
+	float* vertices,
 	int vertex_count,
 	int* indices,
 	int index_count,
@@ -71,7 +72,7 @@ void MyGame::requestCreateEntity(float* vertices,
 								 textCoordAll[i]});
 	}
 
-	m_delegate_create_mesh({ verticesList, indicesList, worldMat });
+	m_delegate_create_mesh({ modelName, verticesList, indicesList, worldMat });
 }
 
 void MyGame::commandCreateEntity(data p)
@@ -106,7 +107,7 @@ void MyGame::init()
 	terrainMaterial->addTexture(terrainTexture);
 
 	{
-		m_entity = getEntitySystem()->createEntity<MEntity>();
+		m_entity = getEntitySystem()->createEntity<MEntity>("cuboEjemplo");
 		auto meshComponent = m_entity->createComponent<MMeshComponent>();
 		m_entity->createComponent<MRigidBodyComponent>();
 
@@ -116,13 +117,13 @@ void MyGame::init()
 	}
 	
 	{
-		auto terrainEntity = getEntitySystem()->createEntity<MEntity>();
+		auto terrainEntity = getEntitySystem()->createEntity<MEntity>("terrain");
 		auto meshComponentTerrain = terrainEntity->createComponent<MMeshComponent>();
 		meshComponentTerrain->setMesh(terrain);
 		meshComponentTerrain->addMaterial(terrainMaterial);
 	}
 
-	m_player = getEntitySystem()->createEntity<MyPlayer>();
+	m_player = getEntitySystem()->createEntity<MyPlayer>("Player");
 	m_player->getTransform()->setPosition(glm::vec3(0.0f, 20.0f, 30.0f));
 
 	InputSystem::get().mapInput("MoveForwardCamera", "w", 1.0f);
@@ -145,7 +146,7 @@ void MyGame::createEntity(data& p)
 	auto material = getResourceManager()->createResourceFromFile<MMaterial>("shaders/basicVertShader.glsl", "shaders/basicFragShader.glsl");
 	material->addTexture(texture);
 
-	auto entity = getEntitySystem()->createEntity<MEntity>();
+	auto entity = getEntitySystem()->createEntity<MEntity>("OtroCuboEjemplo");
 	entity->getTransform()->setPosition(glm::vec3(p.m_px, p.m_py, p.m_pz));
 	auto meshComponent = entity->createComponent<MMeshComponent>();
 	meshComponent->setMesh(mesh);
@@ -154,6 +155,8 @@ void MyGame::createEntity(data& p)
 
 void MyGame::createEntity(meshData& p)
 {
+	getEntitySystem()->removeEntity(p.modelName);
+
 	MVertexAtrribute attributeList[] =
 	{
 		sizeof(glm::vec3) / sizeof(f32), // pos
@@ -179,9 +182,9 @@ void MyGame::createEntity(meshData& p)
 	
 	material->addTexture(texture);
 
-	auto entity = getEntitySystem()->createEntity<MEntity>();
+	auto entity = getEntitySystem()->createEntity<MEntity>(p.modelName);
 	entity->getTransform()->setWorldMat(p.worldMatrix);
-	
+
 	auto meshComponent = entity->createComponent<MMeshComponent>();
 	meshComponent->setMesh(mesh);
 	meshComponent->addMaterial(material);

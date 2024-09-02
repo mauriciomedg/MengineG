@@ -37,7 +37,8 @@ void MGameEngine::createEntity(float x, float y, float z)
 	mGame->requestCreateEntity(x, y, z);
 }
 
-void MGameEngine::createEntityMesh(float* vertices, 
+void MGameEngine::createEntityMesh(const char* modelName,
+	float* vertices,
 	int vertex_count, 
 	int* indices, 
 	int index_count, 
@@ -45,5 +46,5 @@ void MGameEngine::createEntityMesh(float* vertices,
 	int text_coord_count,
 	float* transform_matrix)
 {
-	mGame->requestCreateEntity(vertices, vertex_count, indices, index_count, texture_coord, text_coord_count, transform_matrix);
+	mGame->requestCreateEntity(modelName, vertices, vertex_count, indices, index_count, texture_coord, text_coord_count, transform_matrix);
 }

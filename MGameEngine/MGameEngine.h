@@ -22,7 +22,8 @@ public:
 	void run();
 	void quit();
 	void createEntity(float x, float y, float z);
-	void createEntityMesh(float* vertices,
+	void createEntityMesh(const char* modelName,
+		float* vertices,
 		int vertex_count,
 		int* indices,
 		int index_count,

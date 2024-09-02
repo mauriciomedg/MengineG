@@ -14,7 +14,8 @@ extern "C" BLENDERPLUGIN_API void start();
 extern "C" BLENDERPLUGIN_API void quit();
 
 extern "C" BLENDERPLUGIN_API void createEntity(float pX, float pY, float pZ);
-extern "C" BLENDERPLUGIN_API void createEntityMesh(float* vertices,
+extern "C" BLENDERPLUGIN_API void createEntityMesh(const char* modelName,
+	float* vertices,
 	int vertex_count,
 	int* indices,
 	int index_count,
